@@ -1,0 +1,481 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    line-height: 1.6;
+    background: #ffffff;
+    color: #111111;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.container {
+    width: min(1120px, 90%);
+    margin: 0 auto;
+}
+
+
+/* =========================
+   Navigation
+========================= */
+
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+    background: rgba(255, 255, 255, 0.95);
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.nav-container {
+    height: 70px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+}
+
+nav {
+    display: flex;
+    gap: 28px;
+}
+
+nav a {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+nav a:hover {
+    color: #000;
+}
+
+
+/* =========================
+   Hero
+========================= */
+
+.hero {
+    min-height: 620px;
+
+    display: flex;
+    align-items: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f5f7fa 0%,
+            #ffffff 60%
+        );
+}
+
+.hero-content {
+    padding: 100px 0;
+}
+
+.hero-label {
+    margin-bottom: 20px;
+
+    font-size: 0.8rem;
+    font-weight: 700;
+
+    letter-spacing: 0.15em;
+    color: #666;
+}
+
+h1 {
+    max-width: 850px;
+
+    font-size: clamp(3rem, 7vw, 6rem);
+    line-height: 0.98;
+    letter-spacing: -0.06em;
+}
+
+h1 span {
+    display: block;
+    color: #555;
+}
+
+.hero-description {
+    max-width: 650px;
+
+    margin-top: 30px;
+
+    font-size: 1.25rem;
+    color: #666;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 14px;
+
+    margin-top: 35px;
+}
+
+.button {
+    padding: 13px 22px;
+
+    border-radius: 6px;
+
+    font-weight: 600;
+}
+
+.button.primary {
+    background: #111;
+    color: white;
+}
+
+.button.secondary {
+    border: 1px solid #ccc;
+}
+
+
+/* =========================
+   Sections
+========================= */
+
+.section {
+    padding: 110px 0;
+}
+
+.section-dark {
+    background: #111;
+    color: white;
+}
+
+.section-header {
+    display: flex;
+    gap: 35px;
+
+    margin-bottom: 60px;
+}
+
+.section-number {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #888;
+}
+
+.section-header h2 {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+
+    line-height: 1;
+    letter-spacing: -0.04em;
+}
+
+.section-header p {
+    max-width: 600px;
+
+    margin-top: 15px;
+
+    color: #777;
+}
+
+.section-dark .section-header p {
+    color: #aaa;
+}
+
+
+/* =========================
+   Overview
+========================= */
+
+.overview-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 20px;
+}
+
+.info-card {
+    padding: 35px;
+
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+}
+
+.info-card h3 {
+    margin-bottom: 15px;
+}
+
+.info-card p {
+    color: #666;
+}
+
+
+/* =========================
+   Projects
+========================= */
+
+.projects-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 20px;
+}
+
+.project-card {
+    padding: 35px;
+
+    border: 1px solid #333;
+    border-radius: 8px;
+
+    transition:
+        transform 0.2s,
+        border-color 0.2s;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    border-color: #777;
+}
+
+.project-number {
+    margin-bottom: 60px;
+
+    color: #777;
+    font-size: 0.85rem;
+}
+
+.project-card h3 {
+    font-size: 1.5rem;
+
+    margin-bottom: 15px;
+}
+
+.project-card p {
+    color: #aaa;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-top: 25px;
+}
+
+.tags span {
+    padding: 5px 10px;
+
+    border: 1px solid #444;
+    border-radius: 20px;
+
+    font-size: 0.75rem;
+    color: #bbb;
+}
+
+
+/* =========================
+   Pipeline
+========================= */
+
+.pipeline {
+    display: flex;
+    align-items: center;
+
+    gap: 15px;
+}
+
+.pipeline-step {
+    flex: 1;
+
+    padding: 25px;
+
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.pipeline-step span {
+    display: block;
+
+    margin-bottom: 15px;
+
+    font-size: 0.75rem;
+    color: #888;
+}
+
+.pipeline-step strong {
+    display: block;
+
+    margin-bottom: 5px;
+}
+
+.pipeline-step p {
+    font-size: 0.85rem;
+    color: #777;
+}
+
+.pipeline-arrow {
+    font-size: 1.5rem;
+    color: #999;
+}
+
+.technology {
+    margin-top: 70px;
+}
+
+.technology h3 {
+    margin-bottom: 20px;
+}
+
+.tech-list {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 10px;
+}
+
+.tech-list span {
+    padding: 8px 15px;
+
+    border: 1px solid #ddd;
+    border-radius: 20px;
+
+    font-size: 0.85rem;
+}
+
+
+/* =========================
+   Team
+========================= */
+
+.team-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 20px;
+}
+
+.member-card {
+    padding: 30px;
+
+    border: 1px solid #333;
+    border-radius: 8px;
+}
+
+.avatar {
+    width: 55px;
+    height: 55px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 25px;
+
+    border-radius: 50%;
+
+    background: #333;
+
+    font-weight: 700;
+}
+
+.member-card h3 {
+    font-size: 1rem;
+}
+
+.member-card p {
+    margin-top: 5px;
+
+    font-size: 0.85rem;
+    color: #999;
+}
+
+
+/* =========================
+   Footer
+========================= */
+
+footer {
+    padding: 50px 0;
+
+    background: #080808;
+    color: white;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.footer-content p {
+    margin-top: 8px;
+
+    color: #888;
+}
+
+.footer-content a {
+    color: #ccc;
+}
+
+
+/* =========================
+   Responsive
+========================= */
+
+@media (max-width: 800px) {
+
+    nav {
+        display: none;
+    }
+
+    .overview-grid,
+    .projects-grid,
+    .team-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .pipeline {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .pipeline-arrow {
+        text-align: center;
+        transform: rotate(90deg);
+    }
+
+    .section {
+        padding: 80px 0;
+    }
+
+    .section-header {
+        gap: 15px;
+    }
+
+    .footer-content {
+        flex-direction: column;
+    }
+}
