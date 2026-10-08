@@ -2,10 +2,10 @@
 seed: 42
 
 dataset:
-  name: FashionMNIST  # FashionMNIST, MNIST, or CIFAR10
+  name: fashion_mnist  # FashionMNIST, MNIST, or CIFAR10
   data_dir: data
   num_workers: 2
-  download: false
+  download: true
 
 training:
   batch_size: 128
