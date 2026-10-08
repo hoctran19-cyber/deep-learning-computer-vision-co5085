@@ -1,0 +1,30 @@
+# E1 experiment configuration. Dataset files are downloaded only when code is run.
+seed: 42
+
+dataset:
+  name: FashionMNIST  # FashionMNIST, MNIST, or CIFAR10
+  data_dir: data
+  num_workers: 2
+  download: false
+
+training:
+  batch_size: 128
+  epochs: 10
+  learning_rate: 0.001
+
+optimizer:
+  name: Adam
+
+experiment:
+  validation_split: 0.1
+
+model:
+  name: cnn  # softmax, mlp, or cnn
+  mlp_hidden_dims: [128, 64]
+  cnn_channels: [32, 64]
+  dropout: 0.0
+
+output:
+  figures_dir: results/figures
+  metrics_dir: results/metrics
+  checkpoints_dir: results/checkpoints
