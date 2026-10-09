@@ -21,17 +21,30 @@ from .utils import (count_trainable_parameters, get_device, load_config,
 
 
 def _run_accuracy(output: torch.Tensor, target: torch.Tensor) -> int:
-    # Lấy lớp có điểm dự đoán cao nhất và đếm số mẫu dự đoán đúng.
+    """Đếm số dự đoán đúng trong một lô dữ liệu.
+
+    ``output`` chứa logits cho từng lớp; chỉ số có logit lớn nhất được xem
+    là lớp mô hình dự đoán. Hàm trả về số lượng mẫu đúng (số nguyên), không
+    phải tỷ lệ chính xác, để bên gọi cộng dồn qua nhiều lô.
+    """
     return int((output.argmax(dim=1) == target).sum().item())
 
 
 def train_one_epoch(model: nn.Module, loader: DataLoader, criterion: nn.Module,
                     optimizer: Optimizer, device: torch.device) -> tuple[float, float]:
-    """Huấn luyện một epoch theo các bước lan truyền xuôi và cập nhật trọng số."""
+    """Chạy một lượt huấn luyện trên toàn bộ dữ liệu của ``loader``.
+
+    Với mỗi lô, hàm chuyển ảnh và nhãn tới thiết bị tính toán, tính đầu ra và
+    loss, rồi lan truyền ngược gradient để optimizer cập nhật trọng số. Loss
+    trả về là trung bình theo số mẫu (không phải trung bình các trung bình của
+    từng lô); độ chính xác là tỷ lệ mẫu được dự đoán đúng trên cả epoch.
+    """
     model.train()
     total_loss = total_correct = total_items = 0
     for images, targets in loader:
+        # Dữ liệu và mô hình phải ở cùng thiết bị, chẳng hạn CPU hoặc GPU.
         images, targets = images.to(device), targets.to(device)
+        # Xóa gradient còn lại từ lần cập nhật trước trước khi tính gradient mới.
         optimizer.zero_grad()
         output = model(images)
         loss = criterion(output, targets)
@@ -47,7 +60,12 @@ def train_one_epoch(model: nn.Module, loader: DataLoader, criterion: nn.Module,
 
 def validate_one_epoch(model: nn.Module, loader: DataLoader, criterion: nn.Module,
                        device: torch.device) -> tuple[float, float]:
-    """Đánh giá một epoch trên tập validation mà không tính gradient."""
+    """Tính loss và độ chính xác trên tập validation mà không cập nhật mô hình.
+
+    ``eval()`` chuyển các lớp có hành vi khác nhau giữa huấn luyện và suy luận
+    (ví dụ Dropout) sang chế độ đánh giá. Kết quả trả về là loss trung bình
+    theo số ảnh và tỷ lệ dự đoán đúng trên toàn bộ tập validation.
+    """
     model.eval()
     total_loss = total_correct = total_items = 0
     # Không cần gradient khi đánh giá, giúp giảm bộ nhớ và chi phí tính toán.
@@ -56,6 +74,8 @@ def validate_one_epoch(model: nn.Module, loader: DataLoader, criterion: nn.Modul
             images, targets = images.to(device), targets.to(device)
             output = model(images)
             loss = criterion(output, targets)
+            # Nhân loss trung bình của lô với kích thước lô để cộng dồn chính xác,
+            # kể cả khi lô cuối có ít mẫu hơn các lô còn lại.
             total_loss += loss.item() * targets.size(0)
             total_correct += _run_accuracy(output, targets)
             total_items += targets.size(0)
@@ -64,7 +84,13 @@ def validate_one_epoch(model: nn.Module, loader: DataLoader, criterion: nn.Modul
 
 def train_model(model: nn.Module, loaders: dict[str, DataLoader], config: dict[str, Any],
                 device: torch.device) -> dict[str, list[float]]:
-    """Huấn luyện mô hình và trả về lịch sử loss/độ chính xác để vẽ biểu đồ."""
+    """Huấn luyện mô hình qua nhiều epoch và trả về lịch sử các chỉ số.
+
+    Hàm dùng CrossEntropyLoss cho bài toán phân loại nhiều lớp, chọn Adam hoặc
+    SGD theo cấu hình, rồi lần lượt chạy pha huấn luyện và validation ở mỗi
+    epoch. Kết quả gồm loss và accuracy của cả hai pha theo thứ tự epoch; hàm
+    không đánh giá tập test và không tự lưu checkpoint.
+    """
     criterion = nn.CrossEntropyLoss()
     training = config.get("training", {})
     optimizer_setting = config.get("optimizer", "adam")
@@ -73,13 +99,17 @@ def train_model(model: nn.Module, loaders: dict[str, DataLoader], config: dict[s
                       if isinstance(optimizer_setting, dict) else optimizer_setting).lower()
     learning_rate = float(training.get("learning_rate", config.get("learning_rate", 1e-3)))
     if optimizer_name == "adam":
+        # Adam tự điều chỉnh bước cập nhật cho từng tham số dựa trên gradient.
         optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
     elif optimizer_name == "sgd":
+        # SGD cập nhật tham số theo gradient với tốc độ học đã cấu hình.
         optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
     else:
         raise ValueError("Unsupported optimizer. Choose adam or sgd.")
     model.to(device)
     history = {"train_loss": [], "validation_loss": [], "train_accuracy": [], "validation_accuracy": []}
+    # Ưu tiên số epoch trong training; nếu thiếu thì dùng cấu hình cấp cao nhất,
+    # và cuối cùng mặc định 10 epoch.
     # Mỗi epoch lần lượt huấn luyện rồi đánh giá, sau đó lưu các chỉ số vào lịch sử.
     for _ in range(int(training.get("epochs", config.get("epochs", 10)))):
         train_loss, train_accuracy = train_one_epoch(model, loaders["train"], criterion, optimizer, device)
@@ -94,7 +124,12 @@ def train_model(model: nn.Module, loaders: dict[str, DataLoader], config: dict[s
 
 
 def parse_args() -> argparse.Namespace:
-    """Đọc các tùy chọn dòng lệnh dùng khi chạy cục bộ hoặc trên Colab."""
+    """Khai báo và đọc các tùy chọn dòng lệnh của chương trình huấn luyện.
+
+    ``--model`` là bắt buộc và giới hạn ở các kiến trúc được hỗ trợ. Tệp cấu
+    hình có đường dẫn mặc định; các tùy chọn epoch, batch size và learning
+    rate là tùy chọn, khi được truyền sẽ ghi đè giá trị tương ứng trong cấu hình.
+    """
     parser = argparse.ArgumentParser(description="Train one E1 classifier.")
     parser.add_argument("--model", choices=["softmax", "mlp", "cnn"], required=True)
     parser.add_argument("--config", default="configs/config.yaml")
@@ -105,8 +140,15 @@ def parse_args() -> argparse.Namespace:
 
 
 def main() -> None:
-    """Huấn luyện, đánh giá và lưu kết quả cho bộ phân loại được chọn."""
+    """Điều phối toàn bộ thí nghiệm cho một kiến trúc mô hình.
+
+    Quy trình gồm đọc cấu hình và ghi đè bằng tham số dòng lệnh, cố định seed,
+    chuẩn bị dữ liệu/mô hình, huấn luyện, rồi đo kết quả trên tập test. Cuối
+    cùng, các chỉ số, trọng số, biểu đồ và bảng so sánh được ghi vào các vị trí
+    xác định trong cấu hình đầu ra.
+    """
     args = parse_args()
+    # Các đường dẫn tương đối trong cấu hình được tính từ thư mục làm việc hiện tại.
     project_root = Path.cwd()
     config = load_config(args.config)
     config.setdefault("training", {})
@@ -122,12 +164,15 @@ def main() -> None:
     bundle = load_datasets(config)
     loaders = create_dataloaders(bundle, config)
     model = get_model(args.model, config, bundle.input_shape, bundle.num_classes)
+    # Chỉ đo thời gian của quá trình huấn luyện, không tính thời gian tải dữ liệu
+    # hoặc đánh giá test.
     start = time.perf_counter()
     history = train_model(model, loaders, config, device)
     training_time = time.perf_counter() - start
     # Chỉ đánh giá trên tập test sau khi hoàn tất huấn luyện.
     evaluation = evaluate_model(model, loaders["test"], device)
     output = config["output"]
+    # Chuẩn hóa các thư mục đầu ra theo thư mục gốc dự án.
     metrics_dir = project_path(output["metrics_dir"], project_root)
     figures_dir = project_path(output["figures_dir"], project_root)
     checkpoints_dir = project_path(output["checkpoints_dir"], project_root)
@@ -138,6 +183,7 @@ def main() -> None:
                   "best_val_accuracy": max(history["validation_accuracy"]),
                   "training_time": training_time}, metrics_dir / f"{args.model}.json")
     save_checkpoint(model, checkpoints_dir / f"{args.model}.pt")
+    # Lưu biểu đồ đường học, ma trận nhầm lẫn và các ví dụ bị phân loại sai.
     plot_training_curves(history, figures_dir / f"{args.model}_learning_curves.png")
     plot_confusion_matrix(evaluation["confusion_matrix"], bundle.class_names,
                           figures_dir / f"{args.model}_confusion_matrix.png")
@@ -150,7 +196,12 @@ def main() -> None:
 
 def _update_comparison(path: Path, model_name: str, evaluation: dict[str, Any],
                        history: dict[str, list[float]], training_time: float) -> None:
-    """Thêm mới hoặc cập nhật kết quả của một thí nghiệm trong tệp CSV so sánh."""
+    """Ghi kết quả của một mô hình vào bảng CSV so sánh chung.
+
+    Nếu tệp đã tồn tại, các dòng hiện có được đọc và giữ lại để không làm mất
+    kết quả của những mô hình khác. Dòng của ``model_name`` được thay bằng
+    kết quả mới (hoặc được thêm nếu chưa có), sau đó toàn bộ bảng được ghi lại.
+    """
     rows: dict[str, dict[str, Any]] = {}
     if path.exists():
         # Đọc các kết quả cũ để giữ lại những mô hình chưa được chạy lại.
