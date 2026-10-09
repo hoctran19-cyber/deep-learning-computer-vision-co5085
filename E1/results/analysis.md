@@ -144,6 +144,7 @@ Một số ảnh dress bị dự đoán thành T-shirt/top, shirt hoặc coat. C
 **Softmax**
 
 ![softmax_misclassified](figures/softmax_misclassified.png)
+
 *Hình 7: các hình ảnh dự đoán sai của Softmax*
 
 Các ví dụ dự đoán sai của Softmax thể hiện nhầm lẫn giữa nhiều lớp trang phục, đặc biệt là shirt, T-shirt/top, pullover, coat và dress. Mô hình cũng nhầm lẫn một số mẫu sneaker và ankle boot với sandal.
