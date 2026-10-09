@@ -1,4 +1,4 @@
-"""Manual PyTorch training loop and command-line experiment entry point."""
+"""Vòng lặp huấn luyện PyTorch và điểm bắt đầu chạy thí nghiệm qua dòng lệnh."""
 
 import argparse
 import csv
@@ -21,12 +21,13 @@ from .utils import (count_trainable_parameters, get_device, load_config,
 
 
 def _run_accuracy(output: torch.Tensor, target: torch.Tensor) -> int:
+    # Lấy lớp có điểm dự đoán cao nhất và đếm số mẫu dự đoán đúng.
     return int((output.argmax(dim=1) == target).sum().item())
 
 
 def train_one_epoch(model: nn.Module, loader: DataLoader, criterion: nn.Module,
                     optimizer: Optimizer, device: torch.device) -> tuple[float, float]:
-    """Train for one epoch using the explicit forward/backward update steps."""
+    """Huấn luyện một epoch theo các bước lan truyền xuôi và cập nhật trọng số."""
     model.train()
     total_loss = total_correct = total_items = 0
     for images, targets in loader:
@@ -34,8 +35,10 @@ def train_one_epoch(model: nn.Module, loader: DataLoader, criterion: nn.Module,
         optimizer.zero_grad()
         output = model(images)
         loss = criterion(output, targets)
+        # Lan truyền ngược để tính gradient, sau đó cập nhật trọng số mô hình.
         loss.backward()
         optimizer.step()
+        # Cộng loss theo số mẫu để cuối epoch tính trung bình trên toàn bộ dữ liệu.
         total_loss += loss.item() * targets.size(0)
         total_correct += _run_accuracy(output, targets)
         total_items += targets.size(0)
@@ -44,9 +47,10 @@ def train_one_epoch(model: nn.Module, loader: DataLoader, criterion: nn.Module,
 
 def validate_one_epoch(model: nn.Module, loader: DataLoader, criterion: nn.Module,
                        device: torch.device) -> tuple[float, float]:
-    """Evaluate one validation epoch without computing gradients."""
+    """Đánh giá một epoch trên tập validation mà không tính gradient."""
     model.eval()
     total_loss = total_correct = total_items = 0
+    # Không cần gradient khi đánh giá, giúp giảm bộ nhớ và chi phí tính toán.
     with torch.no_grad():
         for images, targets in loader:
             images, targets = images.to(device), targets.to(device)
@@ -60,10 +64,11 @@ def validate_one_epoch(model: nn.Module, loader: DataLoader, criterion: nn.Modul
 
 def train_model(model: nn.Module, loaders: dict[str, DataLoader], config: dict[str, Any],
                 device: torch.device) -> dict[str, list[float]]:
-    """Train a model and return loss/accuracy history for later plotting."""
+    """Huấn luyện mô hình và trả về lịch sử loss/độ chính xác để vẽ biểu đồ."""
     criterion = nn.CrossEntropyLoss()
     training = config.get("training", {})
     optimizer_setting = config.get("optimizer", "adam")
+    # Hỗ trợ cấu hình optimizer dưới dạng tên trực tiếp hoặc một từ điển có khóa "name".
     optimizer_name = (optimizer_setting.get("name", "adam")
                       if isinstance(optimizer_setting, dict) else optimizer_setting).lower()
     learning_rate = float(training.get("learning_rate", config.get("learning_rate", 1e-3)))
@@ -75,6 +80,7 @@ def train_model(model: nn.Module, loaders: dict[str, DataLoader], config: dict[s
         raise ValueError("Unsupported optimizer. Choose adam or sgd.")
     model.to(device)
     history = {"train_loss": [], "validation_loss": [], "train_accuracy": [], "validation_accuracy": []}
+    # Mỗi epoch lần lượt huấn luyện rồi đánh giá, sau đó lưu các chỉ số vào lịch sử.
     for _ in range(int(training.get("epochs", config.get("epochs", 10)))):
         train_loss, train_accuracy = train_one_epoch(model, loaders["train"], criterion, optimizer, device)
         validation_loss, validation_accuracy = validate_one_epoch(
@@ -88,7 +94,7 @@ def train_model(model: nn.Module, loaders: dict[str, DataLoader], config: dict[s
 
 
 def parse_args() -> argparse.Namespace:
-    """Parse command-line overrides used locally and in Colab."""
+    """Đọc các tùy chọn dòng lệnh dùng khi chạy cục bộ hoặc trên Colab."""
     parser = argparse.ArgumentParser(description="Train one E1 classifier.")
     parser.add_argument("--model", choices=["softmax", "mlp", "cnn"], required=True)
     parser.add_argument("--config", default="configs/config.yaml")
@@ -99,11 +105,12 @@ def parse_args() -> argparse.Namespace:
 
 
 def main() -> None:
-    """Train, evaluate, and save artifacts for one selected classifier."""
+    """Huấn luyện, đánh giá và lưu kết quả cho bộ phân loại được chọn."""
     args = parse_args()
     project_root = Path.cwd()
     config = load_config(args.config)
     config.setdefault("training", {})
+    # Các tùy chọn được truyền qua dòng lệnh sẽ ghi đè giá trị trong tệp cấu hình.
     if args.epochs is not None:
         config["training"]["epochs"] = args.epochs
     if args.batch_size is not None:
@@ -118,11 +125,13 @@ def main() -> None:
     start = time.perf_counter()
     history = train_model(model, loaders, config, device)
     training_time = time.perf_counter() - start
+    # Chỉ đánh giá trên tập test sau khi hoàn tất huấn luyện.
     evaluation = evaluate_model(model, loaders["test"], device)
     output = config["output"]
     metrics_dir = project_path(output["metrics_dir"], project_root)
     figures_dir = project_path(output["figures_dir"], project_root)
     checkpoints_dir = project_path(output["checkpoints_dir"], project_root)
+    # Lưu chỉ số, checkpoint và các biểu đồ vào những thư mục đã cấu hình.
     save_metrics({"model": args.model, "history": history,
                   "test_accuracy": evaluation["accuracy"],
                   "num_parameters": count_trainable_parameters(model),
@@ -141,11 +150,13 @@ def main() -> None:
 
 def _update_comparison(path: Path, model_name: str, evaluation: dict[str, Any],
                        history: dict[str, list[float]], training_time: float) -> None:
-    """Upsert one real experiment result into the comparison CSV."""
+    """Thêm mới hoặc cập nhật kết quả của một thí nghiệm trong tệp CSV so sánh."""
     rows: dict[str, dict[str, Any]] = {}
     if path.exists():
+        # Đọc các kết quả cũ để giữ lại những mô hình chưa được chạy lại.
         with path.open(newline="", encoding="utf-8") as file:
             rows = {row["model"]: row for row in csv.DictReader(file)}
+    # Gán theo tên mô hình để cập nhật kết quả cũ hoặc thêm một mô hình mới.
     rows[model_name] = {"model": model_name, "test_accuracy": evaluation["accuracy"],
                        "num_parameters": evaluation["trainable_parameters"],
                        "best_val_accuracy": max(history["validation_accuracy"]),
@@ -158,4 +169,5 @@ def _update_comparison(path: Path, model_name: str, evaluation: dict[str, Any],
 
 
 if __name__ == "__main__":
+    # Chỉ chạy quy trình huấn luyện khi tệp được gọi trực tiếp.
     main()
