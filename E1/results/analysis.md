@@ -145,14 +145,16 @@ Một số ảnh dress bị dự đoán thành T-shirt/top, shirt hoặc coat. C
 
 ![softmax_misclassified](figures/softmax_misclassified.png)
 
-*Hình 7: các hình ảnh dự đoán sai của Softmax*
+*Hình 7: Các hình ảnh dự đoán sai của Softmax*
 
 Các ví dụ dự đoán sai của Softmax thể hiện nhầm lẫn giữa nhiều lớp trang phục, đặc biệt là shirt, T-shirt/top, pullover, coat và dress. Mô hình cũng nhầm lẫn một số mẫu sneaker và ankle boot với sandal.
 
 Những lỗi này phù hợp với hạn chế của bộ phân loại tuyến tính khi ảnh đầu vào được làm phẳng thành vector. Mô hình không trực tiếp khai thác cấu trúc không gian cục bộ của ảnh như mạng tích chập.
 
 **MLP**
+
 ![mlp_misclassified](figures/mlp_misclassified.png)
+
 *Hình 8: Các hình ảnh dự đoán sai của MLP*
 
 MLP vẫn mắc các lỗi tương tự, nhất là giữa coat, pullover, shirt và dress. Một số mẫu giày dép cũng bị nhầm lẫn giữa sneaker và sandal.
@@ -160,7 +162,9 @@ MLP vẫn mắc các lỗi tương tự, nhất là giữa coat, pullover, shirt
 Mặc dù MLP có khả năng học các quan hệ phi tuyến thông qua các lớp ẩn, các ví dụ cho thấy mô hình vẫn gặp khó khăn khi các lớp có hình dáng tương đồng. Việc tăng khả năng biểu diễn không bảo đảm tất cả các lỗi phân loại sẽ được loại bỏ.
 
 **CNN**
+
 ![cnn_misclassified](figures/cnn_misclassified.png)
+
 *Hình 9: Các hình ảnh dự đoán sai của CNN*
 
 Các ví dụ dự đoán sai của CNN cũng cho thấy sự nhầm lẫn giữa shirt, T-shirt/top, pullover, coat và dress. Ngoài ra, một số mẫu sneaker hoặc ankle boot vẫn bị phân loại thành sandal hoặc sneaker tương ứng.
