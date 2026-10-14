@@ -1,0 +1,39 @@
+# E2 default experiment configuration. Dataset follows E1: Fashion-MNIST.
+seed: 42
+
+dataset:
+  name: fashion_mnist
+  data_dir: data
+  num_workers: 2
+  download: true
+
+experiment:
+  validation_split: 0.1
+
+training:
+  batch_size: 128
+  epochs: 5
+  learning_rate: 0.001
+
+optimizer:
+  name: adamw
+  weight_decay: 0.0001
+
+model:
+  tokenizer: patch          # patch, row, or cnn_stem
+  attention_type: custom    # custom or torch
+  embedding_dim: 64
+  num_heads: 4
+  num_blocks: 2
+  patch_size: 7
+  stem_channels: 32
+  dropout: 0.1
+  mlp_ratio: 2.0
+
+output:
+  metrics_dir: outputs/metrics
+  figures_dir: outputs/figures
+  checkpoints_dir: outputs/checkpoints
+  configs_dir: outputs/configs
+  # Optional in Colab: set to a Google Drive path after mounting Drive.
+  copy_to_dir: null
