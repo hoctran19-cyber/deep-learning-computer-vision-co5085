@@ -53,5 +53,5 @@
   "test_accuracy": 0.8792,
   "num_parameters": 109386,
   "best_val_accuracy": 0.8866666666666667,
-  "training_time": 118.43704905300001
+  "training_time": 106.99187630000006
 }

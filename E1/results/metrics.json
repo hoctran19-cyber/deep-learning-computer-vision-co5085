@@ -3,18 +3,18 @@
         "test_accuracy": 0.8419,
         "num_parameters": 7850,
         "best_val_accuracy": 0.8525,
-        "training_time": 118.43519173599998
+        "training_time": 104.96239994400003
     },
     "mlp": {
         "test_accuracy": 0.8792,
         "num_parameters": 109386,
         "best_val_accuracy": 0.8866666666666667,
-        "training_time": 118.43704905300001
+        "training_time": 106.99187630000006
     },
     "cnn": {
-        "test_accuracy": 0.9105,
+        "test_accuracy": 0.9111,
         "num_parameters": 50186,
-        "best_val_accuracy": 0.92,
-        "training_time": 122.52638691600009
+        "best_val_accuracy": 0.9203333333333333,
+        "training_time": 112.99359806999996
     }
 }
