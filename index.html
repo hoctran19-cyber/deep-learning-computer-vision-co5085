@@ -356,15 +356,17 @@
 
                         <span class="work-code">E1</span>
 
-                        <h3>Image Classification</h3>
+                        <h3>Phân loại ảnh: Softmax, MLP, CNN</h3>
 
                         <p>
-                            Small image set (MNIST / Fashion-MNIST / CIFAR-10).
-                            Image classification with (i) softmax classifier
-                            on a flatten vector; (ii) MLP on a flatten vector;
-                            (iii) CNN. Compare accuracy, capacity, and error
-                            cases.
+                            Xây dựng và so sánh ba bộ phân loại trên tập ảnh
+                            nhỏ (Fashion-MNIST): softmax và MLP trên vector
+                            flatten, và CNN. Tự viết vòng lặp huấn luyện; so
+                            sánh accuracy, số tham số, đường cong loss–accuracy
+                            và các trường hợp sai (confusion matrix, mẫu lỗi).
                         </p>
+
+                        <p><strong>Hạn nộp:</strong> 02/11/2026, 23:59 GMT+7</p>
 
                         <div class="tags">
                             <span>Softmax</span>
@@ -380,15 +382,18 @@
 
                         <span class="work-code">E2</span>
 
-                        <h3>Multi-Head Self-Attention</h3>
+                        <h3>Transformer: MSA và tokenization</h3>
 
                         <p>
-                            Implement Multi-Head Self-Attention (MSA) fully
-                            from scratch and with PyTorch modules. Explore
-                            several tokenizations (patch, pixel/row, CNN stem,
-                            CLS + patches, …) and classify on the same small
-                            image set.
+                            Hiện thực Multi-Head Self-Attention (MSA) từ đầu
+                            và bằng module PyTorch; thử nhiều cách lấy token
+                            (patch, hàng/pixel, CNN-stem) và phân loại trên
+                            cùng tập ảnh như E1. So sánh MSA tự viết với bản
+                            PyTorch, và các cách tokenize về accuracy và thời
+                            gian.
                         </p>
+
+                        <p><strong>Hạn nộp:</strong> 02/11/2026, 23:59 GMT+7</p>
 
                         <div class="tags">
                             <span>MSA</span>
@@ -403,40 +408,21 @@
 
                         <span class="work-code">E3</span>
 
-                        <h3>Sequence Models</h3>
+                        <h3>LSTM / GRU trên chuỗi ảnh</h3>
 
                         <p>
-                            Sequence models with LSTM and GRU (e.g. MNIST as a
-                            pixel/row sequence). Compare with a feed-forward /
-                            CNN baseline.
+                            Mô hình hóa ảnh như dữ liệu chuỗi (mỗi hàng/cột
+                            hoặc dãy patch là một bước thời gian) bằng LSTM và
+                            GRU. So sánh accuracy, số tham số và khả năng bắt
+                            phụ thuộc thời gian với baseline MLP/CNN từ E1.
                         </p>
+
+                        <p><strong>Hạn nộp:</strong> 09/11/2026, 23:59 GMT+7</p>
 
                         <div class="tags">
                             <span>LSTM</span>
                             <span>GRU</span>
                             <span>RNN</span>
-                        </div>
-
-                    </a>
-
-
-                    <a href="E4/" class="work-card">
-
-                        <span class="work-code">E4</span>
-
-                        <h3>Generative Models</h3>
-
-                        <p>
-                            Generative models on a small image set
-                            (MNIST-like): VAE, GAN, and Diffusion. Visualize
-                            samples and latent space; compare quality vs.
-                            compute.
-                        </p>
-
-                        <div class="tags">
-                            <span>VAE</span>
-                            <span>GAN</span>
-                            <span>Diffusion</span>
                         </div>
 
                     </a>
