@@ -2,7 +2,7 @@
 
 E2 triển khai mô hình phân loại ảnh nhỏ dùng Transformer trên cùng quy ước dữ liệu của E1. Dataset mặc định là Fashion-MNIST, validation split 10%, seed 42 và normalize ảnh bằng mean/std 0.5.
 
-Không có kết quả thực nghiệm được bịa sẵn. Các bảng trong tài liệu này là khung để điền sau khi chạy thật trên local hoặc Google Colab.
+Các kết quả trong tài liệu này lấy từ lần chạy thật bằng `notebooks/e2_experiments.ipynb` (GPU CUDA, Google Colab), được lưu tại `outputs/metrics/`.
 
 ## Cấu trúc
 
@@ -123,30 +123,32 @@ Mỗi lần chạy tạo:
 
 `outputs/figures/<experiment>_confusion_matrix.png`: confusion matrix trên test set.
 
-## Bảng kết quả cần điền sau khi chạy thật
+## Kết quả thực nghiệm
 
-| Nhóm | Experiment | MSA | Tokenizer | Test accuracy | Best validation accuracy | Params | Training time | Inference time |
+Cấu hình: Fashion-MNIST, `embedding_dim=64`, `num_heads=4`, `num_blocks=2`, `batch_size=128`, `epochs=5`, `learning_rate=0.001`, seed 42, thiết bị CUDA. Số liệu lấy từ `outputs/metrics/comparison.csv`.
+
+| Nhóm | Experiment | MSA | Tokenizer | Test accuracy | Best validation accuracy | Params | Training time (s) | Inference time (s) |
 |---|---|---|---|---:|---:|---:|---:|---:|
-| A | msa_custom_patch | custom | patch | Chưa chạy | Chưa chạy | Chưa chạy | Chưa chạy | Chưa chạy |
-| A | msa_torch_patch | torch | patch | Chưa chạy | Chưa chạy | Chưa chạy | Chưa chạy | Chưa chạy |
-| B | tok_patch_custom | custom | patch | Chưa chạy | Chưa chạy | Chưa chạy | Chưa chạy | Chưa chạy |
-| B | tok_row_custom | custom | row | Chưa chạy | Chưa chạy | Chưa chạy | Chưa chạy | Chưa chạy |
-| B | tok_cnn_stem_custom | custom | cnn_stem | Chưa chạy | Chưa chạy | Chưa chạy | Chưa chạy | Chưa chạy |
+| A | msa_custom_patch | custom | patch | 0.8547 | 0.8582 | 72,074 | 65.2 | 1.92 |
+| A | msa_torch_patch | torch | patch | 0.8567 | 0.8592 | 72,074 | 63.7 | 1.90 |
+| B | tok_patch_custom | custom | patch | 0.8547 | 0.8582 | 72,074 | 64.3 | 1.91 |
+| B | tok_row_custom | custom | row | **0.8665** | **0.8725** | 71,498 | 65.4 | 1.92 |
+| B | tok_cnn_stem_custom | custom | cnn_stem | 0.8607 | 0.8690 | 89,802 | 66.9 | 1.98 |
 
-## Nhận xét dự kiến cần kiểm chứng
+Ngoài ra, lần chạy `smoke_custom_patch` (kiểm tra nhanh) đạt test accuracy 0.8571.
 
-Patch tokenizer thường ít token hơn row/cnn-stem trong cấu hình hiện tại nên attention rẻ hơn.
+## Nhận xét
 
-Row tokenizer đơn giản, dễ giải thích, nhưng token theo hàng có thể kém phù hợp với cấu trúc cục bộ 2D.
+Thí nghiệm A: custom MSA (0.8547) và PyTorch MSA (0.8567) cho kết quả gần như tương đương, chênh lệch 0.2 điểm phần trăm, cùng số tham số và thời gian tương đương. Điều này cho thấy bản tự cài đặt hoạt động đúng. Với một seed và 5 epoch, chênh lệch này chưa đủ để kết luận bản nào tốt hơn.
 
-CNN-stem tokenizer có thêm đặc trưng cục bộ trước attention, nhưng nhiều phép tính hơn và không còn là tokenization tuyến tính thuần túy.
+Thí nghiệm B: row tokenization cho độ chính xác cao nhất (0.8665), tiếp theo là CNN-stem (0.8607) và patch (0.8547). CNN-stem có nhiều tham số nhất (89,802, tăng khoảng 25% so với patch) và thời gian chạy lâu hơn một chút, nhưng không vượt row. Với số liệu hiện có, row tokenization vừa nhẹ vừa tốt nhất trong cấu hình này, dù có 28 token so với 16 token của patch.
 
-Các nhận xét định lượng chỉ nên viết sau khi đã chạy thí nghiệm thật và đọc `comparison.csv`.
+Thời gian huấn luyện và suy luận gần như không khác biệt giữa các cấu hình vì mô hình nhỏ và chuỗi token ngắn.
 
 ## Hạn chế
 
-Mô hình nhỏ để phù hợp Colab và smoke test local, không nhằm đạt SOTA.
+Mô hình nhỏ để phù hợp Colab, không nhằm đạt SOTA.
+
+Mỗi cấu hình chỉ chạy một lần (seed 42, 5 epoch), nên các chênh lệch dưới khoảng 1 điểm phần trăm có thể nằm trong dao động ngẫu nhiên.
 
 Kết quả có thể khác giữa CUDA, MPS và CPU.
-
-Notebook và README không chứa số liệu thực nghiệm nếu chưa chạy thật.
