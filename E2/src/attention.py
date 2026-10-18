@@ -63,9 +63,11 @@ class CustomMultiHeadSelfAttention(nn.Module):
 
         # 2. Tính QK^T và chia cho sqrt(d_k) để tránh softmax quá sắc.
         scores = torch.matmul(query, key.transpose(-2, -1)) / math.sqrt(self.head_dim)
+
         # 3. Softmax trên chiều token nguồn để tạo trọng số attention.
         attention_weights = torch.softmax(scores, dim=-1)
         attention_weights = self.dropout(attention_weights)
+        
         # 4. Tổng có trọng số các vector Value trong từng head.
         attended = torch.matmul(attention_weights, value)
 
