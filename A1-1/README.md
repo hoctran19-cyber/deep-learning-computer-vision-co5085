@@ -44,10 +44,13 @@ thay thế tư vấn pháp lý.
 
 ## Split protocol
 
-Giữ nguyên test split do Food-101 cung cấp. Tách validation theo từng lớp từ
-train split gốc: lấy ngẫu nhiên 10% trong 750 ảnh của mỗi lớp, dùng seed `42`.
-Phần còn lại dùng để huấn luyện. Việc phân tầng bảo đảm số ảnh mỗi lớp giống
-nhau ở từng split.
+Giữ nguyên test split do Food-101 cung cấp. Khi tạo split, sắp xếp tên lớp và
+định danh ảnh tương đối theo thứ tự từ điển; khởi tạo một bộ sinh ngẫu nhiên
+NumPy với seed `42`; lần lượt xáo trộn danh sách ảnh của từng lớp và lấy 75 ảnh
+mỗi lớp làm validation. 675 ảnh còn lại mỗi lớp là train. Như vậy validation
+được lấy phân tầng và seed `42` quyết định lựa chọn ảnh. Ghi phiên bản NumPy
+cùng manifest để có thể kiểm tra/tái tạo phép chia; mọi model và regime phải
+dùng chính manifest đó thay vì chia lại độc lập.
 
 | Split | Ảnh mỗi lớp | Tổng ảnh | Nguồn/cách tạo |
 |---|---:|---:|---|
@@ -57,9 +60,12 @@ nhau ở từng split.
 | **Tổng** | **1.000** | **101.000** | |
 
 Phép tính: `101 × 675 = 68.175`, `101 × 75 = 7.575` và
-`101 × 250 = 25.250`. Cần lưu hoặc tái tạo chính xác các chỉ số của phép chia
-để mọi mô hình và chế độ dùng chung cùng train/validation/test. Test chỉ dùng
-đánh giá cuối cùng, không dùng chọn checkpoint, siêu tham số hay preprocessing.
+`101 × 250 = 25.250`. Khi triển khai, nên lưu manifest gồm đường dẫn/định danh
+tương đối của từng ảnh, nhãn và split (train, validation hoặc test); manifest
+cần được dùng lại cho mọi cấu hình. Manifest **chưa được tạo**. Không đưa ảnh
+dataset vào Git; chỉ lưu manifest nếu không chứa nội dung ảnh và tuân theo các
+hạn chế sử dụng dataset. Test chỉ dùng đánh giá cuối cùng, không dùng chọn
+checkpoint, siêu tham số hay preprocessing.
 
 ## Preprocessing và augmentation dự kiến
 
@@ -94,6 +100,25 @@ dùng cùng split, preprocessing, metric và quy tắc chọn checkpoint; ghi l�
 hình thực tế để kết quả có thể diễn giải. Số tham số trainable sẽ được tính sau
 khi áp dụng chính sách đóng băng/mở từng phần.
 
+### Cấu hình huấn luyện dự kiến
+
+Các giá trị khởi điểm dưới đây là **đề xuất để chốt trước thực nghiệm**, chưa
+phải cấu hình đã chạy. Có thể chọn learning rate khác cho các regime; cần chọn
+trên validation và ghi rõ cấu hình thực tế.
+
+| Thành phần | Giá trị/nguyên tắc khởi điểm |
+|---|---|
+| Optimizer | AdamW cho tất cả cấu hình để tạo một baseline chung |
+| Learning rate | Scratch: `1e-3`; frozen head: `1e-3`; partial/full fine-tuning: backbone `1e-4`, head `1e-3` với parameter groups riêng. Đây là giá trị khởi điểm đề xuất, cần chốt trước khi chạy |
+| Batch size | `32` ảnh trên mỗi thiết bị nếu bộ nhớ cho phép; nếu phải giảm, ghi batch size và gradient accumulation thực tế |
+| Epoch tối đa | `30` epoch cho mỗi cấu hình |
+| Early stopping/checkpoint | Theo dõi macro-F1 validation; lưu checkpoint tốt nhất, dùng accuracy validation để phân xử hòa; dừng nếu không cải thiện sau `5` epoch liên tiếp hoặc đạt epoch tối đa |
+| Seed huấn luyện | `42` cho Python, NumPy, PyTorch CPU/CUDA/MPS nếu hỗ trợ, sampler và worker DataLoader. Ghi nhận rằng một số phép toán/thiết bị có thể không hoàn toàn xác định |
+| Thiết bị và thời gian | Ghi thiết bị cụ thể (CPU, CUDA hoặc MPS), phiên bản runtime và batch size. Đo wall-clock từ batch train đầu đến optimizer update cuối, gồm thời gian nạp batch nhưng loại trừ validation, tải dữ liệu ban đầu và test; đồng bộ accelerator trước/sau phép đo nếu hỗ trợ |
+
+Nếu giới hạn phần cứng buộc phải thay batch size, epoch budget, precision hoặc
+phần backbone được mở, ghi lại thay đổi đó cho từng run.
+
 ## Metrics và evaluation protocol
 
 - **Accuracy:** tỷ lệ dự đoán đúng trên split được đánh giá.
@@ -105,6 +130,13 @@ khi áp dụng chính sách đóng băng/mở từng phần.
   accuracy validation để phân xử. Không xem test trong quá trình chọn mô hình.
 - Sau khi chốt checkpoint/cấu hình trên validation, đánh giá test một lần cho
   mỗi cấu hình được báo cáo. Báo cáo accuracy và macro-F1 test cùng cách tính.
+- Các mô hình dùng chung manifest split, định nghĩa metrics, preprocessing và
+  quy tắc chọn checkpoint. Ghi cấu hình thực tế, phiên bản PyTorch/Torchvision,
+  định danh chính xác pretrained weights, seed, thiết bị và mọi thay đổi do
+  giới hạn phần cứng.
+- Đây là so sánh có kiểm soát theo protocol, không mặc nhiên là công bằng tuyệt
+  đối: nếu ngân sách huấn luyện, thời gian, batch size hoặc cấu hình khác nhau
+  đáng kể, phải nêu rõ giới hạn khi diễn giải kết quả.
 
 ### Phân tích lỗi dự kiến
 
