@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>A1-1 · Dataset + Protocol — CO5085</title>
+    <title>A1.1 · Dataset và Protocol — CO5085</title>
 
     <link rel="stylesheet" href="../css/style.css">
 </head>
@@ -40,7 +40,7 @@
             <div class="container">
 
                 <a href="../#assignments" class="back-link">
-                    ← Back to Assignments
+                    ← Quay lại danh sách bài tập
                 </a>
 
                 <div class="section-header">
@@ -50,56 +50,230 @@
                     </span>
 
                     <div>
-                        <span class="hero-label">Assignment 1.1</span>
+                        <span class="hero-label">Bài tập 1.1</span>
 
-                        <h2>Dataset + Protocol</h2>
+                        <h2>Dataset và Protocol</h2>
 
                         <p>
-                            Self-chosen large image dataset. Define the dataset, splits, metrics and the experimental protocol for comparing CNN vs Transformer under several training regimes.
+                            Giới thiệu bộ dữ liệu ảnh quy mô lớn và protocol dự kiến
+                            để so sánh CNN với Vision Transformer qua nhiều chế độ huấn luyện.
                         </p>
                     </div>
 
                 </div>
 
 
-                <div class="info-card">
-                    <span class="card-label">Protocol dự kiến · Chưa có kết quả thực nghiệm</span>
+                <section aria-labelledby="dataset-overview" style="margin-bottom: 48px;">
+                    <div class="section-header" style="margin-bottom: 24px;">
+                        <div>
+                            <span class="hero-label">Tổng quan Dataset</span>
+                            <h3 id="dataset-overview">Food-101</h3>
+                            <p>
+                                Food-101 là bộ dữ liệu phân loại ảnh món ăn được xây dựng
+                                phục vụ nghiên cứu thị giác máy tính.
+                            </p>
+                        </div>
+                    </div>
 
-                    <h3>Food-101: CNN và Transformer</h3>
-
-                    <p>
-                        Food-101 gồm 101 lớp và 101.000 ảnh. Protocol giữ nguyên
-                        test split gốc, tách validation phân tầng từ train gốc
-                        với seed 42.
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 16px;">
+                        <div class="info-card"><strong>101</strong><br>lớp món ăn</div>
+                        <div class="info-card"><strong>101.000</strong><br>ảnh</div>
+                        <div class="info-card"><strong>1.000</strong><br>ảnh mỗi lớp</div>
+                        <div class="info-card"><strong>750</strong><br>ảnh Training set gốc mỗi lớp</div>
+                        <div class="info-card"><strong>250</strong><br>ảnh Test set gốc mỗi lớp</div>
+                    </div>
+                    <p style="margin-top: 16px; color: #666;">
+                        Các số liệu này mô tả cấu trúc Training set/Test set gốc,
+                        không phải split train/validation/test dự kiến của dự án bên dưới.
                     </p>
+                </section>
 
-                    <p>
-                        <strong>Split:</strong> train 68.175 · validation 7.575 · test 25.250 ảnh
-                    </p>
+                <section aria-labelledby="dataset-characteristics" style="margin-bottom: 48px;">
+                    <div class="section-header" style="margin-bottom: 24px;">
+                        <div>
+                            <span class="hero-label">Đặc điểm Dataset</span>
+                            <h3 id="dataset-characteristics">Sự đa dạng của ảnh món ăn</h3>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <p>
+                            Food-101 gồm 101 loại món ăn đa dạng về hình dạng, màu sắc,
+                            nguyên liệu và cách trình bày. Ảnh có thể khác nhau về góc chụp,
+                            ánh sáng, phông nền và cách bày món.
+                        </p>
+                        <p style="margin-top: 12px;">
+                            Training set gốc không được làm sạch hoàn toàn và có thể chứa
+                            label noise (nhiễu nhãn) cùng những khác biệt không đồng nhất
+                            trong ảnh. Nhãn của Test set gốc đã được kiểm tra thủ công.
+                            Những đặc điểm này tạo điều kiện khảo sát, so sánh khả năng học
+                            đặc trưng của mạng CNN và Vision Transformer; không giả định
+                            mọi lớp hoặc ảnh đều có độ khó như nhau.
+                        </p>
+                    </div>
+                </section>
 
-                    <p>
-                        <strong>Mô hình:</strong> ResNet-50 và ViT-B/16.
-                        <strong>Training regimes:</strong> from scratch, frozen
-                        backbone, partial fine-tuning và full fine-tuning.
-                    </p>
+                <section aria-labelledby="representative-images" style="margin-bottom: 48px;">
+                    <div class="section-header" style="margin-bottom: 24px;">
+                        <div>
+                            <span class="hero-label">Ảnh món ăn minh họa</span>
+                            <h3 id="representative-images">Một số món ăn tiêu biểu</h3>
+                            <p>
+                                Đây là ảnh minh họa, không phải ảnh mẫu thực tế trong
+                                Food-101. Ảnh được dẫn từ Wikimedia Commons; nguồn và
+                                giấy phép được ghi dưới từng ảnh.
+                            </p>
+                        </div>
+                    </div>
 
-                    <p>
-                        <strong>Đánh giá dự kiến:</strong> accuracy và macro-F1;
-                        ghi nhận thời gian huấn luyện và số tham số trainable
-                        nếu khả thi.
-                    </p>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px;">
+                        <figure style="border: 1px solid #e5e5e5; border-radius: 8px; overflow: hidden;">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a4/Pizza.jpg"
+                                 alt="Một chiếc Pizza tròn phủ phô mai và các loại nhân"
+                                 loading="lazy"
+                                 style="display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover;">
+                            <figcaption style="padding: 14px;">
+                                <strong>Pizza</strong><br>
+                                        <small>Ảnh: Jakob Dettner · <a href="https://commons.wikimedia.org/wiki/File:Pizza.jpg" target="_blank" rel="noopener noreferrer">Xem nguồn trên Wikimedia Commons</a> · Giấy phép <a href="https://creativecommons.org/licenses/by-sa/2.0/de/deed.en" target="_blank" rel="noopener noreferrer">CC BY-SA 2.0 DE</a></small>
+                            </figcaption>
+                        </figure>
 
-                    <p>
-                        Đây là kế hoạch thực nghiệm, chưa phải kết quả; dataset
-                        chưa được tải và mô hình chưa được huấn luyện. License
-                        ảnh chưa được xác minh đầy đủ; không giả định ảnh được
-                        tự do tái phân phối.
-                    </p>
+                        <figure style="border: 1px solid #e5e5e5; border-radius: 8px; overflow: hidden;">
+                            <img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/6/60/Sushi_platter.jpg/960px-Sushi_platter.jpg"
+                                 alt="Một đĩa gồm nhiều loại Sushi"
+                                 loading="lazy"
+                                 style="display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover;">
+                            <figcaption style="padding: 14px;">
+                                <strong>Sushi</strong><br>
+                                <small>Ảnh: chidorian · <a href="https://commons.wikimedia.org/wiki/File:Sushi_platter.jpg" target="_blank" rel="noopener noreferrer">Xem nguồn trên Wikimedia Commons</a> · Giấy phép <a href="https://creativecommons.org/licenses/by-sa/2.0" target="_blank" rel="noopener noreferrer">CC BY-SA 2.0</a></small>
+                            </figcaption>
+                        </figure>
 
-                    <p>
-                        <a href="README.md"><strong>Đọc protocol A1.1 đầy đủ →</strong></a>
+                        <figure style="border: 1px solid #e5e5e5; border-radius: 8px; overflow: hidden;">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Hamburger_sandwich.jpg"
+                                 alt="Một chiếc Hamburger kẹp rau xà lách"
+                                 loading="lazy"
+                                 style="display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover;">
+                            <figcaption style="padding: 14px;">
+                                <strong>Hamburger</strong><br>
+                                <small>Ảnh: Ericd · <a href="https://commons.wikimedia.org/wiki/File:Hamburger_sandwich.jpg" target="_blank" rel="noopener noreferrer">Xem nguồn trên Wikimedia Commons</a> · Giấy phép <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 3.0</a></small>
+                            </figcaption>
+                        </figure>
+
+                        <figure style="border: 1px solid #e5e5e5; border-radius: 8px; overflow: hidden;">
+                            <img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a5/Saiki-ramen.jpg/960px-Saiki-ramen.jpg"
+                                 alt="Một tô Ramen kiểu Saiki"
+                                 loading="lazy"
+                                 style="display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover;">
+                            <figcaption style="padding: 14px;">
+                                <strong>Ramen</strong><br>
+                                <small>Ảnh: Mikadojin · <a href="https://commons.wikimedia.org/wiki/File:Saiki-ramen.jpg" target="_blank" rel="noopener noreferrer">Xem nguồn trên Wikimedia Commons</a> · Giấy phép <a href="https://creativecommons.org/licenses/by-sa/4.0" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a></small>
+                            </figcaption>
+                        </figure>
+
+                        <figure style="border: 1px solid #e5e5e5; border-radius: 8px; overflow: hidden;">
+                            <img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4b/Apple_pie.jpg/960px-Apple_pie.jpg"
+                                 alt="Một chiếc bánh Apple pie nướng"
+                                 loading="lazy"
+                                 style="display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover;">
+                            <figcaption style="padding: 14px;">
+                                <strong>Apple pie</strong><br>
+                                <small>Ảnh: Dan Parsons · <a href="https://commons.wikimedia.org/wiki/File:Apple_pie.jpg" target="_blank" rel="noopener noreferrer">Xem nguồn trên Wikimedia Commons</a> · Giấy phép <a href="https://creativecommons.org/licenses/by-sa/2.0" target="_blank" rel="noopener noreferrer">CC BY-SA 2.0</a></small>
+                            </figcaption>
+                        </figure>
+
+                        <figure style="border: 1px solid #e5e5e5; border-radius: 8px; overflow: hidden;">
+                            <img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/8/85/Caesar-salad.jpg/960px-Caesar-salad.jpg"
+                                 alt="Một phần Caesar salad với rau xà lách và bánh mì nướng"
+                                 loading="lazy"
+                                 style="display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover;">
+                            <figcaption style="padding: 14px;">
+                                <strong>Caesar salad</strong><br>
+                                <small>Ảnh: Telluride · <a href="https://commons.wikimedia.org/wiki/File:Caesar-salad.jpg" target="_blank" rel="noopener noreferrer">Xem nguồn trên Wikimedia Commons</a> · Giấy phép <a href="https://creativecommons.org/licenses/by-sa/3.0" target="_blank" rel="noopener noreferrer">CC BY-SA 3.0</a></small>
+                            </figcaption>
+                        </figure>
+                    </div>
+                    <p style="margin-top: 14px; color: #666;">
+                        Nếu ảnh không tải được, văn bản alt vẫn mô tả món ăn; hãy mở
+                        liên kết trang ảnh trên Commons để xem nguồn và giấy phép.
                     </p>
-                </div>
+                    <p style="margin-top: 8px; color: #666;">
+                        Ảnh được cắt hiển thị bằng CSS để thống nhất khung gallery;
+                        tệp gốc không bị thay đổi và có thể xem qua liên kết nguồn.
+                    </p>
+                </section>
+
+                <section aria-labelledby="project-split" style="margin-bottom: 48px;">
+                    <div class="section-header" style="margin-bottom: 24px;">
+                        <div>
+                            <span class="hero-label">Split dự kiến của dự án</span>
+                            <h3 id="project-split">Các tập dữ liệu dự kiến</h3>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                            <thead>
+                                <tr>
+                                    <th scope="col" style="padding: 10px; border-bottom: 1px solid #e5e5e5;">Tập dữ liệu</th>
+                                    <th scope="col" style="padding: 10px; border-bottom: 1px solid #e5e5e5;">Số ảnh</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><th scope="row" style="padding: 10px; border-bottom: 1px solid #e5e5e5;">Training set</th><td style="padding: 10px; border-bottom: 1px solid #e5e5e5;">68.175</td></tr>
+                                <tr><th scope="row" style="padding: 10px; border-bottom: 1px solid #e5e5e5;">Validation set</th><td style="padding: 10px; border-bottom: 1px solid #e5e5e5;">7.575</td></tr>
+                                <tr><th scope="row" style="padding: 10px;">Test set</th><td style="padding: 10px;">25.250</td></tr>
+                            </tbody>
+                        </table>
+                        <p style="margin-top: 14px;">
+                            Theo protocol dự kiến, Validation set được tách phân tầng
+                            từ Training set gốc (10% mỗi lớp, seed 42); Test set gốc
+                            được giữ nguyên. Split này chưa được tạo.
+                        </p>
+                    </div>
+                </section>
+
+                <section aria-labelledby="experiment-connection" style="margin-bottom: 48px;">
+                    <div class="section-header" style="margin-bottom: 24px;">
+                        <div>
+                            <span class="hero-label">Kế hoạch thực nghiệm</span>
+                            <h3 id="experiment-connection">Protocol so sánh CNN và Transformer</h3>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <p><strong>Mô hình (Models):</strong> ResNet-50 và ViT-B/16.</p>
+                        <p style="margin-top: 8px;"><strong>Chế độ huấn luyện (Training regimes):</strong> from scratch, frozen backbone, partial fine-tuning và full fine-tuning.</p>
+                        <p style="margin-top: 8px;"><strong>Chỉ số đánh giá (Metrics):</strong> Accuracy và Macro-F1; ghi nhận thời gian huấn luyện và số tham số có thể huấn luyện nếu khả thi.</p>
+                        <p style="margin-top: 12px;">
+                            Đây là protocol dự kiến, chưa phải báo cáo kết quả thực nghiệm;
+                            hiện chưa có kết quả huấn luyện hoặc đánh giá.
+                            <a href="README.md"><strong>Xem protocol A1.1 đầy đủ →</strong></a>
+                        </p>
+                    </div>
+                </section>
+
+                <section aria-labelledby="sources-usage">
+                    <div class="section-header" style="margin-bottom: 24px;">
+                        <div>
+                            <span class="hero-label">Nguồn tham khảo và lưu ý sử dụng</span>
+                            <h3 id="sources-usage">Tài liệu tham khảo</h3>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <ul style="padding-left: 20px;">
+                            <li><a href="https://data.vision.ee.ethz.ch/cvl/datasets_extra/food-101/" target="_blank" rel="noopener noreferrer">Trang Dataset Food-101 chính thức — ETH Zurich</a></li>
+                            <li><a href="https://data.vision.ee.ethz.ch/cvl/datasets_extra/food-101/static/bossard_eccv14_food-101.pdf" target="_blank" rel="noopener noreferrer">Paper gốc của Bossard, Guillaumin và Van Gool, “Food-101 — Mining Discriminative Components with Random Forests,” ECCV 2014</a></li>
+                        </ul>
+                        <p style="margin-top: 14px;">
+                            Ảnh gốc không thuộc sở hữu của ETH Zurich. Một
+                            <a href="https://docs.voxel51.com/dataset_zoo/datasets_hf/food101.html" target="_blank" rel="noopener noreferrer">thẻ mô tả Dataset từ nguồn thứ ba</a>
+                            lưu ý rằng việc sử dụng ngoài phạm vi scientific fair use
+                            (sử dụng hợp lý cho nghiên cứu khoa học) có thể cần xin
+                            phép chủ sở hữu quyền tương ứng. Đây là lưu ý
+                            thận trọng, không phải giấy phép cấp quyền: trang Dataset
+                            chính thức không xác lập giấy phép mở cho phép tái phân phối
+                            ảnh Food-101. Không mặc định rằng ảnh được tự do tái phân phối.
+                        </p>
+                    </div>
+                </section>
 
             </div>
 
