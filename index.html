@@ -56,10 +56,10 @@
         <section class="hero" id="home">
             <div class="container hero-content">
                 <div class="hero-copy">
-                    <span class="hero-label">CO5085 – HK261</span>
+                    <span class="hero-label">CO5085 · Học kỳ 261 (2026–2027)</span>
                     <h1>Deep Learning <span>for Computer Vision</span></h1>
                     <p class="hero-description">
-                        Trang web tổng hợp báo cáo, mã nguồn và kết quả thực hiện các bài tập
+                        Trang web tổng hợp mã nguồn, thí nghiệm và báo cáo các bài tập
                         về Deep Learning cho Computer Vision.
                     </p>
                     <div class="hero-person" aria-label="Thông tin sinh viên và môn học">
@@ -68,8 +68,8 @@
                         <span>CO5085</span>
                     </div>
                     <div class="hero-buttons">
-                        <a class="button primary" href="#assignments">Xem danh sách bài tập <span aria-hidden="true">→</span></a>
-                        <a class="button" href="https://github.com/hoctran19-cyber/deep-learning-computer-vision-co5085" target="_blank" rel="noopener noreferrer">Xem trên GitHub</a>
+                        <a class="button primary" href="#exercises">Xem các bài tập <span aria-hidden="true">→</span></a>
+                        <a class="button" href="https://github.com/hoctran19-cyber/deep-learning-computer-vision-co5085" target="_blank" rel="noopener noreferrer">Xem repository trên GitHub</a>
                     </div>
                 </div>
 
@@ -89,7 +89,7 @@
             <div class="container">
                 <div class="section-header">
                     <div>
-                        <span class="hero-label">Coursework</span>
+                        <span class="hero-label">Bài tập</span>
                         <h2>Danh sách bài tập</h2>
                         <p>Các bài tập được thực hiện trong quá trình học, từ xử lý ảnh cơ bản đến các mô hình hiện đại.</p>
                     </div>
@@ -165,24 +165,60 @@
             <div class="container">
                 <div class="section-header">
                     <div>
-                        <span class="hero-label">Hands-on</span>
-                        <h2>Exercises</h2>
+                        <span class="hero-label">Thực hành</span>
+                        <h2>Bài tập thực hành</h2>
                         <p>Các bài thực hành hiện có trong repository về phân loại, attention, mô hình chuỗi và mô hình sinh.</p>
                     </div>
                 </div>
-                <div class="work-grid">
-                    <a href="E1/" class="work-card">
-                        <span class="work-code">E1</span>
-                        <h3>Phân loại ảnh: Softmax, MLP và CNN</h3>
-                        <p>Thực nghiệm trên Fashion-MNIST, tự xây dựng vòng lặp huấn luyện và phân tích các mô hình phân loại.</p>
-                        <div class="tags"><span>Fashion-MNIST</span><span>CNN</span><span>Kết quả đã có</span></div>
-                    </a>
-                    <a href="E2/" class="work-card">
-                        <span class="work-code">E2</span>
-                        <h3>Transformer: MSA và tokenization</h3>
-                        <p>So sánh Multi-Head Self-Attention tự cài đặt với PyTorch và khảo sát các cách tokenization.</p>
-                        <div class="tags"><span>MSA</span><span>Tokenization</span><span>Kết quả đã có</span></div>
-                    </a>
+                <div class="exercise-feature-grid">
+                    <article class="work-card exercise-card">
+                        <div class="exercise-card-heading">
+                            <span class="work-code">E1</span>
+                            <span class="due-date">Hạn nộp · 02/11/2026 · 23:59 GMT+7</span>
+                        </div>
+                        <h3>Image Classification: Softmax, MLP, CNN</h3>
+                        <p>Xây dựng và so sánh ba bộ phân loại ảnh gồm Softmax classifier, MLP classifier và CNN trên cùng một tập ảnh nhỏ.</p>
+                        <ul class="exercise-details">
+                            <li><strong>Softmax classifier:</strong> làm phẳng ảnh thành vector, ánh xạ tuyến tính và áp dụng softmax.</li>
+                            <li><strong>MLP classifier:</strong> nhiều tầng fully connected kết hợp activation.</li>
+                            <li><strong>CNN classifier:</strong> convolution, pooling và classification head.</li>
+                            <li>Tự triển khai training loop bằng PyTorch.</li>
+                            <li>Đánh giá bằng accuracy, số tham số, đường cong loss–accuracy và phân tích các trường hợp dự đoán sai.</li>
+                        </ul>
+                        <div class="tags"><span>Image Classification</span><span>Fashion-MNIST</span><span>PyTorch</span></div>
+                        <div class="exercise-card-links">
+                            <a class="button primary" href="https://github.com/hoctran19-cyber/deep-learning-computer-vision-co5085/tree/main/E1" target="_blank" rel="noopener noreferrer">Xem mã nguồn E1</a>
+                            <a href="https://github.com/hoctran19-cyber/deep-learning-computer-vision-co5085/blob/main/E1/README.md" target="_blank" rel="noopener noreferrer">Đọc README / hướng dẫn chạy</a>
+                        </div>
+                    </article>
+
+                    <article class="work-card exercise-card">
+                        <div class="exercise-card-heading">
+                            <span class="work-code">E2</span>
+                            <span class="due-date">Hạn nộp · 02/11/2026 · 23:59 GMT+7</span>
+                        </div>
+                        <h3>Transformer: MSA và Tokenization</h3>
+                        <p>Hiện thực Multi-Head Self-Attention (MSA) từ đầu và bằng module PyTorch, sau đó so sánh các cách tokenization trên cùng tập ảnh đã sử dụng ở E1.</p>
+                        <ul class="exercise-details">
+                            <li>Tự triển khai MSA bằng các phép toán cơ bản và đối chiếu với <code>nn.MultiheadAttention</code>.</li>
+                            <li>Đưa MSA vào mô hình phân loại ảnh nhỏ với encoder nông và classification head; đây không phải mô hình Vision Transformer hoàn chỉnh.</li>
+                            <li>Thử các cách tokenization: patch-based, pixel/row-based và CNN-stem.</li>
+                            <li>So sánh accuracy, thời gian thực thi và nhận xét giữa các phiên bản.</li>
+                        </ul>
+                        <div class="tags"><span>Transformer &amp; Attention</span><span>MSA</span><span>Fashion-MNIST</span></div>
+                        <div class="exercise-card-links">
+                            <a class="button primary" href="https://github.com/hoctran19-cyber/deep-learning-computer-vision-co5085/tree/main/E2" target="_blank" rel="noopener noreferrer">Xem mã nguồn E2</a>
+                            <a href="https://github.com/hoctran19-cyber/deep-learning-computer-vision-co5085/blob/main/E2/README.md" target="_blank" rel="noopener noreferrer">Đọc README / hướng dẫn chạy</a>
+                        </div>
+                    </article>
+                </div>
+
+                <p class="report-note">
+                    Báo cáo PDF chung E1–E3 sẽ được cập nhật theo tiến độ bài tập.
+                    Hiện chưa có file PDF báo cáo trong repository.
+                </p>
+
+                <div class="work-grid additional-exercises" aria-label="Các bài thực hành khác">
                     <a href="E3/" class="work-card">
                         <span class="work-code">E3</span>
                         <h3>Mô hình chuỗi</h3>
@@ -237,8 +273,8 @@
                     </div>
                 </div>
                 <div class="resource-grid">
-                    <a class="resource-card" href="E1/README.md"><strong>E1 · README</strong><span>Hướng dẫn triển khai và kết quả thực nghiệm E1.</span></a>
-                    <a class="resource-card" href="E2/README.md"><strong>E2 · README</strong><span>Mô tả kiến trúc attention, thí nghiệm và kết quả E2.</span></a>
+                    <a class="resource-card" href="https://github.com/hoctran19-cyber/deep-learning-computer-vision-co5085/blob/main/E1/README.md" target="_blank" rel="noopener noreferrer"><strong>E1 · README</strong><span>Hướng dẫn triển khai và kết quả thực nghiệm E1.</span></a>
+                    <a class="resource-card" href="https://github.com/hoctran19-cyber/deep-learning-computer-vision-co5085/blob/main/E2/README.md" target="_blank" rel="noopener noreferrer"><strong>E2 · README</strong><span>Mô tả kiến trúc attention, thí nghiệm và kết quả E2.</span></a>
                     <a class="resource-card" href="A1-1/README.md"><strong>A1.1 · Protocol</strong><span>Dataset, split và kế hoạch thực nghiệm Food-101.</span></a>
                     <a class="resource-card" href="AI_USAGE.md"><strong>Tuyên bố sử dụng AI</strong><span>Thông tin về cách sử dụng và kiểm chứng công cụ AI.</span></a>
                     <a class="resource-card" href="git_colab_guide.md"><strong>Hướng dẫn GitHub và Colab</strong><span>Workflow phát triển và thực nghiệm trên Colab.</span></a>
