@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <meta name="description" content="Bài thực hành E2 về Multi-Head Self-Attention và tokenization trên Fashion-MNIST trong môn CO5085.">
     <title>E2 · Multi-Head Self-Attention — CO5085</title>
 
     <link rel="stylesheet" href="../css/style.css">
@@ -12,23 +13,21 @@
 
 <body>
 
-    <!-- Navigation -->
     <header class="navbar">
         <div class="container nav-container">
-
-            <a href="../" class="logo">
-                CO5085
+            <a class="brand" href="../#home" aria-label="Deep Learning for Computer Vision — Trang chủ">
+                <span class="brand-mark" aria-hidden="true">
+                    <svg viewBox="0 0 40 40" width="30" height="30" fill="none"><rect x="3" y="4" width="34" height="32" rx="6" fill="#DCEBFA"/><path d="M5 28 15 17l6 6 5-6 9 11v5H5z" fill="#60A5FA"/><circle cx="28" cy="12" r="3" fill="#FBBF24"/><path d="M5 31h30" stroke="#fff" stroke-width="2"/></svg>
+                </span>
+                <span class="brand-copy"><span class="brand-title">Deep Learning for Computer Vision</span><span class="brand-subtitle">CO5085 | HK261</span></span>
             </a>
-
-            <nav>
-                <a href="../#exercises">Exercises</a>
-                <a href="../#assignments">Assignments</a>
-                <a href="https://github.com/hoctran19-cyber/deep-learning-computer-vision-co5085"
-                   target="_blank">
-                    GitHub
+            <nav class="primary-nav" aria-label="Điều hướng chính">
+                <a href="../#home">Trang chủ</a><a href="../#assignments" aria-current="page">Bài tập</a><a href="../#documents">Tài liệu</a><a href="../#about">Giới thiệu</a>
+                <a class="github-link" href="https://github.com/hoctran19-cyber/deep-learning-computer-vision-co5085" target="_blank" rel="noopener noreferrer" aria-label="Mở repository trên GitHub">
+                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .9a11.1 11.1 0 0 0-3.51 21.63c.55.1.76-.24.76-.54v-2.1c-3.1.67-3.76-1.32-3.76-1.32-.5-1.29-1.23-1.63-1.23-1.63-1.01-.69.08-.68.08-.68 1.12.08 1.7 1.15 1.7 1.15.99 1.7 2.6 1.21 3.23.93.1-.72.39-1.21.7-1.49-2.47-.28-5.07-1.24-5.07-5.5 0-1.22.44-2.21 1.15-2.99-.12-.28-.5-1.42.11-2.95 0 0 .94-.3 3.05 1.14a10.6 10.6 0 0 1 5.55 0c2.12-1.44 3.05-1.14 3.05-1.14.61 1.53.23 2.67.11 2.95.72.78 1.15 1.77 1.15 2.99 0 4.27-2.6 5.21-5.08 5.49.4.35.75 1.02.75 2.06v3.06c0 .3.2.65.76.54A11.1 11.1 0 0 0 12 .9Z"/></svg>
                 </a>
             </nav>
-
+            <details class="mobile-nav"><summary aria-label="Mở menu điều hướng">☰</summary><nav class="mobile-nav-panel" aria-label="Điều hướng trên thiết bị di động"><a href="../#home">Trang chủ</a><a href="../#assignments" aria-current="page">Bài tập</a><a href="../#documents">Tài liệu</a><a href="../#about">Giới thiệu</a><a href="https://github.com/hoctran19-cyber/deep-learning-computer-vision-co5085" target="_blank" rel="noopener noreferrer">GitHub</a></nav></details>
         </div>
     </header>
 
@@ -36,72 +35,73 @@
     <main>
 
         <section class="section subpage">
-
             <div class="container">
+                <nav class="breadcrumbs" aria-label="Đường dẫn">
+                    <a href="../#home">Trang chủ</a><span aria-hidden="true">›</span>
+                    <a href="../#exercises">Bài tập</a><span aria-hidden="true">›</span>
+                    <span aria-current="page">E2</span>
+                </nav>
 
-                <a href="../#exercises" class="back-link">
-                    ← Back to Exercises
-                </a>
-
-                <div class="section-header">
-
-                    <span class="section-number">
-                        E2
-                    </span>
-
+                <div class="detail-heading">
                     <div>
-                        <span class="hero-label">Exercise 2</span>
-
-                        <h2>Multi-Head Self-Attention</h2>
-
-                        <p>
-                            Implement Multi-Head Self-Attention (MSA) fully from scratch and with PyTorch modules. Explore several tokenizations (patch, pixel/row, CNN stem, CLS + patches, …) and classify on the same small image set.
+                        <span class="hero-label">E2 · Bài thực hành</span>
+                        <h1 class="page-title">Multi-Head Self-Attention</h1>
+                        <p class="hero-description">
+                            Hiện thực và so sánh Multi-Head Self-Attention tự cài đặt
+                            với module PyTorch, đồng thời khảo sát các cách tokenization
+                            trên Fashion-MNIST.
                         </p>
                     </div>
-
+                    <span class="status-badge">Đã có mã nguồn và kết quả</span>
                 </div>
 
+                <div class="detail-content">
+                    <section class="detail-section">
+                        <h2>Nội dung thực hành</h2>
+                        <div class="experiment-cards">
+                            <article class="info-card">
+                                <span class="card-label">Attention</span>
+                                <h3>Custom MSA và PyTorch</h3>
+                                <p>Đối chiếu hai cách hiện thực attention trong cùng cấu hình mô hình.</p>
+                            </article>
+                            <article class="info-card">
+                                <span class="card-label">Tokenization</span>
+                                <h3>Patch, row và CNN-stem</h3>
+                                <p>Khảo sát ảnh được biểu diễn thành chuỗi token theo các cách khác nhau.</p>
+                            </article>
+                            <article class="info-card">
+                                <span class="card-label">Đánh giá</span>
+                                <h3>Fashion-MNIST</h3>
+                                <p>README ghi cấu hình chạy, metrics, nhận xét và hạn chế của các thí nghiệm.</p>
+                            </article>
+                        </div>
+                    </section>
 
-                <div class="placeholder">
-                    <strong>Coming soon</strong>
-                    <p>
-                        Notebook, results and write-up for this
-                        exercise will be published here.
-                    </p>
+                    <section class="detail-section">
+                        <h2>Tài liệu và tệp thí nghiệm</h2>
+                        <div class="resource-grid">
+                            <a class="resource-card" href="README.md"><strong>README · Báo cáo và hướng dẫn</strong><span>Mô tả triển khai, cấu hình, kết quả thực nghiệm và hạn chế.</span></a>
+                            <a class="resource-card" href="notebooks/e2_experiments.ipynb"><strong>Notebook E2</strong><span>Notebook dùng để chạy các thí nghiệm trong Google Colab.</span></a>
+                            <a class="resource-card" href="outputs/metrics/comparison.csv"><strong>Bảng metrics</strong><span>Tệp CSV so sánh các cấu hình đã chạy.</span></a>
+                            <a class="resource-card" href="src/attention.py"><strong>Mã nguồn attention</strong><span>Hiện thực Custom MSA và wrapper PyTorch.</span></a>
+                            <a class="resource-card" href="src/tokenizers.py"><strong>Mã nguồn tokenization</strong><span>Hiện thực patch, row và CNN-stem tokenization.</span></a>
+                        </div>
+                    </section>
                 </div>
-
             </div>
-
         </section>
 
     </main>
 
 
-    <!-- Footer -->
     <footer>
-
         <div class="container footer-content">
-
             <div>
-                <strong>CO5085</strong>
-
-                <p>
-                    Deep Learning and Its Applications
-                    in Computer Vision
-                </p>
+                <strong>Trần Thái Học (2570426) · CO5085</strong>
+                <p>Deep Learning for Computer Vision · HK261</p>
             </div>
-
-            <div>
-                <a
-                    href="https://github.com/hoctran19-cyber/deep-learning-computer-vision-co5085"
-                    target="_blank"
-                >
-                    GitHub Repository →
-                </a>
-            </div>
-
+            <a href="https://github.com/hoctran19-cyber/deep-learning-computer-vision-co5085" target="_blank" rel="noopener noreferrer">Mã nguồn trên GitHub →</a>
         </div>
-
     </footer>
 
 </body>
