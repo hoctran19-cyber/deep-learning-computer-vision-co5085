@@ -62,11 +62,42 @@
                 </div>
 
 
-                <div class="placeholder">
-                    <strong>Coming soon</strong>
+                <div class="info-card">
+                    <span class="card-label">Protocol dự kiến · Chưa có kết quả thực nghiệm</span>
+
+                    <h3>Food-101: CNN và Transformer</h3>
+
                     <p>
-                        Notebook, results and write-up for this
-                        assignment will be published here.
+                        Food-101 gồm 101 lớp và 101.000 ảnh. Protocol giữ nguyên
+                        test split gốc, tách validation phân tầng từ train gốc
+                        với seed 42.
+                    </p>
+
+                    <p>
+                        <strong>Split:</strong> train 68.175 · validation 7.575 · test 25.250 ảnh
+                    </p>
+
+                    <p>
+                        <strong>Mô hình:</strong> ResNet-50 và ViT-B/16.
+                        <strong>Training regimes:</strong> from scratch, frozen
+                        backbone, partial fine-tuning và full fine-tuning.
+                    </p>
+
+                    <p>
+                        <strong>Đánh giá dự kiến:</strong> accuracy và macro-F1;
+                        ghi nhận thời gian huấn luyện và số tham số trainable
+                        nếu khả thi.
+                    </p>
+
+                    <p>
+                        Đây là kế hoạch thực nghiệm, chưa phải kết quả; dataset
+                        chưa được tải và mô hình chưa được huấn luyện. License
+                        ảnh chưa được xác minh đầy đủ; không giả định ảnh được
+                        tự do tái phân phối.
+                    </p>
+
+                    <p>
+                        <a href="README.md"><strong>Đọc protocol A1.1 đầy đủ →</strong></a>
                     </p>
                 </div>
 
