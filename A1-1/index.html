@@ -62,44 +62,218 @@
                 </div>
 
 
-                <div class="info-card">
-                    <span class="card-label">Protocol dự kiến · Chưa có kết quả thực nghiệm</span>
+                <section aria-labelledby="dataset-overview" style="margin-bottom: 48px;">
+                    <div class="section-header" style="margin-bottom: 24px;">
+                        <div>
+                            <span class="hero-label">Dataset overview</span>
+                            <h3 id="dataset-overview">Food-101</h3>
+                            <p>
+                                Food-101 is a large-scale food image classification dataset
+                                introduced for computer vision research.
+                            </p>
+                        </div>
+                    </div>
 
-                    <h3>Food-101: CNN và Transformer</h3>
-
-                    <p>
-                        Food-101 gồm 101 lớp và 101.000 ảnh. Protocol giữ nguyên
-                        test split gốc, tách validation phân tầng từ train gốc
-                        với seed 42.
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 16px;">
+                        <div class="info-card"><strong>101</strong><br>classes</div>
+                        <div class="info-card"><strong>101,000</strong><br>images</div>
+                        <div class="info-card"><strong>1,000</strong><br>images per class</div>
+                        <div class="info-card"><strong>750</strong><br>original training images per class</div>
+                        <div class="info-card"><strong>250</strong><br>original test images per class</div>
+                    </div>
+                    <p style="margin-top: 16px; color: #666;">
+                        These counts describe the dataset's original train/test structure.
+                        They are distinct from this project's proposed train/validation/test
+                        split below.
                     </p>
+                </section>
 
-                    <p>
-                        <strong>Split:</strong> train 68.175 · validation 7.575 · test 25.250 ảnh
-                    </p>
+                <section aria-labelledby="dataset-characteristics" style="margin-bottom: 48px;">
+                    <div class="section-header" style="margin-bottom: 24px;">
+                        <div>
+                            <span class="hero-label">Dataset characteristics</span>
+                            <h3 id="dataset-characteristics">Variation in food images</h3>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <p>
+                            Food-101 covers 101 food categories with visual differences in
+                            shape, color, ingredients, and presentation. Images may vary in
+                            camera angle, lighting, background, and plating.
+                        </p>
+                        <p style="margin-top: 12px;">
+                            The original training set was intentionally not cleaned and may
+                            contain label noise and visual inconsistencies. The original
+                            test labels were manually reviewed. These characteristics make
+                            food recognition a useful classification task for comparing
+                            convolutional neural networks (CNNs) with Vision Transformers;
+                            difficulty can still vary across individual classes and images.
+                        </p>
+                    </div>
+                </section>
 
-                    <p>
-                        <strong>Mô hình:</strong> ResNet-50 và ViT-B/16.
-                        <strong>Training regimes:</strong> from scratch, frozen
-                        backbone, partial fine-tuning và full fine-tuning.
-                    </p>
+                <section aria-labelledby="representative-images" style="margin-bottom: 48px;">
+                    <div class="section-header" style="margin-bottom: 24px;">
+                        <div>
+                            <span class="hero-label">Representative dishes</span>
+                            <h3 id="representative-images">Illustrative food images</h3>
+                            <p>
+                                These are illustrative images, not actual Food-101 samples.
+                                Images are served by Wikimedia Commons under the licenses
+                                listed with each attribution.
+                            </p>
+                        </div>
+                    </div>
 
-                    <p>
-                        <strong>Đánh giá dự kiến:</strong> accuracy và macro-F1;
-                        ghi nhận thời gian huấn luyện và số tham số trainable
-                        nếu khả thi.
-                    </p>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px;">
+                        <figure style="border: 1px solid #e5e5e5; border-radius: 8px; overflow: hidden;">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a4/Pizza.jpg"
+                                 alt="A round cheese pizza with toppings"
+                                 loading="lazy"
+                                 style="display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover;">
+                            <figcaption style="padding: 14px;">
+                                <strong>Pizza</strong><br>
+                                <small>Jakob Dettner · <a href="https://commons.wikimedia.org/wiki/File:Pizza.jpg" target="_blank" rel="noopener noreferrer">Wikimedia Commons</a> · <a href="https://creativecommons.org/licenses/by-sa/2.0/de/deed.en" target="_blank" rel="noopener noreferrer">CC BY-SA 2.0 DE</a></small>
+                            </figcaption>
+                        </figure>
 
-                    <p>
-                        Đây là kế hoạch thực nghiệm, chưa phải kết quả; dataset
-                        chưa được tải và mô hình chưa được huấn luyện. License
-                        ảnh chưa được xác minh đầy đủ; không giả định ảnh được
-                        tự do tái phân phối.
-                    </p>
+                        <figure style="border: 1px solid #e5e5e5; border-radius: 8px; overflow: hidden;">
+                            <img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/6/60/Sushi_platter.jpg/960px-Sushi_platter.jpg"
+                                 alt="A platter of assorted sushi"
+                                 loading="lazy"
+                                 style="display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover;">
+                            <figcaption style="padding: 14px;">
+                                <strong>Sushi</strong><br>
+                                <small>chidorian · <a href="https://commons.wikimedia.org/wiki/File:Sushi_platter.jpg" target="_blank" rel="noopener noreferrer">Wikimedia Commons</a> · <a href="https://creativecommons.org/licenses/by-sa/2.0" target="_blank" rel="noopener noreferrer">CC BY-SA 2.0</a></small>
+                            </figcaption>
+                        </figure>
 
-                    <p>
-                        <a href="README.md"><strong>Đọc protocol A1.1 đầy đủ →</strong></a>
+                        <figure style="border: 1px solid #e5e5e5; border-radius: 8px; overflow: hidden;">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Hamburger_sandwich.jpg"
+                                 alt="A hamburger sandwich with lettuce"
+                                 loading="lazy"
+                                 style="display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover;">
+                            <figcaption style="padding: 14px;">
+                                <strong>Hamburger</strong><br>
+                                <small>Ericd · <a href="https://commons.wikimedia.org/wiki/File:Hamburger_sandwich.jpg" target="_blank" rel="noopener noreferrer">Wikimedia Commons</a> · <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 3.0</a></small>
+                            </figcaption>
+                        </figure>
+
+                        <figure style="border: 1px solid #e5e5e5; border-radius: 8px; overflow: hidden;">
+                            <img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a5/Saiki-ramen.jpg/960px-Saiki-ramen.jpg"
+                                 alt="A bowl of Saiki ramen"
+                                 loading="lazy"
+                                 style="display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover;">
+                            <figcaption style="padding: 14px;">
+                                <strong>Ramen</strong><br>
+                                <small>Mikadojin · <a href="https://commons.wikimedia.org/wiki/File:Saiki-ramen.jpg" target="_blank" rel="noopener noreferrer">Wikimedia Commons</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a></small>
+                            </figcaption>
+                        </figure>
+
+                        <figure style="border: 1px solid #e5e5e5; border-radius: 8px; overflow: hidden;">
+                            <img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4b/Apple_pie.jpg/960px-Apple_pie.jpg"
+                                 alt="A baked apple pie"
+                                 loading="lazy"
+                                 style="display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover;">
+                            <figcaption style="padding: 14px;">
+                                <strong>Apple pie</strong><br>
+                                <small>Dan Parsons · <a href="https://commons.wikimedia.org/wiki/File:Apple_pie.jpg" target="_blank" rel="noopener noreferrer">Wikimedia Commons</a> · <a href="https://creativecommons.org/licenses/by-sa/2.0" target="_blank" rel="noopener noreferrer">CC BY-SA 2.0</a></small>
+                            </figcaption>
+                        </figure>
+
+                        <figure style="border: 1px solid #e5e5e5; border-radius: 8px; overflow: hidden;">
+                            <img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/8/85/Caesar-salad.jpg/960px-Caesar-salad.jpg"
+                                 alt="A Caesar salad with lettuce and croutons"
+                                 loading="lazy"
+                                 style="display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover;">
+                            <figcaption style="padding: 14px;">
+                                <strong>Caesar salad</strong><br>
+                                <small>Telluride · <a href="https://commons.wikimedia.org/wiki/File:Caesar-salad.jpg" target="_blank" rel="noopener noreferrer">Wikimedia Commons</a> · <a href="https://creativecommons.org/licenses/by-sa/3.0" target="_blank" rel="noopener noreferrer">CC BY-SA 3.0</a></small>
+                            </figcaption>
+                        </figure>
+                    </div>
+                    <p style="margin-top: 14px; color: #666;">
+                        If an image does not load, its alt text describes the dish; use the
+                        linked Commons file page to view the source and license.
                     </p>
-                </div>
+                    <p style="margin-top: 8px; color: #666;">
+                        Images are displayed with CSS cropping for a consistent gallery
+                        frame; the original files remain unchanged at their source links.
+                    </p>
+                </section>
+
+                <section aria-labelledby="project-split" style="margin-bottom: 48px;">
+                    <div class="section-header" style="margin-bottom: 24px;">
+                        <div>
+                            <span class="hero-label">Project split · Proposed</span>
+                            <h3 id="project-split">Planned train, validation, and test sets</h3>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                            <thead>
+                                <tr>
+                                    <th scope="col" style="padding: 10px; border-bottom: 1px solid #e5e5e5;">Split</th>
+                                    <th scope="col" style="padding: 10px; border-bottom: 1px solid #e5e5e5;">Images</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><th scope="row" style="padding: 10px; border-bottom: 1px solid #e5e5e5;">Train</th><td style="padding: 10px; border-bottom: 1px solid #e5e5e5;">68,175</td></tr>
+                                <tr><th scope="row" style="padding: 10px; border-bottom: 1px solid #e5e5e5;">Validation</th><td style="padding: 10px; border-bottom: 1px solid #e5e5e5;">7,575</td></tr>
+                                <tr><th scope="row" style="padding: 10px;">Test</th><td style="padding: 10px;">25,250</td></tr>
+                            </tbody>
+                        </table>
+                        <p style="margin-top: 14px;">
+                            Validation is proposed to be stratified from the original
+                            training set (10% per class, seed 42); the original test set is
+                            kept unchanged. This split has not yet been generated.
+                        </p>
+                    </div>
+                </section>
+
+                <section aria-labelledby="experiment-connection" style="margin-bottom: 48px;">
+                    <div class="section-header" style="margin-bottom: 24px;">
+                        <div>
+                            <span class="hero-label">Connection to the experiment</span>
+                            <h3 id="experiment-connection">CNN and Transformer protocol</h3>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <p><strong>Architectures:</strong> ResNet-50 and ViT-B/16.</p>
+                        <p style="margin-top: 8px;"><strong>Training regimes:</strong> from scratch, frozen backbone, partial fine-tuning, and full fine-tuning.</p>
+                        <p style="margin-top: 8px;"><strong>Evaluation:</strong> accuracy and macro-F1; training time and trainable parameters where feasible.</p>
+                        <p style="margin-top: 12px;">
+                            This is a proposed protocol, not an experimental report. No
+                            training or evaluation results are available yet.
+                            <a href="README.md"><strong>Read the full A1.1 protocol →</strong></a>
+                        </p>
+                    </div>
+                </section>
+
+                <section aria-labelledby="sources-usage">
+                    <div class="section-header" style="margin-bottom: 24px;">
+                        <div>
+                            <span class="hero-label">Sources and dataset usage</span>
+                            <h3 id="sources-usage">Dataset references</h3>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <ul style="padding-left: 20px;">
+                            <li><a href="https://data.vision.ee.ethz.ch/cvl/datasets_extra/food-101/" target="_blank" rel="noopener noreferrer">Official Food-101 dataset page — ETH Zurich</a></li>
+                            <li><a href="https://data.vision.ee.ethz.ch/cvl/datasets_extra/food-101/static/bossard_eccv14_food-101.pdf" target="_blank" rel="noopener noreferrer">Bossard, Guillaumin &amp; Van Gool, “Food-101 — Mining Discriminative Components with Random Forests,” ECCV 2014</a></li>
+                        </ul>
+                        <p style="margin-top: 14px;">
+                            The original images are not owned by ETH Zurich. A
+                            <a href="https://docs.voxel51.com/dataset_zoo/datasets_hf/food101.html" target="_blank" rel="noopener noreferrer">third-party dataset card</a>
+                            notes that use beyond scientific fair use may require
+                            permission from the respective rights holders. This is a
+                            cautionary note, not a license grant: the official dataset
+                            page does not establish an open redistribution license for
+                            the Food-101 images. Do not assume they are freely
+                            redistributable.
+                        </p>
+                    </div>
+                </section>
 
             </div>
 
