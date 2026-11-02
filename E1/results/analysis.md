@@ -10,21 +10,21 @@ Em đánh giá các mô hình dựa trên độ chính xác của tập kiểm t
 
 | Mô hình | Test accuracy | Best validation accuracy | Số tham số | Thời gian huấn luyện (giây) |
 |---|---:|---:|---:|---:|
-| Softmax | 84,19% | 85,25% | 7.850 | 118,44 |
-| MLP | 87,92% | 88,67% | 109.386 | 118,44 |
-| CNN | 91,05% | 92,00% | 50.186 | 122,53 |
+| Softmax | 84,19% | 85,25% | 7.850 | 111,59 |
+| MLP | 87,92% | 88,67% | 109.386 | 113,41 |
+| CNN | 91,22% | 91,93% | 50.186 | 124,08 |
 
 *Lưu ý: Em tổng hợp các số liệu trong bảng từ kết quả thực nghiệm hiện có; thời gian huấn luyện được làm tròn đến hai chữ số thập phân.*
 
 ### 1.2. Nhận xét tổng quan
 
-Từ kết quả trong bảng, em thấy CNN đạt độ chính xác trên tập kiểm thử cao nhất (91,05%), tiếp theo là MLP (87,92%) và Softmax (84,19%).
+Từ kết quả trong bảng, em thấy CNN đạt độ chính xác trên tập kiểm thử cao nhất (91,22%), tiếp theo là MLP (87,92%) và Softmax (84,19%).
 
-So với Softmax, MLP tăng 3,73 điểm phần trăm về độ chính xác kiểm thử. CNN cao hơn Softmax 6,86 điểm phần trăm và cao hơn MLP 3,13 điểm phần trăm.
+So với Softmax, MLP tăng 3,73 điểm phần trăm về độ chính xác kiểm thử. CNN cao hơn Softmax 7,03 điểm phần trăm và cao hơn MLP 3,30 điểm phần trăm.
 
 Xét về số lượng tham số, Softmax có mô hình nhỏ nhất với 7.850 tham số. MLP có 109.386 tham số, còn CNN có 50.186 tham số. Như vậy, trong cấu hình em thử nghiệm, CNN đạt độ chính xác cao hơn MLP dù sử dụng ít tham số hơn.
 
-Về thời gian huấn luyện, Softmax và MLP lần lượt mất khoảng 118,44 giây, trong khi CNN mất khoảng 122,53 giây. Ở lần chạy này, CNN cần nhiều thời gian hơn một chút.
+Về thời gian huấn luyện, Softmax, MLP và CNN lần lượt mất khoảng 111,59 giây, 113,41 giây và 124,08 giây. Ở lần chạy này, CNN cần nhiều thời gian hơn một chút.
 
 ## 2. Phân tích đường cong huấn luyện
 
@@ -60,7 +60,7 @@ Mặc dù vậy, validation accuracy của MLP vẫn cao hơn Softmax. Với k�
 
 *Hình 3. Training loss, validation loss và accuracy của mô hình CNN.*
 
-Ở CNN, training loss giảm từ khoảng 0,50 xuống 0,16, còn training accuracy tăng lên khoảng 94%. Validation accuracy đạt cao nhất khoảng 92% ở epoch 7, giảm ở epoch 8 rồi phục hồi ở epoch 9.
+Ở CNN, training loss giảm từ khoảng 0,50 xuống 0,16, còn training accuracy tăng lên khoảng 94%. Validation accuracy đạt cao nhất 91,93% ở epoch 8, giảm xuống 91,10% ở epoch 9 rồi phục hồi lên 91,52% ở epoch 10; validation loss thấp nhất (0,2266) cũng ở epoch 8.
 
 Validation loss nhìn chung giảm nhưng vẫn dao động ở giai đoạn cuối. So với Softmax, em cũng thấy khoảng cách giữa training accuracy và validation accuracy của CNN rõ hơn.
 
@@ -106,7 +106,7 @@ So với Softmax, MLP đạt độ chính xác tổng thể cao hơn. Kết qu�
 
 Ở ma trận của CNN, em cũng thấy đường chéo chính nổi bật. Mô hình vẫn nhầm lẫn một số lớp trang phục có hình dạng tương tự, đặc biệt là các loại áo.
 
-Khi xem xét cùng test accuracy 91,05%, em nhận thấy CNN có kết quả phân loại tổng thể tốt nhất trong ba mô hình. Những lớp có hình dạng đặc trưng hơn dường như dễ phân loại hơn, còn các lớp có đường viền tương tự vẫn là thách thức.
+Khi xem xét cùng test accuracy 91,22%, em nhận thấy CNN có kết quả phân loại tổng thể tốt nhất trong ba mô hình. Những lớp có hình dạng đặc trưng hơn dường như dễ phân loại hơn, còn các lớp có đường viền tương tự vẫn là thách thức.
 
 ### 3.4. So sánh ma trận nhầm lẫn
 
@@ -173,7 +173,7 @@ Theo em, CNN cải thiện hiệu quả phân loại tổng thể nhưng vẫn c
 
 ### 4.3. Liên hệ với kết quả định lượng
 
-Em ghi nhận test accuracy của Softmax, MLP và CNN lần lượt là 84,19%, 87,92% và 91,05%.
+Em ghi nhận test accuracy của Softmax, MLP và CNN lần lượt là 84,19%, 87,92% và 91,22%.
 
 Theo em, các ảnh dự đoán sai giúp minh họa thêm cho những số liệu trên. Những ví dụ này cho thấy lỗi có xu hướng tập trung ở các lớp có hình dạng tương đồng, thay vì chỉ xuất hiện ngẫu nhiên.
 
@@ -195,7 +195,7 @@ Softmax có số lượng tham số nhỏ nhất, nên theo em mô hình phù h�
 
 MLP đạt test accuracy 87,92%, nhưng có số lượng tham số lớn nhất (109.386). Theo em, các lớp ẩn giúp mô hình học quan hệ phi tuyến; tuy vậy, MLP không trực tiếp khai thác cấu trúc không gian cục bộ của ảnh như CNN.
 
-CNN đạt test accuracy 91,05% với 50.186 tham số. Trong cấu hình em thử nghiệm, mô hình vừa có độ chính xác cao nhất vừa sử dụng ít tham số hơn MLP. Theo em, các lớp tích chập có thể góp phần cải thiện kết quả vì cho phép mô hình học đặc trưng không gian cục bộ của ảnh.
+CNN đạt test accuracy 91,22% với 50.186 tham số. Trong cấu hình em thử nghiệm, mô hình vừa có độ chính xác cao nhất vừa sử dụng ít tham số hơn MLP. Theo em, các lớp tích chập có thể góp phần cải thiện kết quả vì cho phép mô hình học đặc trưng không gian cục bộ của ảnh.
 
 ### 5.2. Khả năng tổng quát hóa
 
@@ -205,7 +205,7 @@ Kết quả này nhắc em rằng mô hình cải thiện trên tập training k
 
 ### 5.3. Chi phí huấn luyện
 
-Trong lần thực nghiệm này, em ghi nhận thời gian huấn luyện của Softmax, MLP và CNN lần lượt là khoảng 118,44 giây, 118,44 giây và 122,53 giây.
+Trong lần thực nghiệm này, em ghi nhận thời gian huấn luyện của Softmax, MLP và CNN lần lượt là khoảng 111,59 giây, 113,41 giây và 124,08 giây.
 
 CNN mất nhiều thời gian hơn một chút. Dù vậy, theo kết quả hiện tại, chênh lệch này không lớn so với mức cải thiện accuracy. Em lưu ý rằng thời gian trên chỉ phản ánh cấu hình và điều kiện của lần chạy này, không đại diện cho mọi phần cứng hay cách triển khai.
 
@@ -213,17 +213,17 @@ CNN mất nhiều thời gian hơn một chút. Dù vậy, theo kết quả hi�
 
 | Tiêu chí | Mô hình nổi bật | Nhận xét |
 |---|---|---|
-| Test accuracy | CNN | Đạt 91,05%, cao nhất trong ba mô hình |
+| Test accuracy | CNN | Đạt 91,22%, cao nhất trong ba mô hình |
 | Ít tham số nhất | Softmax | Chỉ có 7.850 tham số |
-| Ít tham số hơn MLP nhưng accuracy cao hơn | CNN | 50.186 tham số và test accuracy 91,05% |
-| Thời gian huấn luyện ngắn nhất | Softmax và MLP | Khoảng 118,44 giây trong lần chạy hiện tại |
+| Ít tham số hơn MLP nhưng accuracy cao hơn | CNN | 50.186 tham số và test accuracy 91,22% |
+| Thời gian huấn luyện ngắn nhất | Softmax | Khoảng 111,59 giây trong lần chạy hiện tại |
 | Khả năng khai thác đặc trưng không gian | CNN | Kiến trúc tích chập phù hợp với dữ liệu ảnh |
 
 ## 6. Kết luận
 
 Trong bài thực nghiệm E1 trên Fashion-MNIST, em đã so sánh Softmax, MLP và CNN theo độ chính xác, số lượng tham số, quá trình huấn luyện và các dạng lỗi phân loại.
 
-Softmax có cấu trúc đơn giản nhất và ít tham số nhất, nhưng test accuracy đạt 84,19%. MLP nâng độ chính xác lên 87,92%, đổi lại có số lượng tham số lớn nhất. CNN cho kết quả tốt nhất trong lần thử nghiệm này, với test accuracy 91,05% và 50.186 tham số, ít hơn MLP. Từ các kết quả này, em nhận thấy CNN có sự cân bằng tốt hơn giữa độ chính xác và số lượng tham số trong cấu hình đã thử nghiệm.
+Softmax có cấu trúc đơn giản nhất và ít tham số nhất, nhưng test accuracy đạt 84,19%. MLP nâng độ chính xác lên 87,92%, đổi lại có số lượng tham số lớn nhất. CNN cho kết quả tốt nhất trong lần thử nghiệm này, với test accuracy 91,22% và 50.186 tham số, ít hơn MLP. Từ các kết quả này, em nhận thấy CNN có sự cân bằng tốt hơn giữa độ chính xác và số lượng tham số trong cấu hình đã thử nghiệm.
 
 Từ các đường cong huấn luyện, em nhận thấy cả ba mô hình đều học được đặc trưng hữu ích, nhưng MLP và CNN có chênh lệch giữa kết quả training và validation ở giai đoạn cuối. Ma trận nhầm lẫn cũng cho thấy những lớp trang phục có hình dạng tương tự là một nguồn gây lỗi đáng chú ý.
 
