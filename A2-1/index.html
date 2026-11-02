@@ -8,6 +8,75 @@
     <title>A2-1 · Topic + Paper + Data — CO5085</title>
 
     <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .a21-meta {
+            margin-bottom: 24px
+        }
+
+        .a21-meta p {
+            margin-bottom: 6px;
+            color: var(--muted)
+        }
+
+        .a21-content h3 {
+            margin: 24px 0 10px;
+            color: var(--navy-deep)
+        }
+
+        .a21-content ul,
+        .a21-content ol {
+            margin: 0 0 14px 22px;
+            color: var(--muted)
+        }
+
+        .a21-content li {
+            margin-bottom: 6px
+        }
+
+        .a21-content pre {
+            overflow-x: auto;
+            padding: 16px;
+            margin-bottom: 14px;
+            border-radius: 10px;
+            background: var(--surface-soft);
+            font-size: .9rem
+        }
+
+        .a21-content code {
+            font-family: ui-monospace, Menlo, monospace
+        }
+
+        .a21-content a {
+            overflow-wrap: anywhere
+        }
+
+        .a21-content .table-wrap {
+            margin-bottom: 14px
+        }
+
+        .a21-fig {
+            margin: 18px 0 22px;
+            padding: 14px;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: var(--surface-soft)
+        }
+
+        .a21-fig svg {
+            display: block;
+            width: 100%;
+            height: auto;
+            max-width: 760px;
+            margin: 0 auto
+        }
+
+        .a21-fig figcaption {
+            margin-top: 10px;
+            font-size: .85rem;
+            color: var(--muted);
+            text-align: center
+        }
+    </style>
 </head>
 
 <body>
@@ -16,17 +85,35 @@
         <div class="container nav-container">
             <a class="brand" href="../#home" aria-label="Deep Learning for Computer Vision — Trang chủ">
                 <span class="brand-mark" aria-hidden="true">
-                    <svg viewBox="0 0 40 40" width="30" height="30" fill="none"><rect x="3" y="4" width="34" height="32" rx="6" fill="#DCEBFA"/><path d="M5 28 15 17l6 6 5-6 9 11v5H5z" fill="#60A5FA"/><circle cx="28" cy="12" r="3" fill="#FBBF24"/><path d="M5 31h30" stroke="#fff" stroke-width="2"/></svg>
+                    <svg viewBox="0 0 40 40" width="30" height="30" fill="none">
+                        <rect x="3" y="4" width="34" height="32" rx="6" fill="#DCEBFA" />
+                        <path d="M5 28 15 17l6 6 5-6 9 11v5H5z" fill="#60A5FA" />
+                        <circle cx="28" cy="12" r="3" fill="#FBBF24" />
+                        <path d="M5 31h30" stroke="#fff" stroke-width="2" />
+                    </svg>
                 </span>
-                <span class="brand-copy"><span class="brand-title">Deep Learning for Computer Vision</span><span class="brand-subtitle">CO5085 | HK261</span></span>
+                <span class="brand-copy"><span class="brand-title">Deep Learning for Computer Vision</span><span
+                        class="brand-subtitle">CO5085 | HK261</span></span>
             </a>
             <nav class="primary-nav" aria-label="Điều hướng chính">
-                <a href="../#home">Trang chủ</a><a href="../#assignments" aria-current="page">Bài tập</a><a href="../#documents">Tài liệu</a><a href="../#about">Giới thiệu</a>
-                <a class="github-link" href="https://github.com/hoctran19-cyber/deep-learning-computer-vision-co5085" target="_blank" rel="noopener noreferrer" aria-label="Mở repository trên GitHub">
-                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .9a11.1 11.1 0 0 0-3.51 21.63c.55.1.76-.24.76-.54v-2.1c-3.1.67-3.76-1.32-3.76-1.32-.5-1.29-1.23-1.63-1.23-1.63-1.01-.69.08-.68.08-.68 1.12.08 1.7 1.15 1.7 1.15.99 1.7 2.6 1.21 3.23.93.1-.72.39-1.21.7-1.49-2.47-.28-5.07-1.24-5.07-5.5 0-1.22.44-2.21 1.15-2.99-.12-.28-.5-1.42.11-2.95 0 0 .94-.3 3.05 1.14a10.6 10.6 0 0 1 5.55 0c2.12-1.44 3.05-1.14 3.05-1.14.61 1.53.23 2.67.11 2.95.72.78 1.15 1.77 1.15 2.99 0 4.27-2.6 5.21-5.08 5.49.4.35.75 1.02.75 2.06v3.06c0 .3.2.65.76.54A11.1 11.1 0 0 0 12 .9Z"/></svg>
+                <a href="../#home">Trang chủ</a><a href="../#assignments" aria-current="page">Bài tập</a><a
+                    href="../#documents">Tài liệu</a><a href="../#about">Giới thiệu</a>
+                <a class="github-link" href="https://github.com/hoctran19-cyber/deep-learning-computer-vision-co5085"
+                    target="_blank" rel="noopener noreferrer" aria-label="Mở repository trên GitHub">
+                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path
+                            d="M12 .9a11.1 11.1 0 0 0-3.51 21.63c.55.1.76-.24.76-.54v-2.1c-3.1.67-3.76-1.32-3.76-1.32-.5-1.29-1.23-1.63-1.23-1.63-1.01-.69.08-.68.08-.68 1.12.08 1.7 1.15 1.7 1.15.99 1.7 2.6 1.21 3.23.93.1-.72.39-1.21.7-1.49-2.47-.28-5.07-1.24-5.07-5.5 0-1.22.44-2.21 1.15-2.99-.12-.28-.5-1.42.11-2.95 0 0 .94-.3 3.05 1.14a10.6 10.6 0 0 1 5.55 0c2.12-1.44 3.05-1.14 3.05-1.14.61 1.53.23 2.67.11 2.95.72.78 1.15 1.77 1.15 2.99 0 4.27-2.6 5.21-5.08 5.49.4.35.75 1.02.75 2.06v3.06c0 .3.2.65.76.54A11.1 11.1 0 0 0 12 .9Z" />
+                    </svg>
                 </a>
             </nav>
-            <details class="mobile-nav"><summary aria-label="Mở menu điều hướng">☰</summary><nav class="mobile-nav-panel" aria-label="Điều hướng trên thiết bị di động"><a href="../#home">Trang chủ</a><a href="../#assignments" aria-current="page">Bài tập</a><a href="../#documents">Tài liệu</a><a href="../#about">Giới thiệu</a><a href="https://github.com/hoctran19-cyber/deep-learning-computer-vision-co5085" target="_blank" rel="noopener noreferrer">GitHub</a></nav></details>
+            <details class="mobile-nav">
+                <summary aria-label="Mở menu điều hướng">☰</summary>
+                <nav class="mobile-nav-panel" aria-label="Điều hướng trên thiết bị di động"><a href="../#home">Trang
+                        chủ</a><a href="../#assignments" aria-current="page">Bài tập</a><a href="../#documents">Tài
+                        liệu</a><a href="../#about">Giới thiệu</a><a
+                        href="https://github.com/hoctran19-cyber/deep-learning-computer-vision-co5085" target="_blank"
+                        rel="noopener noreferrer">GitHub</a></nav>
+            </details>
         </div>
     </header>
 
@@ -53,19 +140,639 @@
                         <h2>Topic + Paper + Data</h2>
 
                         <p>
-                            Self-chosen topic (detection, segmentation, …). Select the topic, one related paper and the dataset to work with.
+                            Self-chosen topic (detection, segmentation, …). Select the topic, one related paper and the
+                            dataset to work with.
                         </p>
                     </div>
 
                 </div>
 
 
-                <div class="placeholder">
-                    <strong>Coming soon</strong>
-                    <p>
-                        Notebook, results and write-up for this
-                        assignment will be published here.
-                    </p>
+                <div class="detail-layout">
+                    <aside class="detail-toc" aria-label="Mục lục">
+                        <h2>Mục lục</h2>
+                        <a href="#s1">1. Giới thiệu đề tài</a><a href="#s2">2. Paper được lựa chọn để phân tích</a><a
+                            href="#s3">3. Dataset</a><a href="#s4">4. Evaluation Metrics</a><a href="#s5">5. Kế hoạch
+                            Pipeline</a><a href="#s6">6. Kế hoạch thực hiện</a><a href="#s7">7. Kết luận</a><a
+                            href="#s8">8. References</a>
+                    </aside>
+                    <div class="detail-content a21-content">
+                        <div class="a21-meta">
+                            <p><strong>Môn học:</strong> CO5085 – Deep Learning and Its Applications in Computer
+                                Vision<br />
+                                <strong>Assignment:</strong> A2 – Self-chosen Topic + Paper Analysis<br />
+                                <strong>Chủ đề:</strong> Automatic License Plate Recognition for Vietnamese Vehicles
+                                from Still Images<br />
+                                <strong>Phiên bản:</strong> A2.1 – Topic + Paper + Dataset
+                                <strong>Học viên</strong> Trần Thái Học - 2570426
+                            </p>
+                            <div class="exercise-card-links">
+                                <a class="button primary" href="topic_paper_dataset.pdf" target="_blank"
+                                    rel="noopener noreferrer">Mở file PDF A2.1 <span aria-hidden="true">→</span></a>
+                                <a class="button" href="topic_paper_dataset.md">Xem bản Markdown</a>
+                            </div>
+                        </div>
+                        <section class="detail-section" id="s1">
+                            <h2>1. Giới thiệu đề tài</h2>
+                            <h3 class="a21-h3">1.1. Tên đề tài</h3>
+                            <p><strong>Automatic License Plate Recognition (ALPR) for Vietnamese Vehicles from Still
+                                    Images</strong></p>
+                            <h3 class="a21-h3">1.2. Phát biểu bài toán</h3>
+                            <p>Automatic License Plate Recognition (ALPR) là bài toán phát hiện và nhận dạng biển số xe
+                                tự động từ hình ảnh.</p>
+                            <p>Đề tài tập trung xây dựng một hệ thống ALPR cho phương tiện tại Việt Nam, sử dụng ảnh
+                                tĩnh làm dữ liệu đầu vào. Hệ thống cần thực hiện hai nhiệm vụ chính:</p>
+                            <ol>
+                                <li><strong>License Plate Detection:</strong> Xác định vị trí biển số trong ảnh và trích
+                                    xuất vùng chứa biển số.</li>
+                                <li><strong>License Plate Recognition:</strong> Nhận dạng chuỗi ký tự trên biển số đã
+                                    được phát hiện.</li>
+                            </ol>
+                            <p>Bài toán cần xử lý các trường hợp biển số có bố cục một dòng hoặc hai dòng, kích thước
+                                khác nhau, góc nhìn không đồng nhất và chất lượng ảnh không ổn định.</p>
+                            <figure class="a21-fig"><svg viewBox="0 0 760 170" role="img"
+                                    aria-label="Sơ đồ bài toán ALPR" font-family="system-ui,Segoe UI,Arial,sans-serif">
+                                    <defs>
+                                        <marker id="ar1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7"
+                                            markerHeight="7" orient="auto">
+                                            <path d="M0 0L10 5L0 10z" fill="#526579" />
+                                        </marker>
+                                    </defs>
+                                    <rect x="10" y="50" width="130" height="70" rx="8" fill="#f4f8fc" stroke="#526579"
+                                        stroke-width="1.5" /><text x="75.0" y="90.0" text-anchor="middle" font-size="14"
+                                        fill="#0b1f33">Ảnh xe (tĩnh)</text>
+                                    <rect x="190" y="50" width="150" height="70" rx="8" fill="#eaf2ff" stroke="#2563eb"
+                                        stroke-width="1.5" /><text x="265.0" y="90.0" text-anchor="middle"
+                                        font-size="14" fill="#0b1f33">1. Detection</text>
+                                    <rect x="390" y="50" width="130" height="70" rx="8" fill="#f4f8fc" stroke="#526579"
+                                        stroke-width="1.5" /><text x="455.0" y="90.0" text-anchor="middle"
+                                        font-size="14" fill="#0b1f33">Crop biển số</text>
+                                    <rect x="570" y="50" width="180" height="70" rx="8" fill="#eaf2ff" stroke="#2563eb"
+                                        stroke-width="1.5" /><text x="660.0" y="90.0" text-anchor="middle"
+                                        font-size="14" fill="#0b1f33">2. Recognition</text>
+                                    <line x1="140" y1="85" x2="187" y2="85" stroke="#526579" stroke-width="2"
+                                        marker-end="url(#ar1)" />
+                                    <line x1="340" y1="85" x2="387" y2="85" stroke="#526579" stroke-width="2"
+                                        marker-end="url(#ar1)" />
+                                    <line x1="520" y1="85" x2="567" y2="85" stroke="#526579" stroke-width="2"
+                                        marker-end="url(#ar1)" /><text x="265" y="145" text-anchor="middle"
+                                        font-size="12" fill="#526579">bounding box</text><text x="660" y="145"
+                                        text-anchor="middle" font-size="12" fill="#526579">chuỗi ký tự, ví dụ
+                                        29A-123.45</text>
+                                </svg>
+                                <figcaption>Hình 1. Hai nhiệm vụ chính của ALPR: phát hiện vị trí biển số, sau đó nhận
+                                    dạng chuỗi ký tự.</figcaption>
+                            </figure>
+                            <h3 class="a21-h3">1.3. Mục tiêu</h3>
+                            <ul>
+                                <li>Xây dựng pipeline phát hiện và nhận dạng biển số xe Việt Nam từ ảnh tĩnh.</li>
+                                <li>Đánh giá khả năng phát hiện biển số và nhận dạng chuỗi ký tự.</li>
+                                <li>So sánh hai phương pháp nhận dạng trên cùng một detector.</li>
+                                <li>Phân tích ảnh hưởng của chất lượng ảnh và bố cục biển số đến kết quả.</li>
+                                <li>Đánh giá khả năng ứng dụng của các mô hình deep learning trong bài toán ALPR.</li>
+                            </ul>
+                            <h3 class="a21-h3">1.4. Phạm vi</h3>
+                            <p><strong>Trong phạm vi:</strong></p>
+                            <ul>
+                                <li>Ảnh tĩnh, không xử lý video hoặc tracking.</li>
+                                <li>Biển số xe Việt Nam.</li>
+                                <li>Biển số một dòng và hai dòng.</li>
+                                <li>Detection và recognition.</li>
+                            </ul>
+                            <p><strong>Ngoài phạm vi:</strong></p>
+                            <ul>
+                                <li>Nhận dạng phương tiện hoặc phân loại loại xe.</li>
+                                <li>Theo dõi phương tiện qua nhiều khung hình.</li>
+                                <li>Xây dựng hệ thống triển khai production hoặc xử lý video thời gian thực.</li>
+                            </ul>
+                        </section>
+                        <section class="detail-section" id="s2">
+                            <h2>2. Paper được lựa chọn để phân tích</h2>
+                            <h3 class="a21-h3">2.1. Thông tin paper</h3>
+                            <p><strong>Title:</strong> Towards End-to-End License Plate Detection and Recognition: A
+                                Large Dataset and Baseline</p>
+                            <p><strong>Authors:</strong> Zhenbo Xu, Wei Yang, Ajin Meng, Nanxue Lu, Huan Huang,
+                                Changchun Ying, Liusheng Huang.</p>
+                            <p><strong>Publication:</strong> European Conference on Computer Vision (ECCV), 2018.</p>
+                            <p><strong>DOI:</strong> https://doi.org/10.1007/978-3-030-01261-8_16</p>
+                            <p><strong>Official paper:</strong><br />
+                                https://openaccess.thecvf.com/content_ECCV_2018/html/Zhenbo_Xu_Towards_End-to-End_License_ECCV_2018_paper.html
+                            </p>
+                            <p><strong>Official implementation and dataset:</strong><br />
+                                https://github.com/detectRecog/CCPD</p>
+                            <h3 class="a21-h3">2.2. Lý do lựa chọn</h3>
+                            <p>Paper được lựa chọn vì:</p>
+                            <ul>
+                                <li>Được công bố tại ECCV, một trong những hội nghị hàng đầu về Computer Vision.</li>
+                                <li>Giải quyết trực tiếp bài toán License Plate Detection and Recognition.</li>
+                                <li>Đề xuất một mô hình có khả năng dự đoán vị trí biển số và nhận dạng chuỗi ký tự
+                                    trong cùng hệ thống.</li>
+                                <li>Giới thiệu CCPD, một dataset lớn dành cho bài toán phát hiện và nhận dạng biển số.
+                                </li>
+                                <li>Có paper, dataset và repository chính thức để tham khảo.</li>
+                            </ul>
+                            <p>Paper được sử dụng làm tài liệu nghiên cứu về phương pháp ALPR và cách thiết kế
+                                benchmark. Nhóm không đặt mục tiêu tái tạo nguyên bản mô hình hoặc sử dụng kết quả trên
+                                CCPD làm kết quả thực nghiệm của VNLP.</p>
+                            <h3 class="a21-h3">2.3. Tóm tắt phương pháp</h3>
+                            <p>Paper giới thiệu CCPD và một baseline end-to-end cho bài toán License Plate Detection and
+                                Recognition.</p>
+                            <p>Ý tưởng chính là kết hợp phát hiện vị trí biển số và nhận dạng nội dung biển số trong một
+                                hệ thống học sâu. Thay vì chỉ xác định bounding box, mô hình còn dự đoán chuỗi ký tự
+                                tương ứng.</p>
+                            <p>Các nội dung chính cần phân tích:</p>
+                            <ul>
+                                <li><strong>Input:</strong> Ảnh phương tiện có chứa biển số.</li>
+                                <li><strong>Detection:</strong> Xác định vùng biển số và vị trí của nó trong ảnh.</li>
+                                <li><strong>Recognition:</strong> Dự đoán chuỗi ký tự của biển số.</li>
+                                <li><strong>Output:</strong> Vị trí biển số và nội dung ký tự được nhận dạng.</li>
+                            </ul>
+                            <p>Điểm đáng chú ý của nghiên cứu là thiết kế một hệ thống nhận dạng biển số end-to-end và
+                                xây dựng một dataset có quy mô lớn, có nhiều điều kiện hình ảnh khác nhau.</p>
+                            <h3 class="a21-h3">2.4. Thí nghiệm của paper</h3>
+                            <p>Paper sử dụng CCPD với hơn 250.000 ảnh phương tiện. Dataset có các trường hợp khác nhau
+                                về góc nhìn, độ nghiêng, độ mờ và điều kiện hình ảnh.</p>
+                            <p>Tác giả đánh giá:</p>
+                            <ul>
+                                <li>Khả năng phát hiện biển số.</li>
+                                <li>Khả năng nhận dạng chính xác toàn bộ chuỗi ký tự.</li>
+                                <li>Tốc độ xử lý của hệ thống.</li>
+                            </ul>
+                            <p>Paper báo cáo mô hình đạt khoảng 98,5% accuracy và tốc độ trên 61 FPS trong thiết lập
+                                thực nghiệm được mô tả.</p>
+                            <p><strong>Lưu ý:</strong> Đây là kết quả của tác giả trên CCPD, không phải kết quả có thể
+                                kỳ vọng trực tiếp trên VNLP.</p>
+                            <h3 class="a21-h3">2.5. Hạn chế và liên hệ với đề tài</h3>
+                            <p>Một số hạn chế khi tham khảo và áp dụng nghiên cứu:</p>
+                            <ol>
+                                <li>CCPD chủ yếu chứa biển số Trung Quốc, có định dạng và bộ ký tự khác biển số Việt
+                                    Nam.</li>
+                                <li>Kết quả trên CCPD không đảm bảo khả năng tổng quát hóa sang VNLP.</li>
+                                <li>Nhóm cần xây dựng bộ ký tự và quy tắc xử lý chuỗi phù hợp với dữ liệu Việt Nam.</li>
+                                <li>Mô hình end-to-end trong paper không nhất thiết là lựa chọn phù hợp nhất với tài
+                                    nguyên và thời gian của assignment.</li>
+                            </ol>
+                            <p><strong>Cách áp dụng vào đề tài:</strong></p>
+                            <p>Nhóm kế thừa cách tiếp cận tách biệt hai nhiệm vụ detection và recognition để xây dựng
+                                pipeline có thể đánh giá từng thành phần. Thay vì tái tạo nguyên bản kiến trúc trong
+                                paper, nhóm sử dụng YOLOv8n cho detection và so sánh hai mô hình recognition là CRNN-CTC
+                                và LPRNet.</p>
+                        </section>
+                        <section class="detail-section" id="s3">
+                            <h2>3. Dataset</h2>
+                            <h3 class="a21-h3">3.1. Dataset được lựa chọn</h3>
+                            <p><strong>Tên:</strong> Vietnamese License Plate Dataset (VNLP)</p>
+                            <p><strong>Official repository:</strong><br />
+                                https://github.com/fict-labs/VNLP</p>
+                            <p><strong>Download:</strong> Liên kết tải dữ liệu được cung cấp trong repository chính
+                                thức.</p>
+                            <p>VNLP là dataset dành cho bài toán phát hiện và nhận dạng biển số Việt Nam.</p>
+                            <h3 class="a21-h3">3.2. Thống kê dataset</h3>
+                            <p>Theo mô tả trong repository:</p>
+                            <div class="table-wrap">
+                                <table class="split-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Thuộc tính</th>
+                                            <th style="text-align: right;">Thông tin</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Tổng số ảnh</td>
+                                            <td style="text-align: right;">Khoảng 37.300</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Biển số một dòng</td>
+                                            <td style="text-align: right;">19.086</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Biển số hai dòng</td>
+                                            <td style="text-align: right;">18.211</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Số ký tự mỗi biển</td>
+                                            <td style="text-align: right;">6–9</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Nhãn vị trí biển số</td>
+                                            <td style="text-align: right;">Bounding box</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Nhãn nhận dạng</td>
+                                            <td style="text-align: right;">Chuỗi ký tự</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p>Dataset bao gồm hai nhóm bố cục biển số:</p>
+                            <ul>
+                                <li><strong>One-row license plate:</strong> Biển số có ký tự trên một dòng.</li>
+                                <li><strong>Two-row license plate:</strong> Biển số có ký tự trên hai dòng.</li>
+                            </ul>
+                            <p>Kích thước ảnh biển số có sự khác biệt đáng kể, do đó cần chuẩn hóa kích thước đầu vào
+                                trong quá trình tiền xử lý.</p>
+                            <figure class="a21-fig"><svg viewBox="0 0 760 250" role="img"
+                                    aria-label="Biển số một dòng và hai dòng"
+                                    font-family="system-ui,Segoe UI,Arial,sans-serif">
+                                    <rect x="30" y="30" width="200" height="60" rx="6" fill="#fff" stroke="#102a43"
+                                        stroke-width="3" /><text x="130.0" y="70.0" text-anchor="middle" font-size="26"
+                                        font-weight="700" fill="#102a43" letter-spacing="2">29A-123.45</text>
+                                    <rect x="30" y="125" width="200" height="100" rx="6" fill="#fff" stroke="#102a43"
+                                        stroke-width="3" /><text x="130.0" y="160.0" text-anchor="middle" font-size="24"
+                                        font-weight="700" fill="#102a43" letter-spacing="2">29A</text><text x="130.0"
+                                        y="210.0" text-anchor="middle" font-size="24" font-weight="700" fill="#102a43"
+                                        letter-spacing="2">123.45</text><text x="250" y="65" font-size="13"
+                                        fill="#526579">Một dòng</text><text x="250" y="180" font-size="13"
+                                        fill="#526579">Hai dòng</text><text x="340" y="50" font-size="13"
+                                        fill="#0b1f33">Phân bố bố cục trong VNLP</text>
+                                    <rect x="340" y="65" width="205" height="34" fill="#2563eb" />
+                                    <rect x="545" y="65" width="195" height="34" fill="#60a5fa" /><text x="340" y="122"
+                                        font-size="13" fill="#0b1f33">Một dòng: 19.086 (≈51%)</text><text x="340"
+                                        y="142" font-size="13" fill="#0b1f33">Hai dòng: 18.211 (≈49%)</text><text
+                                        x="340" y="185" font-size="12" fill="#526579">Số ký tự mỗi biển: 6–9 · Nhãn:
+                                        bounding box + chuỗi ký tự</text>
+                                </svg>
+                                <figcaption>Hình 2. Hai bố cục biển số trong dataset (minh họa) và tỷ lệ số lượng theo
+                                    thống kê của VNLP.</figcaption>
+                            </figure>
+                            <h3 class="a21-h3">3.3. Lý do lựa chọn</h3>
+                            <ul>
+                                <li>Dữ liệu phù hợp trực tiếp với bài toán biển số Việt Nam.</li>
+                                <li>Có nhãn bounding box phục vụ detection.</li>
+                                <li>Có nhãn chuỗi ký tự phục vụ recognition.</li>
+                                <li>Có cả biển số một dòng và hai dòng.</li>
+                                <li>Quy mô dữ liệu phù hợp để thực hiện huấn luyện và đánh giá các mô hình deep
+                                    learning.</li>
+                            </ul>
+                            <h3 class="a21-h3">3.4. Phương pháp chia dữ liệu</h3>
+                            <p>Nhóm dự kiến chia dữ liệu theo tỷ lệ:</p>
+                            <div class="table-wrap">
+                                <table class="split-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Tập dữ liệu</th>
+                                            <th style="text-align: right;">Tỷ lệ</th>
+                                            <th>Mục đích</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Training</td>
+                                            <td style="text-align: right;">70%</td>
+                                            <td>Huấn luyện mô hình</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Validation</td>
+                                            <td style="text-align: right;">15%</td>
+                                            <td>Theo dõi quá trình huấn luyện và chọn mô hình</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Testing</td>
+                                            <td style="text-align: right;">15%</td>
+                                            <td>Đánh giá cuối cùng</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p>Việc chia dữ liệu sẽ được thực hiện trước khi tạo các ảnh crop phục vụ recognition.</p>
+                            <p>Các nguyên tắc:</p>
+                            <ul>
+                                <li>Cố định random seed để bảo đảm khả năng tái lập.</li>
+                                <li>Duy trì tỷ lệ tương đối giữa biển số một dòng và hai dòng trong các tập.</li>
+                                <li>Kiểm tra ảnh trùng lặp hoặc gần trùng lặp để hạn chế data leakage.</li>
+                                <li>Không sử dụng tập test trong quá trình lựa chọn hyperparameters.</li>
+                            </ul>
+                            <p><strong>Lưu ý:</strong> Tỷ lệ trên là protocol dự kiến của bản thân, không phải split
+                                mặc định do tác giả VNLP cung cấp. Số lượng ảnh thực tế ở từng tập sẽ được xác định sau
+                                khi kiểm tra dữ liệu.</p>
+                            <figure class="a21-fig"><svg viewBox="0 0 760 120" role="img"
+                                    aria-label="Tỷ lệ chia dữ liệu" font-family="system-ui,Segoe UI,Arial,sans-serif">
+                                    <rect x="30" y="30" width="490" height="46" fill="#2563eb" /><text x="275" y="58"
+                                        text-anchor="middle" font-size="14" font-weight="600" fill="#fff">Training
+                                        70%</text>
+                                    <rect x="520" y="30" width="105" height="46" fill="#60a5fa" /><text x="572" y="58"
+                                        text-anchor="middle" font-size="14" font-weight="600" fill="#fff">Val 15%</text>
+                                    <rect x="625" y="30" width="105" height="46" fill="#fbbf24" /><text x="678" y="58"
+                                        text-anchor="middle" font-size="14" font-weight="600" fill="#0b1f33">Test
+                                        15%</text><text x="30" y="104" font-size="12" fill="#526579">Chia trước khi tạo
+                                        ảnh crop cho recognition; cố định random seed.</text>
+                                </svg>
+                                <figcaption>Hình 3. Protocol chia dữ liệu dự kiến 70/15/15 (không phải split mặc định
+                                    của VNLP).</figcaption>
+                            </figure>
+                            <h3 class="a21-h3">3.5. Tiền xử lý và augmentation dự kiến</h3>
+                            <p><strong>Detection:</strong></p>
+                            <ul>
+                                <li>Đọc ảnh và bounding box.</li>
+                                <li>Chuyển annotation về định dạng YOLO.</li>
+                                <li>Resize ảnh theo kích thước đầu vào của detector.</li>
+                                <li>Chuẩn hóa pixel.</li>
+                                <li>Augmentation phù hợp: brightness/contrast, blur, noise và geometric transformation
+                                    có kiểm soát.</li>
+                            </ul>
+                            <p><strong>Recognition:</strong></p>
+                            <ul>
+                                <li>Crop vùng biển số theo ground-truth bounding box trong giai đoạn chuẩn bị dữ liệu
+                                    huấn luyện.</li>
+                                <li>Resize ảnh theo yêu cầu của từng mô hình.</li>
+                                <li>Chuẩn hóa pixel.</li>
+                                <li>Chuyển chuỗi ký tự thành sequence labels.</li>
+                                <li>Xây dựng character vocabulary từ nhãn thực tế trong VNLP.</li>
+                            </ul>
+                            <p>Với biển số hai dòng, cần kiểm tra cách sắp xếp ký tự trong ground truth để bảo đảm thứ
+                                tự chuỗi được giữ nhất quán.</p>
+                        </section>
+                        <section class="detail-section" id="s4">
+                            <h2>4. Evaluation Metrics</h2>
+                            <p>Nhóm sử dụng các metric riêng cho detection, recognition và toàn bộ pipeline.</p>
+                            <h3 class="a21-h3">4.1. Detection Metrics</h3>
+                            <div class="table-wrap">
+                                <table class="split-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Metric</th>
+                                            <th>Ý nghĩa</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Precision</td>
+                                            <td>Tỷ lệ dự đoán detection đúng trên tổng số detection được dự đoán</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Recall</td>
+                                            <td>Tỷ lệ biển số thực tế được phát hiện</td>
+                                        </tr>
+                                        <tr>
+                                            <td>mAP@0.5</td>
+                                            <td>Mean Average Precision tại IoU threshold 0.5</td>
+                                        </tr>
+                                        <tr>
+                                            <td>mAP@0.5:0.95</td>
+                                            <td>mAP trung bình trên các IoU threshold từ 0.5 đến 0.95</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p>mAP@0.5 được sử dụng làm metric chính để đánh giá khả năng phát hiện biển số.
+                                mAP@0.5:0.95 được bổ sung để đánh giá độ chính xác định vị nghiêm ngặt hơn.</p>
+                            <h3 class="a21-h3">4.2. Recognition Metrics</h3>
+                            <div class="table-wrap">
+                                <table class="split-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Metric</th>
+                                            <th>Ý nghĩa</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Character Accuracy</td>
+                                            <td>Tỷ lệ ký tự được nhận dạng đúng</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Exact Plate Accuracy</td>
+                                            <td>Tỷ lệ biển số có toàn bộ chuỗi ký tự được nhận dạng chính xác</td>
+                                        </tr>
+                                        <tr>
+                                            <td>CER</td>
+                                            <td>Character Error Rate, tỷ lệ lỗi ở cấp độ ký tự</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p>CER được tính theo công thức:</p>
+                            <p>[
+                                CER = \frac{S + D + I}{N}
+                                ]</p>
+                            <p>Trong đó:</p>
+                            <ul>
+                                <li><em>S</em>: Số ký tự bị thay thế.</li>
+                                <li><em>D</em>: Số ký tự bị xóa.</li>
+                                <li><em>I</em>: Số ký tự bị chèn thêm.</li>
+                                <li><em>N</em>: Tổng số ký tự trong ground truth.</li>
+                            </ul>
+                            <p>Exact Plate Accuracy được tính bằng tỷ lệ dự đoán có chuỗi ký tự trùng khớp hoàn toàn với
+                                ground truth.</p>
+                            <h3 class="a21-h3">4.3. End-to-End Metrics</h3>
+                            <p><strong>End-to-End Exact Plate Recognition Rate</strong></p>
+                            <p>Đánh giá tỷ lệ ảnh mà hệ thống vừa phát hiện đúng biển số, vừa nhận dạng chính xác toàn
+                                bộ chuỗi ký tự.</p>
+                            <p>Một kết quả chỉ được tính đúng khi:</p>
+                            <ul>
+                                <li>Biển số được phát hiện đúng theo tiêu chí IoU đã xác định.</li>
+                                <li>Chuỗi ký tự dự đoán trùng khớp hoàn toàn với ground truth.</li>
+                            </ul>
+                            <h3 class="a21-h3">4.4. Computational Metrics</h3>
+                            <p>Nếu tài nguyên cho phép, nhóm sẽ báo cáo thêm:</p>
+                            <ul>
+                                <li>FPS: số ảnh xử lý trong một giây.</li>
+                                <li>Number of Parameters: số lượng tham số của mô hình.</li>
+                                <li>Model Size: kích thước trọng số mô hình.</li>
+                            </ul>
+                            <p>Các chỉ số này giúp đánh giá sự cân bằng giữa độ chính xác và chi phí tính toán.</p>
+                        </section>
+                        <section class="detail-section" id="s5">
+                            <h2>5. Kế hoạch Pipeline</h2>
+                            <h3 class="a21-h3">5.1. Tổng quan kiến trúc</h3>
+                            <p>Pipeline dự kiến:</p>
+                            <figure class="a21-fig"><svg viewBox="0 0 760 330" role="img" aria-label="Pipeline ALPR"
+                                    font-family="system-ui,Segoe UI,Arial,sans-serif">
+                                    <defs>
+                                        <marker id="ar4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7"
+                                            markerHeight="7" orient="auto">
+                                            <path d="M0 0L10 5L0 10z" fill="#526579" />
+                                        </marker>
+                                    </defs>
+                                    <rect x="280" y="10" width="200" height="38" rx="8" fill="#f4f8fc" stroke="#526579"
+                                        stroke-width="1.5" /><text x="380.0" y="34.0" text-anchor="middle"
+                                        font-size="14" fill="#0b1f33">Input Image</text>
+                                    <rect x="230" y="75" width="300" height="38" rx="8" fill="#eaf2ff" stroke="#2563eb"
+                                        stroke-width="1.5" /><text x="380.0" y="99.0" text-anchor="middle"
+                                        font-size="14" fill="#0b1f33">YOLOv8n License Plate Detector</text>
+                                    <rect x="280" y="140" width="200" height="38" rx="8" fill="#f4f8fc" stroke="#526579"
+                                        stroke-width="1.5" /><text x="380.0" y="164.0" text-anchor="middle"
+                                        font-size="14" fill="#0b1f33">Plate Cropping</text>
+                                    <rect x="80" y="215" width="250" height="44" rx="8" fill="#eaf2ff" stroke="#2563eb"
+                                        stroke-width="1.5" /><text x="205.0" y="242.0" text-anchor="middle"
+                                        font-size="14" fill="#0b1f33">CRNN + BiLSTM + CTC</text>
+                                    <rect x="430" y="215" width="250" height="44" rx="8" fill="#eaf2ff" stroke="#2563eb"
+                                        stroke-width="1.5" /><text x="555.0" y="242.0" text-anchor="middle"
+                                        font-size="14" fill="#0b1f33">LPRNet</text>
+                                    <rect x="230" y="285" width="300" height="38" rx="8" fill="#fef3c7" stroke="#d97706"
+                                        stroke-width="1.5" /><text x="380.0" y="309.0" text-anchor="middle"
+                                        font-size="14" fill="#0b1f33">Evaluation &amp; Comparison</text>
+                                    <line x1="380" y1="48" x2="380" y2="75" stroke="#526579" stroke-width="2"
+                                        marker-end="url(#ar4)" />
+                                    <line x1="380" y1="113" x2="380" y2="140" stroke="#526579" stroke-width="2"
+                                        marker-end="url(#ar4)" />
+                                    <line x1="380" y1="178" x2="205" y2="215" stroke="#526579" stroke-width="2"
+                                        marker-end="url(#ar4)" />
+                                    <line x1="380" y1="178" x2="555" y2="215" stroke="#526579" stroke-width="2"
+                                        marker-end="url(#ar4)" />
+                                    <line x1="205" y1="259" x2="320" y2="285" stroke="#526579" stroke-width="2"
+                                        marker-end="url(#ar4)" />
+                                    <line x1="555" y1="259" x2="440" y2="285" stroke="#526579" stroke-width="2"
+                                        marker-end="url(#ar4)" />
+                                </svg>
+                                <figcaption>Hình 4. Pipeline dự kiến: một detector dùng chung, hai mô hình recognition
+                                    được so sánh.</figcaption>
+                            </figure>
+                            <h3 class="a21-h3">5.2. Detection Module</h3>
+                            <p><strong>Model:</strong> YOLOv8n</p>
+                            <p>Vai trò:</p>
+                            <ul>
+                                <li>Phát hiện vị trí biển số trong ảnh đầu vào.</li>
+                                <li>Dự đoán bounding box.</li>
+                                <li>Trích xuất vùng ảnh chứa biển số.</li>
+                            </ul>
+                            <p>Lý do lựa chọn:</p>
+                            <ul>
+                                <li>Kiến trúc detection một giai đoạn, phù hợp với yêu cầu xây dựng pipeline.</li>
+                                <li>Có implementation và tài liệu công khai.</li>
+                                <li>Có thể fine-tune trên dataset VNLP.</li>
+                                <li>Có thể giữ cố định detector để đánh giá công bằng hai mô hình recognition.</li>
+                            </ul>
+                            <h3 class="a21-h3">5.3. Recognition Model 1 — CRNN + BiLSTM + CTC</h3>
+                            <p>CRNN kết hợp CNN và recurrent neural network để nhận dạng chuỗi ký tự từ ảnh.</p>
+                            <p>Các thành phần:</p>
+                            <ul>
+                                <li>CNN: Trích xuất đặc trưng hình ảnh.</li>
+                                <li>BiLSTM: Học quan hệ tuần tự theo hai chiều.</li>
+                                <li>CTC Loss: Huấn luyện nhận dạng chuỗi mà không cần căn chỉnh từng ký tự với từng vị
+                                    trí ảnh.</li>
+                            </ul>
+                            <p>Đây là phương pháp baseline cho bài toán nhận dạng chuỗi ký tự.</p>
+                            <h3 class="a21-h3">5.4. Recognition Model 2 — LPRNet</h3>
+                            <p>LPRNet là kiến trúc nhận dạng biển số được thiết kế chuyên biệt cho bài toán license
+                                plate recognition.</p>
+                            <p>Mô hình sử dụng các lớp convolution để trích xuất đặc trưng và dự đoán chuỗi ký tự bằng
+                                cơ chế nhận dạng sequence.</p>
+                            <p>Lý do lựa chọn:</p>
+                            <ul>
+                                <li>Được thiết kế trực tiếp cho bài toán nhận dạng biển số.</li>
+                                <li>Có thể dùng để so sánh với baseline CRNN.</li>
+                                <li>Cho phép đánh giá sự khác biệt giữa hai kiến trúc recognition.</li>
+                            </ul>
+                            <h3 class="a21-h3">5.5. Kế hoạch thực nghiệm</h3>
+                            <p>Nhóm dự kiến thực hiện hai cấu hình:</p>
+                            <div class="table-wrap">
+                                <table class="split-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Experiment</th>
+                                            <th>Detection</th>
+                                            <th>Recognition</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>E1 — Baseline</td>
+                                            <td>YOLOv8n</td>
+                                            <td>CRNN + BiLSTM + CTC</td>
+                                        </tr>
+                                        <tr>
+                                            <td>E2 — Comparison</td>
+                                            <td>YOLOv8n</td>
+                                            <td>LPRNet</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p>Để bảo đảm tính công bằng:</p>
+                            <ul>
+                                <li>Sử dụng cùng dataset và data split.</li>
+                                <li>Sử dụng cùng detector YOLOv8n.</li>
+                                <li>Sử dụng cùng ground-truth plate crops khi đánh giá riêng recognition.</li>
+                                <li>Sử dụng cùng detection predictions khi đánh giá end-to-end.</li>
+                                <li>Cố định các điều kiện đánh giá và character vocabulary.</li>
+                                <li>Báo cáo rõ cấu hình huấn luyện của từng mô hình.</li>
+                            </ul>
+                            <p>Kết quả sẽ được phân tích ở ba mức: detection, recognition và end-to-end.</p>
+                        </section>
+                        <section class="detail-section" id="s6">
+                            <h2>6. Kế hoạch thực hiện</h2>
+                            <div class="table-wrap">
+                                <table class="split-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Giai đoạn</th>
+                                            <th>Công việc</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Phase 1</td>
+                                            <td>Kiểm tra dataset, annotation và phân tích dữ liệu</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Phase 2</td>
+                                            <td>Chuẩn bị train/validation/test split và DataLoader</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Phase 3</td>
+                                            <td>Huấn luyện hoặc fine-tune YOLOv8n</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Phase 4</td>
+                                            <td>Huấn luyện CRNN và LPRNet</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Phase 5</td>
+                                            <td>Đánh giá detection, recognition và end-to-end</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Phase 6</td>
+                                            <td>So sánh, phân tích kết quả và viết báo cáo</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p>A2.1 tập trung xác định chủ đề, paper, dataset, metrics và kế hoạch thực nghiệm. Kết quả
+                                huấn luyện và so sánh đầy đủ sẽ được trình bày ở A2.2.</p>
+                        </section>
+                        <section class="detail-section" id="s7">
+                            <h2>7. Kết luận</h2>
+                            <p>Đề tài lựa chọn bài toán Automatic License Plate Recognition trên ảnh tĩnh, tập trung vào
+                                biển số xe Việt Nam.</p>
+                            <p>Paper ECCV 2018 được sử dụng làm tài liệu nghiên cứu nền tảng về ALPR end-to-end và
+                                benchmark CCPD. Dataset VNLP được lựa chọn làm dữ liệu thực nghiệm chính vì có nhãn
+                                bounding box và chuỗi ký tự phù hợp với biển số Việt Nam.</p>
+                            <p>Pipeline dự kiến sử dụng YOLOv8n cho detection, kết hợp hai phương pháp CRNN-CTC và
+                                LPRNet cho recognition. Việc so sánh hai cấu hình sẽ giúp đánh giá khả năng nhận dạng
+                                chuỗi ký tự và hiệu quả tổng thể của hệ thống.</p>
+                        </section>
+                        <section class="detail-section" id="s8">
+                            <h2>8. References</h2>
+                            <ol>
+                                <li>
+                                    <p>Xu, Z., Yang, W., Meng, A., Lu, N., Huang, H., Ying, C., &amp; Huang, L. (2018).
+                                        <em>Towards End-to-End License Plate Detection and Recognition: A Large Dataset
+                                            and Baseline</em>. European Conference on Computer Vision (ECCV).
+                                        https://doi.org/10.1007/978-3-030-01261-8_16</p>
+                                </li>
+                                <li>
+                                    <p>VNLP Dataset. <em>Vietnamese License Plate Dataset</em>. Official GitHub
+                                        repository. https://github.com/fict-labs/VNLP</p>
+                                </li>
+                                <li>
+                                    <p>CCPD Dataset. <em>A Diverse and Well-Annotated Dataset for License Plate
+                                            Detection and Recognition</em>. Official GitHub repository.
+                                        https://github.com/detectRecog/CCPD</p>
+                                </li>
+                                <li>
+                                    <p>Ultralytics. <em>YOLO Documentation</em>. https://docs.ultralytics.com/</p>
+                                </li>
+                                <li>
+                                    <p>Shi, B., Bai, X., &amp; Yao, C. (2017). <em>An End-to-End Trainable Neural
+                                            Network for Image-Based Sequence Recognition and Its Application to Scene
+                                            Text Recognition</em>. IEEE Transactions on Pattern Analysis and Machine
+                                        Intelligence. https://doi.org/10.1109/TPAMI.2016.2646371</p>
+                                </li>
+                            </ol>
+                        </section>
+                    </div>
                 </div>
 
             </div>
@@ -81,7 +788,8 @@
                 <strong>Trần Thái Học (2570426) · CO5085</strong>
                 <p>Deep Learning for Computer Vision · HK261</p>
             </div>
-            <a href="https://github.com/hoctran19-cyber/deep-learning-computer-vision-co5085" target="_blank" rel="noopener noreferrer">Mã nguồn trên GitHub →</a>
+            <a href="https://github.com/hoctran19-cyber/deep-learning-computer-vision-co5085" target="_blank"
+                rel="noopener noreferrer">Mã nguồn trên GitHub →</a>
         </div>
     </footer>
 
