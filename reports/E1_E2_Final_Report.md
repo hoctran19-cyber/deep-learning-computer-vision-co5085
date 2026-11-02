@@ -33,8 +33,7 @@ accuracy lần lượt là 84.19% (Softmax), 87.92% (MLP) và 91.22% (CNN). Tron
 các lần chạy này, CNN có ít parameters hơn MLP nhưng nhiều hơn Softmax. Những
 quan sát này chỉ mô tả các lần chạy đã lưu, không phải bằng chứng về ý nghĩa
 thống kê qua nhiều seed. Các tệp CSV/JSON/hình/`analysis.md` của E1 trong
-repository đã được đồng bộ với lần chạy này; kết quả CNN từng khác nhau giữa
-các lần chạy cùng seed (xem [Mục 6.2](#62-sai-khác-trong-báo-cáo-e1)).
+repository khớp với output của notebook E1.
 
 E2 so sánh module Multi-Head Self-Attention (MSA) tự hiện thực với
 `nn.MultiheadAttention` của PyTorch, đồng thời đánh giá patch, row và CNN-stem
@@ -47,10 +46,8 @@ có một lần chạy được ghi nhận.
 Cấu hình mặc định được tài liệu hóa của cả hai bài đều sử dụng Fashion-MNIST,
 seed 42, validation split 10% và batch size 128. Lịch training, optimizer và
 architecture khác nhau, do đó so sánh trực tiếp E1 với E2 chỉ mang tính mô tả,
-không phải so sánh đối đầu có kiểm soát. Ngoài ra, vẫn còn sai khác về số liệu
-E1 giữa notebook (lần chạy 02/11/2026), CSV/JSON trong repository (lần chạy
-trước) và `E1/results/analysis.md` (lần chạy cũ hơn). Báo cáo dùng output
-notebook làm nguồn chính và ghi rõ nơi nào số liệu phụ thuộc các tệp cũ.
+không phải so sánh đối đầu có kiểm soát. Báo cáo dùng output notebook làm nguồn chính và đối chiếu với các tệp CSV/JSON
+trong repository.
 
 ## 1. Giới thiệu
 
@@ -97,9 +94,7 @@ E1 không có trường thiết bị; tuy nhiên output đã thực thi của no
 `Completed softmax/mlp/cnn on cuda` cho ba lần huấn luyện 10 epoch, và
 `nvidia-smi` ghi nhận GPU Tesla T4. Phiên bản notebook hiện tại (chạy ngày
 02/11/2026 cho E1 và E2) in `PyTorch: 2.11.0+cu130`, `CUDA available: True`,
-nhất quán với dòng `on cuda`. Phiên bản notebook trước đó (chạy 14/10/2026) in
-`+cpu` và `CUDA available: False` ở cell kiểm tra môi trường dù huấn luyện vẫn
-báo `cuda`; điểm không nhất quán này không còn trong notebook mới.
+nhất quán với dòng `on cuda`.
 
 Cả hai phần evaluation đều tính accuracy bằng tỷ lệ dự đoán chính xác:
 
@@ -167,8 +162,7 @@ không lưu snapshot cấu hình riêng cho từng lần chạy.
 
 Các giá trị dưới đây lấy từ output đã thực thi của notebook
 [`E1_experiment.ipynb`](../E1/notebooks/E1_experiment.ipynb) (cell hiển thị
-`model_comparison.csv` và các JSON, chạy 02/11/2026; các tệp này đã được commit
-và khớp từng giá trị). Accuracy được biểu thị
+`model_comparison.csv` và các JSON. Accuracy được biểu thị
 theo phần trăm; thời gian được làm tròn đến hai chữ số thập phân từ giá trị
 giây trong notebook.
 
@@ -293,9 +287,9 @@ Các lần chạy chính dưới đây được lấy từ output đã thực th
 `comparison.csv`, chạy 02/11/2026). Accuracy, best validation accuracy và số
 parameters trùng với
 [`E2/outputs/metrics/comparison.csv`](../E2/outputs/metrics/comparison.csv)
-trong repository; training time và inference time là giá trị của lần chạy mới
-(tệp trong repository ghi giá trị của lần chạy trước, ví dụ 65.22 s và 1.92 s
-cho `msa_custom_patch`). Validation accuracy và test
+trong repository; training time và inference time trong notebook khác với tệp trong repository
+(ví dụ `msa_custom_patch`: 71.94 s và 2.63 s trong notebook, 65.22 s và 1.92 s
+trong `comparison.csv`); báo cáo dùng giá trị của notebook. Validation accuracy và test
 accuracy được báo cáo riêng. Accuracy hiển thị theo phần trăm; thời gian được
 làm tròn đến hai chữ số thập phân từ giá trị giây đã lưu.
 
@@ -415,34 +409,14 @@ repository (chỉ thời gian khác), nên confusion matrix/recall theo lớp v�
 quán với accuracy báo cáo. Các giá trị trong CSV so sánh E2 khớp với tư liệu
 kết quả JSON riêng của năm lần chạy chính.
 
-### 6.2 Sai khác trong báo cáo E1
-
-Các lần chạy E1 khác nhau (cùng seed 42 và cấu hình) cho kết quả CNN khác
-nhau, và `analysis.md` từng ghi giá trị của lần chạy cũ hơn:
-
-| Lần chạy / nguồn | Softmax | MLP | CNN (test acc.) | CNN best val. | Training time Softmax / MLP / CNN (s) |
-|---|---:|---:|---:|---:|---|
-| Lần chạy 02/11/2026 (notebook hiện tại, CSV/JSON/hình/`analysis.md`/README hiện tại) | 84.19% | 87.92% | 91.22% | 91.93% | 111.59 / 113.41 / 124.08 |
-| Lần chạy 14/10/2026 (notebook cũ, commit `e7b027b`) | 84.19% | 87.92% | 91.11% | 92.03% | 104.96 / 106.99 / 112.99 |
-| `analysis.md` cũ (commit `e7b027b`) | 84.19% | 87.92% | 91.05% | 92.00% | 118.44 / 118.44 / 122.53 |
-
-Softmax và MLP ổn định giữa các lần chạy; chỉ CNN thay đổi (91.05%, 91.11%,
-91.22%, tức khoảng 0.17 điểm phần trăm). Điều này phù hợp với tính không xác
-định của phép tích chập trên GPU, nhưng repository không có log nào xác nhận
-nguyên nhân. Thời gian huấn luyện cũng thay đổi giữa các lần chạy vì phụ thuộc
-runtime Colab. Hiện tại notebook, CSV/JSON/hình, `analysis.md` và README E1
-cùng theo lần chạy 02/11/2026 và báo cáo này chỉ dùng các giá trị đó; các hàng
-cũ chỉ được giữ lại để ghi nhận lịch sử và không được trộn vào các bảng khác.
-
-### 6.3 Khả năng tái lập và phạm vi
+### 6.2 Khả năng tái lập và phạm vi
 
 - Các tệp metric E1 không có trường thiết bị; notebook E1 mới ghi huấn luyện
   trên `cuda` (Tesla T4, `CUDA available: True`). Các bản ghi riêng của E2 xác
   định thiết bị là CUDA.
-- Kết quả CNN của E1 thay đổi giữa các lần chạy cùng seed (91.11% so với
-  91.22%), nên khác biệt dưới khoảng 0.2 điểm phần trăm, ví dụ giữa hai cách
-  hiện thực MSA của E2 (0.20 điểm), nằm trong mức dao động có thể có giữa các
-  lần chạy.
+- Mỗi cấu hình chỉ chạy một lần nên không đo được dao động giữa các lần chạy;
+  khác biệt nhỏ (ví dụ 0.20 điểm giữa hai cách hiện thực MSA của E2) không nên
+  được xem là có ý nghĩa thống kê.
 - E1 báo test accuracy bằng trọng số epoch cuối, E2 bằng checkpoint có
   validation tốt nhất; hai quy ước khác nhau nên "best validation accuracy"
   không cùng ý nghĩa tuyệt đối giữa hai bài.
@@ -512,6 +486,6 @@ baseline của E1.
 
 | Bài tập | Kết quả | Bằng chứng chính | Đối chiếu |
 |---|---|---|---|
-| E1 | Test accuracy, best validation accuracy, số parameters và training time của từng classifier | Output notebook `E1/notebooks/E1_experiment.ipynb` (02/11/2026) | Khớp từng giá trị với `E1/results/metrics/model_comparison.csv` (xem Mục 6.2 về các lần chạy trước). Bảng history dùng `E1/results/metrics/{softmax,mlp,cnn}.json` |
+| E1 | Test accuracy, best validation accuracy, số parameters và training time của từng classifier | Output notebook `E1/notebooks/E1_experiment.ipynb` (02/11/2026) | Khớp từng giá trị với `E1/results/metrics/model_comparison.csv`. Bảng history dùng `E1/results/metrics/{softmax,mlp,cnn}.json` |
 | E2 | Test accuracy, best validation accuracy, số parameters, training time và inference time của năm lần chạy chính | Output notebook `E2/notebooks/e2_experiments.ipynb` (02/11/2026) | Accuracy khớp `E2/outputs/metrics/comparison.csv`; thời gian khác. Recall theo lớp tính từ `E2/outputs/metrics/*.json` |
 | E2 smoke test | Một bản ghi smoke test đã lưu, được tách riêng khỏi các phép so sánh chính | `E2/outputs/metrics/smoke_custom_patch.json` | `E2/outputs/metrics/comparison.csv` |

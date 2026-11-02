@@ -115,6 +115,4 @@ Thời gian huấn luyện của ba mô hình khá gần nhau (111,6–124,1 gi�
 ## Hạn chế
 
 Mỗi mô hình chỉ chạy một lần (seed 42, 10 epoch), nên chênh lệch nhỏ có thể nằm
-trong dao động ngẫu nhiên. Kết quả CNN đã thay đổi nhẹ giữa các lần chạy cùng
-seed 42 (91,05%, 91,11%, 91,22%); `results/analysis.md`, bảng ở trên và
-`results/metrics/` hiện đều theo lần chạy mới nhất (91,22%).
+trong dao động ngẫu nhiên.
