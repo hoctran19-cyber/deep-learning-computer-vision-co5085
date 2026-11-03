@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 740" role="img" aria-labelledby="title description">
   <title id="title">Sơ đồ so sánh hai pipeline ALPR E1 và E2</title>
-  <desc id="description">Ảnh phương tiện đi qua detector YOLOv5 dùng chung, sau đó vùng biển số được chuyển tới hai pipeline nhận dạng CRNN-BiLSTM-CTC và PDLPR. Hai kết quả được đánh giá và so sánh.</desc>
+  <desc id="description">Ảnh phương tiện đi qua detector YOLO26n dùng chung, sau đó vùng biển số được chuyển tới hai pipeline nhận dạng CRNN-BiLSTM-CTC và PDLPR. Hai kết quả được đánh giá và so sánh.</desc>
   <defs>
     <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
       <path d="M0 0 10 5 0 10Z" fill="#526579"/>
@@ -25,7 +25,7 @@
 
   <path d="M600 90v34" class="flow"/>
   <rect x="370" y="130" width="460" height="70" rx="12" class="shared"/>
-  <text x="600" y="173" text-anchor="middle" class="label">Detector YOLOv5 dùng chung</text>
+  <text x="600" y="173" text-anchor="middle" class="label">Detector YOLO26n dùng chung</text>
 
   <path d="M600 200v34" class="flow"/>
   <rect x="370" y="240" width="460" height="70" rx="12" class="node"/>
