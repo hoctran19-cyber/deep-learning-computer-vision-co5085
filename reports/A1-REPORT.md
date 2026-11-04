@@ -32,13 +32,28 @@ trong bài tập nhập môn, đồng thời tạo một bài toán phân loại
 khảo sát hai kiến trúc dự kiến. Đây là lý do lựa chọn theo protocol, không phải
 kết luận rằng dataset hoặc kiến trúc nào phù hợp hơn dựa trên thực nghiệm.
 
-Trang dataset chính thức của ETH Zurich cung cấp thông tin và tải dataset. Tài
-liệu A1.1 chưa xác minh được một license mở riêng cho ảnh hoặc metadata/nhãn;
-ảnh gốc không thuộc ETH Zurich. Một dataset card thứ cấp của Voxel51 ghi nhận
-nguồn ảnh Foodspotting và lưu ý về điều kiện sử dụng, nhưng đây không phải giấy
-phép do chủ sở hữu ảnh cấp. Do đó, báo cáo không kết luận ảnh được tự do sử dụng
-thương mại hoặc tái phân phối. Không đưa archive hoặc ảnh Food-101 vào
-repository; việc sử dụng cần tuân thủ các quyền và điều khoản áp dụng.
+### 2.1. Dataset License and Usage
+
+Food-101 được giới thiệu bởi Bossard et al. (2014) và do Computer Vision Lab,
+ETH Zurich cung cấp tại trang chính thức của dataset. Theo License Agreement
+trong dataset card `ethz/food101` trên Hugging Face, ảnh được thu thập từ
+Foodspotting và không thuộc quyền sở hữu của ETH Zurich; việc sử dụng vượt ngoài
+“scientific fair use” phải được thỏa thuận với chủ sở hữu từng ảnh theo điều
+khoản gốc của Foodspotting. Metadata của dataset card ghi license là `unknown`,
+nên không có căn cứ để kết luận ảnh được phát hành theo một open license cụ thể.
+Dataset card của Voxel51 là nguồn thứ cấp có thông tin tương tự, không phải giấy
+phép do chủ sở hữu ảnh cấp.
+
+Trong bài tập này, Food-101 chỉ dùng cho nghiên cứu và đánh giá mô hình. Ảnh
+dataset không được phân phối lại hoặc đưa vào repository công khai; chỉ công bố
+mã triển khai, script tiền xử lý, cấu hình thí nghiệm và kết quả đánh giá. Header
+Apache License 2.0 ở một số file loader chỉ áp dụng cho phần code đó, không áp
+dụng cho ảnh. License riêng của metadata/nhãn chưa được xác minh. Nội dung này
+không phải tư vấn pháp lý.
+
+**License note:** dataset không cung cấp open license chung cho việc tái phân
+phối ảnh; cần xem lại điều khoản gốc và xin phép chủ sở hữu ảnh đối với việc sử
+dụng vượt ngoài scientific fair use.
 
 ## 3. Data split và preprocessing
 
@@ -215,4 +230,5 @@ Các bước tiếp theo theo protocol:
 
 1. ETH Zurich, Computer Vision Lab. [Food-101 dataset — trang chính thức](https://data.vision.ee.ethz.ch/cvl/datasets_extra/food-101/).
 2. L. Bossard, M. Guillaumin và L. Van Gool. “Food-101 — Mining Discriminative Components with Random Forests.” ECCV 2014. [PDF từ ETH Zurich](https://data.vision.ee.ethz.ch/cvl/datasets_extra/food-101/static/bossard_eccv14_food-101.pdf).
-3. Voxel51. [Food-101 dataset card](https://docs.voxel51.com/dataset_zoo/datasets_hf/food101.html). Nguồn thứ cấp được README A1.1 dẫn để cung cấp ngữ cảnh về nguồn ảnh và điều kiện sử dụng; không phải license do chủ sở hữu ảnh cấp.
+3. Hugging Face. [ethz/food101 — Dataset Card](https://huggingface.co/datasets/ethz/food101). Chứa License Agreement về nguồn ảnh Foodspotting và metadata license `unknown`.
+4. Voxel51. [Food-101 dataset card](https://docs.voxel51.com/dataset_zoo/datasets_hf/food101.html). Nguồn thứ cấp được README A1.1 dẫn để cung cấp ngữ cảnh về nguồn ảnh và điều kiện sử dụng; không phải license do chủ sở hữu ảnh cấp.
