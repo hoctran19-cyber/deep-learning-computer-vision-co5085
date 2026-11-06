@@ -91,9 +91,9 @@ Cấu hình: Fashion-MNIST, validation split 10%, seed 42, optimizer Adam,
 
 | Mô hình | Test accuracy | Best validation accuracy | Số tham số | Thời gian huấn luyện (s) |
 |---|---:|---:|---:|---:|
-| Softmax | 0,8419 | 0,8525 | 7.850 | 105,0 |
-| MLP | 0,8792 | 0,8867 | 109.386 | 107,0 |
-| CNN | **0,9111** | **0,9203** | 50.186 | 113,0 |
+| Softmax | 0,8419 | 0,8525 | 7.850 | 111,6 |
+| MLP | 0,8792 | 0,8867 | 109.386 | 113,4 |
+| CNN | **0,9122** | **0,9193** | 50.186 | 124,1 |
 
 Biểu đồ đường cong huấn luyện, ma trận nhầm lẫn và các mẫu bị phân loại sai của
 từng mô hình nằm trong `results/figures/`. Phân tích chi tiết xem
@@ -101,8 +101,8 @@ từng mô hình nằm trong `results/figures/`. Phân tích chi tiết xem
 
 ## Nhận xét
 
-CNN đạt độ chính xác kiểm thử cao nhất (91,11%), tiếp theo là MLP (87,92%) và
-Softmax (84,19%). CNN hơn Softmax 6,92 điểm phần trăm và hơn MLP 3,19 điểm phần
+CNN đạt độ chính xác kiểm thử cao nhất (91,22%), tiếp theo là MLP (87,92%) và
+Softmax (84,19%). CNN hơn Softmax 7,03 điểm phần trăm và hơn MLP 3,30 điểm phần
 trăm.
 
 CNN dùng ít tham số hơn MLP (50.186 so với 109.386) nhưng chính xác hơn, vì phép
@@ -110,11 +110,9 @@ tích chập khai thác cấu trúc không gian 2D và chia sẻ trọng số, t
 làm phẳng ảnh và mất thông tin vị trí lân cận. Softmax nhỏ nhất (7.850 tham số)
 nhưng bị giới hạn bởi ranh giới quyết định tuyến tính.
 
-Thời gian huấn luyện của ba mô hình khá gần nhau; CNN lâu hơn một chút.
+Thời gian huấn luyện của ba mô hình khá gần nhau (111,6–124,1 giây); CNN lâu hơn một chút.
 
 ## Hạn chế
 
 Mỗi mô hình chỉ chạy một lần (seed 42, 10 epoch), nên chênh lệch nhỏ có thể nằm
-trong dao động ngẫu nhiên. Các con số trong `results/analysis.md` được tổng hợp
-từ một lần chạy trước và lệch nhẹ so với `model_comparison.csv` (ví dụ CNN
-91,05%); bảng ở trên theo lần chạy mới nhất.
+trong dao động ngẫu nhiên.

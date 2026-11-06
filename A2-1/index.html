@@ -1,13 +1,89 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>A2-1 · Topic + Paper + Data — CO5085</title>
+    <title>A2-1 · ALPR on CCPD — CO5085</title>
 
     <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .a21-meta {
+            margin-bottom: 24px
+        }
+
+        .a21-meta p {
+            margin-bottom: 6px;
+            color: var(--muted)
+        }
+
+        .a21-content h3 {
+            margin: 24px 0 10px;
+            color: var(--navy-deep)
+        }
+
+        .a21-content ul,
+        .a21-content ol {
+            margin: 0 0 14px 22px;
+            color: var(--muted)
+        }
+
+        .a21-content li {
+            margin-bottom: 6px
+        }
+
+        .a21-content pre {
+            overflow-x: auto;
+            padding: 16px;
+            margin-bottom: 14px;
+            border-radius: 10px;
+            background: var(--surface-soft);
+            font-size: .9rem
+        }
+
+        .a21-content code {
+            font-family: ui-monospace, Menlo, monospace
+        }
+
+        .a21-content a {
+            overflow-wrap: anywhere
+        }
+
+        .a21-content .table-wrap {
+            margin-bottom: 14px
+        }
+
+        .a21-fig {
+            margin: 18px 0 22px;
+            padding: 14px;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: var(--surface-soft)
+        }
+
+        .a21-fig svg {
+            display: block;
+            width: 100%;
+            height: auto;
+            max-width: 760px;
+            margin: 0 auto
+        }
+
+        .a21-fig img {
+            display: block;
+            width: 100%;
+            height: auto;
+            margin: 0 auto
+        }
+
+        .a21-fig figcaption {
+            margin-top: 10px;
+            font-size: .85rem;
+            color: var(--muted);
+            text-align: center
+        }
+    </style>
 </head>
 
 <body>
@@ -16,17 +92,35 @@
         <div class="container nav-container">
             <a class="brand" href="../#home" aria-label="Deep Learning for Computer Vision — Trang chủ">
                 <span class="brand-mark" aria-hidden="true">
-                    <svg viewBox="0 0 40 40" width="30" height="30" fill="none"><rect x="3" y="4" width="34" height="32" rx="6" fill="#DCEBFA"/><path d="M5 28 15 17l6 6 5-6 9 11v5H5z" fill="#60A5FA"/><circle cx="28" cy="12" r="3" fill="#FBBF24"/><path d="M5 31h30" stroke="#fff" stroke-width="2"/></svg>
+                    <svg viewBox="0 0 40 40" width="30" height="30" fill="none">
+                        <rect x="3" y="4" width="34" height="32" rx="6" fill="#DCEBFA" />
+                        <path d="M5 28 15 17l6 6 5-6 9 11v5H5z" fill="#60A5FA" />
+                        <circle cx="28" cy="12" r="3" fill="#FBBF24" />
+                        <path d="M5 31h30" stroke="#fff" stroke-width="2" />
+                    </svg>
                 </span>
-                <span class="brand-copy"><span class="brand-title">Deep Learning for Computer Vision</span><span class="brand-subtitle">CO5085 | HK261</span></span>
+                <span class="brand-copy"><span class="brand-title">Deep Learning for Computer Vision</span><span
+                        class="brand-subtitle">CO5085 | HK261</span></span>
             </a>
             <nav class="primary-nav" aria-label="Điều hướng chính">
-                <a href="../#home">Trang chủ</a><a href="../#assignments" aria-current="page">Bài tập</a><a href="../#documents">Tài liệu</a><a href="../#about">Giới thiệu</a>
-                <a class="github-link" href="https://github.com/hoctran19-cyber/deep-learning-computer-vision-co5085" target="_blank" rel="noopener noreferrer" aria-label="Mở repository trên GitHub">
-                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .9a11.1 11.1 0 0 0-3.51 21.63c.55.1.76-.24.76-.54v-2.1c-3.1.67-3.76-1.32-3.76-1.32-.5-1.29-1.23-1.63-1.23-1.63-1.01-.69.08-.68.08-.68 1.12.08 1.7 1.15 1.7 1.15.99 1.7 2.6 1.21 3.23.93.1-.72.39-1.21.7-1.49-2.47-.28-5.07-1.24-5.07-5.5 0-1.22.44-2.21 1.15-2.99-.12-.28-.5-1.42.11-2.95 0 0 .94-.3 3.05 1.14a10.6 10.6 0 0 1 5.55 0c2.12-1.44 3.05-1.14 3.05-1.14.61 1.53.23 2.67.11 2.95.72.78 1.15 1.77 1.15 2.99 0 4.27-2.6 5.21-5.08 5.49.4.35.75 1.02.75 2.06v3.06c0 .3.2.65.76.54A11.1 11.1 0 0 0 12 .9Z"/></svg>
+                <a href="../#home">Trang chủ</a><a href="../#assignments" aria-current="page">Bài tập</a><a
+                    href="../#documents">Tài liệu</a><a href="../#about">Giới thiệu</a>
+                <a class="github-link" href="https://github.com/hoctran19-cyber/deep-learning-computer-vision-co5085"
+                    target="_blank" rel="noopener noreferrer" aria-label="Mở repository trên GitHub">
+                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path
+                            d="M12 .9a11.1 11.1 0 0 0-3.51 21.63c.55.1.76-.24.76-.54v-2.1c-3.1.67-3.76-1.32-3.76-1.32-.5-1.29-1.23-1.63-1.23-1.63-1.01-.69.08-.68.08-.68 1.12.08 1.7 1.15 1.7 1.15.99 1.7 2.6 1.21 3.23.93.1-.72.39-1.21.7-1.49-2.47-.28-5.07-1.24-5.07-5.5 0-1.22.44-2.21 1.15-2.99-.12-.28-.5-1.42.11-2.95 0 0 .94-.3 3.05 1.14a10.6 10.6 0 0 1 5.55 0c2.12-1.44 3.05-1.14 3.05-1.14.61 1.53.23 2.67.11 2.95.72.78 1.15 1.77 1.15 2.99 0 4.27-2.6 5.21-5.08 5.49.4.35.75 1.02.75 2.06v3.06c0 .3.2.65.76.54A11.1 11.1 0 0 0 12 .9Z" />
+                    </svg>
                 </a>
             </nav>
-            <details class="mobile-nav"><summary aria-label="Mở menu điều hướng">☰</summary><nav class="mobile-nav-panel" aria-label="Điều hướng trên thiết bị di động"><a href="../#home">Trang chủ</a><a href="../#assignments" aria-current="page">Bài tập</a><a href="../#documents">Tài liệu</a><a href="../#about">Giới thiệu</a><a href="https://github.com/hoctran19-cyber/deep-learning-computer-vision-co5085" target="_blank" rel="noopener noreferrer">GitHub</a></nav></details>
+            <details class="mobile-nav">
+                <summary aria-label="Mở menu điều hướng">☰</summary>
+                <nav class="mobile-nav-panel" aria-label="Điều hướng trên thiết bị di động"><a href="../#home">Trang
+                        chủ</a><a href="../#assignments" aria-current="page">Bài tập</a><a href="../#documents">Tài
+                        liệu</a><a href="../#about">Giới thiệu</a><a
+                        href="https://github.com/hoctran19-cyber/deep-learning-computer-vision-co5085" target="_blank"
+                        rel="noopener noreferrer">GitHub</a></nav>
+            </details>
         </div>
     </header>
 
@@ -50,22 +144,544 @@
                     <div>
                         <span class="hero-label">Assignment 2.1</span>
 
-                        <h2>Topic + Paper + Data</h2>
+                        <h2>ALPR on CCPD</h2>
 
                         <p>
-                            Self-chosen topic (detection, segmentation, …). Select the topic, one related paper and the dataset to work with.
+                            Automatic License Plate Detection and Recognition on CCPD, using YOLO26n with CRNN-BiLSTM-CTC and PDLPR.
                         </p>
                     </div>
 
                 </div>
 
 
-                <div class="placeholder">
-                    <strong>Coming soon</strong>
-                    <p>
-                        Notebook, results and write-up for this
-                        assignment will be published here.
-                    </p>
+                <div class="detail-layout">
+<aside class="detail-toc" aria-label="Mục lục">
+                        <h2>Mục lục</h2>
+                        <a href="#s1">1. Giới thiệu đề tài</a>
+                        <a href="#s2">2. Paper được lựa chọn</a>
+                        <a href="#s3">3. Dataset</a>
+                        <a href="#s4">4. Phương pháp và thiết kế so sánh</a>
+                        <a href="#s5">5. Evaluation Metrics</a>
+                        <a href="#s6">6. Kế hoạch thực nghiệm và ablation</a>
+                        <a href="#s7">7. Tính khả thi và rủi ro</a>
+                        <a href="#s8">8. Kế hoạch thực hiện</a>
+                        <a href="#s9">9. Kết luận và đề xuất chốt đề tài</a>
+                        <a href="#s10">10. References</a>
+                        <a href="#verification-notes">Ghi chú xác minh trước khi nộp</a>
+                    </aside>
+                    <div class="detail-content a21-content">
+                        <div class="a21-meta">
+                           <p><strong>Môn học:</strong> CO5085 – Deep Learning and Its Applications in Computer Vision<br />
+<strong>Assignment:</strong> A2 – Self-chosen Topic + Paper Analysis<br />
+<strong>Chủ đề:</strong> Automatic License Plate Detection and Recognition from Still Images on the CCPD Dataset<br />
+<strong>Phiên bản:</strong> A2.1 – Final proposal for supervisor review<br />
+<strong>Học viên:</strong> Trần Thái Học – 2570426</p>
+                            <div class="exercise-card-links">
+                                <a class="button primary" href="topic_paper_dataset.pdf" target="_blank" rel="noopener noreferrer">Mở file PDF A2.1 <span aria-hidden="true">→</span></a>
+                                <a class="button" href="topic_paper_dataset.md">Xem bản Markdown</a>
+                            </div>
+                        </div>
+                        <section class="detail-section" id="s1">
+                            <h2>1. Giới thiệu đề tài</h2>
+<h3>1.1. Tên đề tài</h3>
+<p><strong>Automatic License Plate Detection and Recognition (ALPR) from Still Images on the CCPD Dataset</strong></p>
+<h3>1.2. Phát biểu bài toán</h3>
+<p>Automatic License Plate Recognition (ALPR) là bài toán tự động phát hiện vị trí biển số và nhận dạng chuỗi ký tự trên biển số từ ảnh phương tiện.</p>
+<p>Đề tài xây dựng và đánh giá một pipeline ALPR, sử dụng ảnh tĩnh làm đầu vào. Hệ thống gồm hai nhiệm vụ:</p>
+<ol>
+<li><strong>License Plate Detection:</strong> Phát hiện vị trí biển số trong ảnh và trích xuất vùng ảnh biển số.</li>
+<li><strong>License Plate Recognition:</strong> Nhận dạng chuỗi ký tự từ vùng biển số đã được trích xuất.</li>
+</ol>
+<p>Dữ liệu CCPD gồm ảnh chụp biển số trong nhiều điều kiện khác nhau như thay đổi ánh sáng, độ mờ, góc nghiêng, khoảng cách chụp và thời tiết. Đây là các điều kiện "unconstrained" mà paper PDLPR hướng tới.</p>
+<h3>1.3. Mục tiêu</h3>
+<ul>
+<li>Xây dựng pipeline phát hiện và nhận dạng biển số từ ảnh tĩnh trên CCPD.</li>
+<li>Triển khai một pipeline chạy được từ ảnh đầu vào đến chuỗi ký tự đầu ra.</li>
+<li>So sánh ít nhất hai phương pháp nhận dạng trên cùng một detector: CRNN-CTC và PDLPR.</li>
+<li>Đánh giá riêng detection, recognition và hiệu quả end-to-end.</li>
+<li>Phân tích ảnh hưởng của điều kiện ảnh (theo các sub-dataset của CCPD) và của vị trí ký tự (ký tự Hán đầu tiên so với các ký tự còn lại) đến kết quả.</li>
+<li>Đối chiếu kết quả thực nghiệm với kết quả mà paper công bố trên cùng dataset, có nêu rõ khác biệt về thiết lập.</li>
+</ul>
+<h3>1.4. Phạm vi</h3>
+<p><strong>Trong phạm vi:</strong></p>
+<ul>
+<li>Ảnh tĩnh; không xử lý video hoặc tracking.</li>
+<li>Biển số trong CCPD (một biển số mỗi ảnh, một dòng, 7 ký tự).</li>
+<li>Detection và recognition.</li>
+</ul>
+<p><strong>Ngoài phạm vi:</strong></p>
+<ul>
+<li>Nhận dạng hoặc phân loại loại phương tiện.</li>
+<li>Theo dõi phương tiện qua nhiều khung hình.</li>
+<li>Xây dựng hệ thống production hoặc tối ưu triển khai thời gian thực trên thiết bị biên.</li>
+<li>Đề xuất một kiến trúc ALPR hoàn toàn mới.</li>
+<li>Biển số nhiều dòng và biển số của các quốc gia/khu vực khác ngoài CCPD.</li>
+</ul>
+<hr />
+                        </section>
+                        <section class="detail-section" id="s2">
+                            <h2>2. Paper được lựa chọn</h2>
+<h3>2.1. Thông tin paper</h3>
+<p><strong>Title:</strong> <em>A Real-Time License Plate Detection and Recognition Model in Unconstrained Scenarios</em><br />
+<strong>Authors:</strong> Lingbing Tao, Shunhe Hong, Yongxing Lin, Yangbing Chen, Pingan He, and Zhixin Tie.<br />
+<strong>Journal:</strong> <em>Sensors</em>, 2024, Volume 24, Issue 9, Article 2791.<br />
+<strong>Publisher:</strong> MDPI.<br />
+<strong>DOI:</strong> https://doi.org/10.3390/s24092791<br />
+<strong>Official paper:</strong> https://www.mdpi.com/1424-8220/24/9/2791<br />
+<strong>PubMed record:</strong> https://pubmed.ncbi.nlm.nih.gov/38732896/  </p>
+<h3>2.2. Lý do lựa chọn</h3>
+<ul>
+<li>Paper giải quyết trực tiếp bài toán license plate detection and recognition.</li>
+<li>Paper mô tả hệ thống gốc gồm YOLOv5 cho detection và PDLPR cho recognition. Trong A2, giữ PDLPR làm phương pháp recognition nghiên cứu, nhưng thay detector bằng YOLO26n để sử dụng mô hình mới hơn.</li>
+<li>PDLPR có các thành phần kiến trúc cụ thể để phân tích: Improved Global Feature Extractor (IGFE), encoder sử dụng Multi-Head Attention và Parallel Decoder.</li>
+<li>Paper có thực nghiệm so sánh và ablation study để đánh giá các thành phần của phương pháp.</li>
+<li><strong>Paper dùng CCPD làm benchmark chính</strong>, nên dataset của đề tài trùng với dataset của paper. Điều này cho phép đối chiếu giao thức đánh giá, các sub-dataset test và kết quả ablation của paper với thực nghiệm của đề tài.</li>
+<li>Paper được xuất bản trong <em>Sensors</em> (MDPI), có quy trình peer review; thông tin bài báo và DOI được ghi nhận trên PubMed. Việc kiểm tra trạng thái chỉ mục SCIE/Scopus cần được đối chiếu theo năm và danh mục chính thức tại thời điểm nộp báo cáo.</li>
+</ul>
+<h3>2.3. Tóm tắt phương pháp</h3>
+<p>Paper đề xuất <strong>YOLOv5-PDLPR</strong>, gồm hai giai đoạn:</p>
+<ol>
+<li><strong>Detection – YOLOv5:</strong> phát hiện và định vị vùng biển số trong ảnh phương tiện.</li>
+<li><strong>Recognition – PDLPR:</strong> nhận dạng chuỗi ký tự từ ảnh biển số đã crop, không yêu cầu tách từng ký tự bằng một detector riêng và không cần bước hiệu chỉnh (correction) biển số.</li>
+</ol>
+<p>PDLPR gồm ba ý tưởng/thành phần chính:</p>
+<ul>
+<li><strong>Improved Global Feature Extractor (IGFE):</strong> trích xuất đặc trưng hình ảnh biển số, dùng Focus Structure và convolution stride 2 thay cho pooling để hạn chế mất thông tin khi downsampling.</li>
+<li><strong>Encoder with Multi-Head Attention:</strong> mã hóa đặc trưng và khai thác quan hệ giữa các vị trí đặc trưng.</li>
+<li><strong>Parallel Decoder:</strong> dự đoán chuỗi ký tự theo cấu trúc giải mã song song, thay cho RNN tuần tự, nhằm cải thiện hiệu quả inference.</li>
+</ul>
+<p>Paper báo cáo average accuracy 99.4% và tốc độ nhận dạng 159.8 FPS trên CCPD trong thiết lập thực nghiệm của tác giả. Đề tài dùng cùng dataset nhưng khác detector (YOLO26n thay YOLOv5), khác ngân sách huấn luyện và có thể dùng tập con của dữ liệu huấn luyện; vì vậy số liệu của paper chỉ dùng để đối chiếu, không phải kết quả dự kiến hoặc cam kết của đề tài.</p>
+<h3>2.4. Novelty và điểm cần đánh giá</h3>
+<p>Đóng góp của paper nằm ở cách thiết kế và kết hợp IGFE, Multi-Head Attention và Parallel Decoder cho recognition biển số. Các thành phần nền tảng như residual block và attention đã có trong nghiên cứu trước; vì vậy không nên mô tả chúng riêng lẻ là kỹ thuật hoàn toàn mới.</p>
+<p>Điểm phù hợp để phân tích trong A2:</p>
+<ul>
+<li>Vai trò của từng module trong recognition.</li>
+<li>Sự khác biệt giữa giải mã tuần tự của CRNN/BiLSTM và Parallel Decoder.</li>
+<li>Kết quả ablation mà tác giả dùng để kiểm chứng IGFE, decoder, số attention head và số decoding unit.</li>
+<li>Mức độ tái hiện được kết quả của paper khi giảm ngân sách huấn luyện và thay detector.</li>
+</ul>
+<h3>2.5. Hạn chế và cách áp dụng vào đề tài</h3>
+<ul>
+<li>Paper đánh giá trên các dataset biển số Trung Quốc và Đài Loan; mô hình không được kiểm chứng trên biển số của quốc gia khác hay biển số nhiều dòng. Đề tài giới hạn trong CCPD nên không đánh giá khả năng chuyển giao sang kiểu biển số khác.</li>
+<li>Chính paper nêu hạn chế: dữ liệu huấn luyện hạn chế nên mô hình nhận dạng kém với các ký tự Hán khác ngoài "皖" (ký tự này chiếm hơn 95% trong CCPD). Đề tài sẽ kiểm tra hiện tượng này bằng cách báo cáo riêng độ chính xác của ký tự đầu tiên.</li>
+<li>CCPD chỉ có một biển số mỗi ảnh, biển một dòng 7 ký tự, nên không kiểm chứng được tình huống nhiều biển số hoặc biển nhiều dòng.</li>
+<li>Không thể xem kết quả accuracy/FPS trong paper là kết quả của đề tài vì khác detector, khác ngân sách huấn luyện (paper huấn luyện recognition 1000 epoch) và khác môi trường đo.</li>
+<li>Chưa xác minh được official implementation và pretrained weights do chính tác giả paper phát hành. Do đó, kế hoạch cần dự phòng việc tự triển khai PDLPR theo mô tả trong paper và ghi rõ các chi tiết mà paper chưa mô tả đầy đủ.</li>
+</ul>
+<p><strong>Vai trò của paper trong A2:</strong> Paper được chọn làm cơ sở nghiên cứu cho PDLPR, đặc biệt là IGFE, Multi-Head Attention và Parallel Decoder. A2 không tái hiện nguyên bản toàn bộ YOLOv5-PDLPR: detector YOLOv5 trong paper được thay bằng YOLO26n, còn PDLPR được nghiên cứu/tái triển khai ở vai trò recognition. Vì vậy, tên gọi chính xác của phương pháp trong A2 là <strong>YOLO26n + PDLPR (paper-inspired adaptation)</strong>, không phải reproduction nguyên bản YOLOv5-PDLPR.</p>
+<hr />
+                        </section>
+                        <section class="detail-section" id="s3">
+                            <h2>3. Dataset</h2>
+<h3>3.1. Dataset được lựa chọn</h3>
+<p><strong>Tên:</strong> CCPD – Chinese City Parking Dataset<br />
+<strong>Official repository:</strong> https://github.com/detectRecog/CCPD<br />
+<strong>Paper của dataset:</strong> Xu, Z., Yang, W., Meng, A., Lu, N., Huang, H., Ying, C., &amp; Huang, L. (2018). <em>Towards End-to-End License Plate Detection and Recognition: A Large Dataset and Baseline</em>. ECCV 2018.<br />
+<strong>License:</strong> MIT (theo paper ECCV 2018 và repository; sẽ được kiểm tra lại trên repository trước khi nộp báo cáo).</p>
+<p>CCPD là bộ dữ liệu biển số lớn do công ty quản lý đỗ xe ven đường chụp thủ công và được annotate cẩn thận. Mỗi ảnh có đúng một biển số. Theo repository, bản CCPD2019 có hơn 300k ảnh, có bounding box, bốn đỉnh biển số và chuỗi ký tự. Ảnh được chia thành nhiều sub-dataset theo điều kiện chụp.</p>
+<h3>3.2. Thống kê theo paper và repository</h3>
+<table>
+<thead>
+<tr>
+<th>Thuộc tính</th>
+<th>Thông tin</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tổng số ảnh</td>
+<td>Hơn 300k (CCPD2019, theo repository); paper ECCV 2018 nêu hơn 250k; paper PDLPR ghi 283k</td>
+</tr>
+<tr>
+<td>Số biển số mỗi ảnh</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Số ký tự mỗi biển</td>
+<td>7 (1 ký tự Hán đại diện tỉnh, 1 chữ cái, 5 chữ cái hoặc chữ số)</td>
+</tr>
+<tr>
+<td>Nhãn vị trí</td>
+<td>Bounding box (góc trái-trên và phải-dưới) và bốn đỉnh biển số</td>
+</tr>
+<tr>
+<td>Nhãn nhận dạng</td>
+<td>Chuỗi ký tự, mã hóa dưới dạng chỉ số ký tự trong tên file</td>
+</tr>
+<tr>
+<td>Thuộc tính khác</td>
+<td>Tỉ lệ diện tích biển số, độ nghiêng ngang/dọc, độ sáng, độ mờ (trong tên file)</td>
+</tr>
+<tr>
+<td>Sub-dataset</td>
+<td>Base, DB, Blur, FN, Rotate, Tilt, Challenge, Weather, ...</td>
+</tr>
+</tbody>
+</table>
+<p>Các con số trên là thống kê do paper/repository công bố, có thể khác giữa các phiên bản. Số lượng mẫu thực tế sử dụng sẽ được xác nhận sau khi tải dữ liệu (dung lượng khoảng 12GB theo repository), kiểm tra file và loại bỏ mẫu lỗi/trùng lặp nếu có. Sub-dataset CCPD-Green (biển năng lượng mới, 8 ký tự) nằm ngoài phạm vi đề tài.</p>
+<h3>3.3. Lý do lựa chọn</h3>
+<ul>
+<li>Dataset công khai, có license MIT, phù hợp yêu cầu "tập công khai, dùng được cho học tập".</li>
+<li>Quy mô lớn, đa dạng điều kiện chụp, đủ để đánh giá có ý nghĩa.</li>
+<li>Có bounding box để huấn luyện detector và chuỗi ký tự để huấn luyện recognizer, cả hai đều lấy được từ tên file.</li>
+<li>Có protocol đánh giá rõ ràng từ tác giả dataset: split train/val trên CCPD-Base và các sub-dataset dùng để test.</li>
+<li>Là dataset chính của paper PDLPR nên đối chiếu được trực tiếp với paper.</li>
+</ul>
+<p>Khi sử dụng dữ liệu, báo cáo sẽ trích dẫn paper ECCV 2018 và repository CCPD.</p>
+<h3>3.4. Chia dữ liệu</h3>
+<p>Chia dữ liệu theo protocol của CCPD:</p>
+<table>
+<thead>
+<tr>
+<th>Split</th>
+<th>Nguồn</th>
+<th>Mục đích</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Training</td>
+<td>CCPD-Base, phần train theo file split của repository</td>
+<td>Huấn luyện</td>
+</tr>
+<tr>
+<td>Validation</td>
+<td>CCPD-Base, phần val theo file split của repository</td>
+<td>Theo dõi huấn luyện và chọn checkpoint</td>
+</tr>
+<tr>
+<td>Testing</td>
+<td>Các sub-dataset DB, Blur, FN, Rotate, Tilt, Challenge (có thể thêm Weather như paper)</td>
+<td>Đánh giá cuối cùng</td>
+</tr>
+</tbody>
+</table>
+<p>Protocol:</p>
+<ul>
+<li>Ưu tiên dùng file split chính thức trong repository; nếu thư mục split không khớp với bản dữ liệu tải về thì ghi rõ cách chia thay thế.</li>
+<li>Do giới hạn tài nguyên, có thể lấy mẫu con từ tập train/test với random seed cố định; số lượng mẫu mỗi split và tiêu chí lấy mẫu được báo cáo sau bước audit.</li>
+<li>Kiểm tra ảnh trùng lặp hoặc gần trùng lặp (cùng một xe được chụp nhiều lần) để hạn chế data leakage giữa train/val/test.</li>
+<li>Chia dữ liệu trước khi tạo crop cho recognition.</li>
+<li>Không dùng test set để chọn hyperparameters hoặc checkpoint.</li>
+</ul>
+<p>Nếu lấy mẫu con hoặc thay đổi cách chia so với paper, cần nêu rõ vì kết quả sẽ không so sánh trực tiếp với paper được.</p>
+<h3>3.5. Tiền xử lý dự kiến</h3>
+<p><strong>Detection:</strong></p>
+<ul>
+<li>Đọc ảnh và bounding box từ tên file.</li>
+<li>Chuyển annotation sang định dạng YOLO.</li>
+<li>Resize/letterbox theo input size và preprocessing của YOLO26n; chuyển đổi bounding box đồng bộ với phép biến đổi ảnh.</li>
+<li>Áp dụng augmentation có kiểm soát như brightness/contrast, blur, noise và geometric transformation; phải biến đổi bounding box đồng bộ với ảnh. Không lật ngang ảnh vì sẽ làm sai thứ tự ký tự.</li>
+</ul>
+<p><strong>Recognition:</strong></p>
+<ul>
+<li>Tạo plate crop từ ground-truth bounding box cho training/validation recognition.</li>
+<li>Resize và normalize theo yêu cầu từng recognizer (paper PDLPR dùng input 48 × 144).</li>
+<li>Giải mã chuỗi ký tự từ các chỉ số trong tên file bằng các bảng ký tự do repository CCPD cung cấp; lưu ý ký hiệu "O" trong các bảng này được dùng như ký tự rỗng (no character), cần xử lý trong bước audit nhãn.</li>
+<li>Xây dựng character vocabulary từ nhãn thực tế (ký tự Hán đại diện tỉnh, chữ cái và chữ số).</li>
+<li>Augmentation cho recognition tương tự paper: color jitter, random crop, random scale, random translation và random rotation.</li>
+<li>Trong đánh giá end-to-end, sử dụng crop từ detection prediction thay vì ground-truth crop.</li>
+</ul>
+<hr />
+                        </section>
+                        <section class="detail-section" id="s4">
+                            <h2>4. Phương pháp và thiết kế so sánh</h2>
+<h3>4.1. Thiết kế tổng thể</h3>
+<p><strong>Detector được chốt: YOLO26n (<code>yolo26n.pt</code>).</strong> Theo tài liệu Ultralytics, YOLO26 là dòng model mới nhất đã phát hành; <code>yolo26n.pt</code> là checkpoint pretrained có thể dùng trực tiếp cho inference và fine-tuning trên dữ liệu tùy chỉnh. Checkpoint này pretrained cho bài toán detection trên COCO, vì vậy vẫn cần fine-tune trên CCPD để phát hiện biển số. Không được nhầm pretrained detector này với pretrained PDLPR.</p>
+<p>Để so sánh recognition một cách công bằng, sử dụng <strong>cùng một YOLO26n detector</strong> cho cả hai pipeline. Chỉ thay đổi recognition model:</p>
+<ul>
+<li><strong>E1 – Baseline:</strong> YOLO26n + CRNN-BiLSTM-CTC.</li>
+<li><strong>E2 – Paper-inspired method:</strong> YOLO26n + PDLPR.</li>
+</ul>
+<p>Như vậy, khác biệt chính giữa E1 và E2 nằm ở recognizer, không phải detector.</p>
+<p><strong>Lý do chọn YOLO26n thay cho YOLOv5 trong phần triển khai:</strong> YOLO26 là dòng Ultralytics mới hơn, có checkpoint pretrained công khai và hỗ trợ fine-tuning. Dùng biến thể <code>n</code> để giới hạn chi phí tính toán. Việc thay detector giúp đề tài dùng công cụ hiện hành, nhưng đồng nghĩa hệ thống không còn là bản tái hiện nguyên gốc YOLOv5-PDLPR; sự khác biệt này sẽ được nêu rõ trong báo cáo. Thư viện Ultralytics phát hành theo giấy phép AGPL-3.0; cần ghi rõ khi công khai code.</p>
+<h3>4.2. Pipeline E1 — CRNN-BiLSTM-CTC</h3>
+<p>CRNN là baseline nhận dạng chuỗi ảnh phổ biến:</p>
+<ul>
+<li>CNN: trích xuất đặc trưng từ ảnh biển số.</li>
+<li>BiLSTM: học quan hệ tuần tự hai chiều trên chuỗi đặc trưng.</li>
+<li>CTC: huấn luyện chuỗi mà không cần căn chỉnh nhãn từng ký tự với từng vị trí ảnh.</li>
+</ul>
+<h3>4.3. Pipeline E2 — PDLPR</h3>
+<p>Tái triển khai PDLPR theo mô tả trong paper:</p>
+<ul>
+<li>IGFE: trích xuất đặc trưng toàn cục (Focus Structure, ConvDownSampling, RESBLOCK).</li>
+<li>Encoder với Multi-Head Attention: mã hóa quan hệ giữa các vị trí đặc trưng.</li>
+<li>Parallel Decoder: dự đoán chuỗi ký tự bằng cấu trúc giải mã song song.</li>
+</ul>
+<p>Paper huấn luyện recognition bằng hàm loss CTC với optimizer Adam; đề tài sẽ dùng cùng loại loss cho cả E1 và E2 để so sánh công bằng. Các chi tiết triển khai mà paper chưa mô tả đầy đủ hoặc chưa được code chính thức xác nhận sẽ được ghi rõ là quyết định triển khai của đề tài, không gán thành cấu hình nguyên bản của tác giả. Các thông số huấn luyện như số epoch sẽ khác paper do giới hạn tài nguyên và được báo cáo cụ thể.</p>
+<h3>4.4. Sơ đồ pipeline</h3>
+<figure class="a21-fig">
+<img src="pipeline_comparison.svg" alt="Sơ đồ so sánh hai pipeline ALPR E1 và E2" />
+<figcaption>Hình 1. Cùng một detector YOLO26n cung cấp vùng biển số cho hai phương pháp nhận dạng; kết quả được đưa vào đánh giá và so sánh.</figcaption>
+</figure>
+<h3>4.5. Quy tắc đảm bảo so sánh công bằng</h3>
+<ul>
+<li>Cùng dataset và train/validation/test split.</li>
+<li>Cùng YOLO26n detector và cùng detector checkpoint cho cả E1, E2.</li>
+<li>Khi đánh giá recognition riêng, dùng cùng ground-truth plate crops.</li>
+<li>Khi đánh giá end-to-end, dùng cùng detection predictions/crops.</li>
+<li>Dùng cùng character vocabulary, quy tắc chuẩn hóa chuỗi và tiêu chí exact match.</li>
+<li>Dùng cùng input size, augmentation và ngân sách huấn luyện (số epoch, mức tinh chỉnh hyperparameter) cho hai recognizer.</li>
+<li>Công bố cấu hình training, input size, epoch, optimizer, learning rate, batch size và checkpoint được chọn cho từng recognizer.</li>
+<li>Báo cáo rõ mô hình nào dùng pretrained weights và nguồn checkpoint. Không xem pretrained YOLO26n là pretrained PDLPR.</li>
+<li>Nếu thời gian cho phép, chạy từ 2–3 random seed để đánh giá độ ổn định của kết luận.</li>
+</ul>
+<hr />
+                        </section>
+                        <section class="detail-section" id="s5">
+                            <h2>5. Evaluation Metrics</h2>
+<h3>5.1. Detection</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Ý nghĩa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Precision</td>
+<td>Tỷ lệ detection dự đoán đúng trên tổng detection được dự đoán</td>
+</tr>
+<tr>
+<td>Recall</td>
+<td>Tỷ lệ biển số ground truth được phát hiện</td>
+</tr>
+<tr>
+<td>mAP@0.5</td>
+<td>Mean Average Precision tại IoU 0.5</td>
+</tr>
+<tr>
+<td>mAP@0.5:0.95</td>
+<td>mAP trung bình trên nhiều ngưỡng IoU</td>
+</tr>
+</tbody>
+</table>
+<p>Vì mỗi ảnh CCPD chỉ có một biển số, khi đánh giá theo protocol CCPD sẽ lấy detection có confidence cao nhất của mỗi ảnh và coi là đúng nếu IoU với ground truth lớn hơn 0.7. Detector được huấn luyện/đánh giá độc lập một lần; cùng kết quả detector được dùng cho cả hai recognizer trong so sánh chính.</p>
+<h3>5.2. Recognition</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Ý nghĩa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Character Accuracy</td>
+<td>Tỷ lệ ký tự dự đoán đúng theo quy tắc căn chỉnh được định nghĩa</td>
+</tr>
+<tr>
+<td>Exact Plate Accuracy</td>
+<td>Tỷ lệ chuỗi biển số khớp hoàn toàn với ground truth</td>
+</tr>
+<tr>
+<td>CER</td>
+<td>Character Error Rate ở cấp độ ký tự</td>
+</tr>
+</tbody>
+</table>
+<p>[
+CER = \frac{S + D + I}{N}
+]</p>
+<p>Trong đó S là số ký tự thay thế, D là số ký tự bị xóa, I là số ký tự chèn thêm và N là tổng số ký tự ground truth.</p>
+<h3>5.3. End-to-End</h3>
+<p><strong>End-to-End Exact Plate Recognition Rate:</strong> tỷ lệ ảnh đầu vào mà hệ thống phát hiện đúng biển số theo ngưỡng IoU được xác định trước và nhận dạng chính xác toàn bộ chuỗi ký tự.</p>
+<p>Ngưỡng IoU chính là 0.7 theo benchmark CCPD; có thể báo cáo thêm ngưỡng 0.6 (dùng trong paper PDLPR cho tiêu chí nhận dạng đúng) để thuận tiện đối chiếu. Ảnh không phát hiện được biển số được tính là thất bại ở metric end-to-end.</p>
+<h3>5.4. Computational metrics</h3>
+<p>Nếu tài nguyên cho phép, báo cáo thêm:</p>
+<ul>
+<li>FPS hoặc latency (ms/image), ghi rõ đo trên CPU/GPU, batch size và có warm-up.</li>
+<li>Number of Parameters.</li>
+<li>Model Size.</li>
+</ul>
+<p>Không so sánh FPS với paper nếu khác biệt môi trường đo hoặc cách tính; chỉ so sánh FPS giữa E1 và E2 đo trên cùng phần cứng.</p>
+<hr />
+                        </section>
+                        <section class="detail-section" id="s6">
+                            <h2>6. Kế hoạch thực nghiệm và ablation</h2>
+<h3>6.1. Thí nghiệm chính</h3>
+<table>
+<thead>
+<tr>
+<th>Experiment</th>
+<th>Detection</th>
+<th>Recognition</th>
+<th>Mục đích</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>E1</td>
+<td>YOLO26n cố định</td>
+<td>CRNN-BiLSTM-CTC</td>
+<td>Baseline recognition</td>
+</tr>
+<tr>
+<td>E2</td>
+<td>YOLO26n cố định</td>
+<td>PDLPR</td>
+<td>Đánh giá PDLPR-inspired recognition trên CCPD và đối chiếu với paper</td>
+</tr>
+</tbody>
+</table>
+<p>Báo cáo kết quả theo ba mức: detection, recognition trên ground-truth crops và end-to-end trên detection crops.</p>
+<h3>6.2. Ablation dự kiến</h3>
+<p>Nếu thời gian và tài nguyên cho phép, thực hiện ít nhất một ablation trên PDLPR:</p>
+<ul>
+<li><strong>A1:</strong> PDLPR đầy đủ so với biến thể bỏ Multi-Head Attention; hoặc</li>
+<li><strong>A2:</strong> PDLPR đầy đủ so với biến thể thay Parallel Decoder bằng decoder tuần tự phù hợp; hoặc</li>
+<li><strong>A3:</strong> thay đổi số attention head hoặc số decoding unit để đối chiếu với kết luận của paper (8 head và 3 decoding unit cho kết quả tốt nhất).</li>
+</ul>
+<p>Chỉ đưa ra kết luận về đóng góp của module khi các cấu hình còn lại được giữ cố định. Nếu không đủ thời gian triển khai ablation, báo cáo sẽ tập trung vào so sánh E1/E2 và phân tích kiến trúc/ablation đã công bố trong paper, đồng thời nêu rõ giới hạn này.</p>
+<h3>6.3. Phân tích theo nhóm dữ liệu</h3>
+<p>Ngoài kết quả tổng thể, phân tích Exact Plate Accuracy và CER theo:</p>
+<ul>
+<li>Từng sub-dataset của CCPD (DB, Blur, FN, Rotate, Tilt, Challenge và Weather nếu dùng), tương ứng các điều kiện ánh sáng, độ mờ, khoảng cách, góc xoay/nghiêng và thời tiết.</li>
+<li>Vị trí ký tự: ký tự Hán đầu tiên so với các ký tự chữ/số còn lại, để kiểm tra hạn chế mất cân bằng ký tự Hán mà paper đã nêu.</li>
+<li>Failure cases có hình minh họa, kèm nhận xét nguyên nhân có thể (detection lệch hay recognition sai).</li>
+</ul>
+<p>Điều này giúp xác định mô hình nào bền vững hơn với các điều kiện khó và so sánh với xu hướng mà paper báo cáo trên các sub-dataset tương ứng.</p>
+<h3>6.4. Mở rộng tùy chọn (không bắt buộc)</h3>
+<ul>
+<li>Attention heat map của PDLPR để minh họa vị trí mô hình chú ý khi nhận dạng từng ký tự (paper có hình tương tự), có thể thay cho Grad-CAM.</li>
+</ul>
+<hr />
+                        </section>
+                        <section class="detail-section" id="s7">
+                            <h2>7. Tính khả thi và rủi ro</h2>
+<h3>7.1. Tính khả thi</h3>
+<ul>
+<li>YOLO26n có implementation và checkpoint pretrained chính thức <code>yolo26n.pt</code> từ Ultralytics; tài liệu hỗ trợ fine-tuning trên dataset tùy chỉnh.</li>
+<li>CCPD có quy mô lớn, annotation đầy đủ (bounding box và chuỗi ký tự) trong tên file, license MIT và protocol train/val/test rõ ràng.</li>
+<li>CRNN-CTC là baseline tương đối phù hợp để tự triển khai.</li>
+<li>PDLPR có mô tả kiến trúc, thông số huấn luyện và ablation trong paper, nhưng cần tự triển khai nếu không tìm được implementation chính thức.</li>
+<li>Có thể chia quá trình huấn luyện thành detector và recognizer, giúp kiểm soát tài nguyên GPU.</li>
+</ul>
+<h3>7.2. Rủi ro và phương án dự phòng</h3>
+<table>
+<thead>
+<tr>
+<th>Rủi ro</th>
+<th>Phương án xử lý</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Không có official PDLPR code/weights đã xác minh</td>
+<td>Tự triển khai theo paper; giới hạn phạm vi module nếu cần và ghi rõ sai khác</td>
+</tr>
+<tr>
+<td>PDLPR khó tái hiện trong thời gian A2</td>
+<td>Ưu tiên hoàn thiện E1; triển khai PDLPR tối thiểu để có so sánh hai phương pháp</td>
+</tr>
+<tr>
+<td>Dataset dung lượng lớn, huấn luyện đầy đủ như paper (1000 epoch) không khả thi</td>
+<td>Dùng tập con CCPD-Base với seed cố định, giảm epoch, ghi rõ khác biệt so với paper</td>
+</tr>
+<tr>
+<td>Phân bố ký tự Hán lệch (ký tự "皖" chiếm đa số) làm accuracy ký tự đầu tiên thiếu tin cậy</td>
+<td>Báo cáo riêng độ chính xác ký tự đầu tiên và các ký tự còn lại; nêu rõ như một hạn chế</td>
+</tr>
+<tr>
+<td>Lỗi parse nhãn từ tên file (ký tự "O" dùng làm ký tự rỗng, mã hóa tên file)</td>
+<td>Audit nhãn bằng cách giải mã lại và kiểm tra thủ công một mẫu ngẫu nhiên; ghi lại số mẫu bị loại</td>
+</tr>
+<tr>
+<td>Dataset có ảnh lỗi/trùng lặp</td>
+<td>Kiểm tra dữ liệu trước khi split và ghi lại số mẫu bị loại</td>
+</tr>
+<tr>
+<td>Thiếu tài nguyên GPU</td>
+<td>Dùng YOLO26n, giảm batch/input size và huấn luyện recognition riêng</td>
+</tr>
+<tr>
+<td>Kết quả recognition tốt trên crop nhưng giảm mạnh end-to-end</td>
+<td>Báo cáo riêng recognition và end-to-end để phân tích ảnh hưởng của detection</td>
+</tr>
+<tr>
+<td>Kết quả thấp hơn paper do khác thiết lập</td>
+<td>Nêu rõ các khác biệt (detector, ngân sách huấn luyện, tập con dữ liệu) và không kết luận paper sai</td>
+</tr>
+</tbody>
+</table>
+<hr />
+                        </section>
+                        <section class="detail-section" id="s8">
+                            <h2>8. Kế hoạch thực hiện</h2>
+<table>
+<thead>
+<tr>
+<th>Giai đoạn</th>
+<th>Công việc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Phase 1</td>
+<td>Tải và audit CCPD: kiểm tra license, file, annotation trong tên file, character vocabulary và ảnh trùng lặp</td>
+</tr>
+<tr>
+<td>Phase 2</td>
+<td>Cố định train/validation/test split; chuẩn bị YOLO labels và plate crops</td>
+</tr>
+<tr>
+<td>Phase 3</td>
+<td>Fine-tune và đánh giá YOLO26n detector</td>
+</tr>
+<tr>
+<td>Phase 4</td>
+<td>Huấn luyện CRNN-BiLSTM-CTC baseline</td>
+</tr>
+<tr>
+<td>Phase 5</td>
+<td>Triển khai và huấn luyện PDLPR trên CCPD</td>
+</tr>
+<tr>
+<td>Phase 6</td>
+<td>Chạy recognition evaluation, end-to-end evaluation và ablation khả thi</td>
+</tr>
+<tr>
+<td>Phase 7</td>
+<td>Tổng hợp bảng kết quả, đối chiếu với paper, phân tích lỗi và viết báo cáo</td>
+</tr>
+</tbody>
+</table>
+<p>A2.1 xác định chủ đề, paper, dataset và protocol. A2.2 trình bày triển khai, thực nghiệm, so sánh và phân tích kết quả thực tế.</p>
+<hr />
+                        </section>
+                        <section class="detail-section" id="s9">
+                            <h2>9. Kết luận và đề xuất chốt đề tài</h2>
+<p>Đề tài đề xuất xây dựng hệ thống <strong>Automatic License Plate Detection and Recognition from Still Images</strong> trên dataset <strong>CCPD</strong>.</p>
+<p>Paper nghiên cứu chính là Tao et al. (2024), <em>A Real-Time License Plate Detection and Recognition Model in Unconstrained Scenarios</em>, đề xuất YOLOv5-PDLPR và dùng CCPD làm benchmark chính. Đề tài sử dụng <strong>YOLO26n</strong> làm detector chung và so sánh hai recognition model: <strong>CRNN-BiLSTM-CTC</strong> (baseline) và <strong>PDLPR</strong> (paper-inspired method). Đây là một điều chỉnh có chủ đích so với paper gốc: thay YOLOv5 bằng YOLO26n, giữ PDLPR ở tầng recognition. Hai pipeline được đánh giá trên cùng dữ liệu, cùng detector checkpoint và cùng protocol.</p>
+<p>Phạm vi được giới hạn ở ảnh tĩnh, detection và recognition biển số trong CCPD. Kết quả sẽ được đánh giá bằng detection metrics, recognition metrics và end-to-end metrics, đồng thời đối chiếu với kết quả của paper trên cùng dataset với các khác biệt thiết lập được nêu rõ. Mục tiêu không phải tuyên bố tạo ra kiến trúc mới, mà là tái triển khai có kiểm soát một phương pháp trong paper và đánh giá mức độ tái hiện được cùng các hạn chế của nó.</p>
+<p><strong>Đề xuất xin ý kiến giáo sư:</strong> chốt đề tài ALPR trên CCPD; sử dụng paper YOLOv5-PDLPR (Tao et al., 2024) làm cơ sở nghiên cứu cho PDLPR; triển khai hai pipeline <strong>YOLO26n + CRNN-BiLSTM-CTC</strong> và <strong>YOLO26n + PDLPR</strong>. YOLO26n dùng pretrained weights chính thức của Ultralytics rồi fine-tune trên CCPD. So sánh chính tập trung vào hai recognition model trong điều kiện detector được giữ cố định.</p>
+<hr />
+                        </section>
+                        <section class="detail-section" id="s10">
+                            <h2>10. References</h2>
+<ol>
+<li>Tao, L., Hong, S., Lin, Y., Chen, Y., He, P., &amp; Tie, Z. (2024). <em>A Real-Time License Plate Detection and Recognition Model in Unconstrained Scenarios</em>. Sensors, 24(9), 2791. https://doi.org/10.3390/s24092791</li>
+<li>Xu, Z., Yang, W., Meng, A., Lu, N., Huang, H., Ying, C., &amp; Huang, L. (2018). <em>Towards End-to-End License Plate Detection and Recognition: A Large Dataset and Baseline</em>. Proceedings of the European Conference on Computer Vision (ECCV), 255–271. https://openaccess.thecvf.com/content_ECCV_2018/papers/Zhenbo_Xu_Towards_End-to-End_License_ECCV_2018_paper.pdf</li>
+<li>CCPD Dataset. <em>Chinese City Parking Dataset</em>. Official GitHub repository (MIT License). https://github.com/detectRecog/CCPD</li>
+<li>Shi, B., Bai, X., &amp; Yao, C. (2017). <em>An End-to-End Trainable Neural Network for Image-Based Sequence Recognition and Its Application to Scene Text Recognition</em>. IEEE Transactions on Pattern Analysis and Machine Intelligence. https://doi.org/10.1109/TPAMI.2016.2646371</li>
+<li>Ultralytics. <em>YOLO26 Documentation</em>. https://docs.ultralytics.com/models/yolo26/</li>
+<li>Ultralytics. <em>YOLO26 model source code</em>. https://github.com/ultralytics/ultralytics</li>
+</ol>
+<hr />
+                        </section>
+                        <section class="detail-section" id="verification-notes">
+                            <h2>Ghi chú xác minh trước khi nộp</h2>
+<ul>
+<li>Xác nhận license MIT, số lượng file thực tế, danh sách sub-dataset và file split trong bản CCPD tải về (các con số trong mục 3.2 khác nhau giữa paper ECCV 2018, repository và paper PDLPR).</li>
+<li>Kiểm tra lại trạng thái SCIE/Scopus của <em>Sensors</em> bằng nguồn danh mục chính thức tương ứng với năm xuất bản nếu cần ghi cụ thể trong phần venue analysis.</li>
+<li>YOLO26n có pretrained checkpoint <code>yolo26n.pt</code> do Ultralytics cung cấp; đây là checkpoint pretrained cho detection trên COCO, không phải mô hình đã huấn luyện nhận dạng biển số.</li>
+<li>Chưa xác minh được official code và pretrained weights do tác giả YOLOv5-PDLPR phát hành. Không dẫn repository bên thứ ba như official implementation.</li>
+<li>Các thông số huấn luyện, split, kết quả trên CCPD và ablation của đề tài chỉ được ghi nhận sau khi thực nghiệm; không sử dụng số liệu của paper làm kết quả của mình.</li>
+</ul>
+                        </section>
+                    </div>
                 </div>
 
             </div>
@@ -81,7 +697,8 @@
                 <strong>Trần Thái Học (2570426) · CO5085</strong>
                 <p>Deep Learning for Computer Vision · HK261</p>
             </div>
-            <a href="https://github.com/hoctran19-cyber/deep-learning-computer-vision-co5085" target="_blank" rel="noopener noreferrer">Mã nguồn trên GitHub →</a>
+            <a href="https://github.com/hoctran19-cyber/deep-learning-computer-vision-co5085" target="_blank"
+                rel="noopener noreferrer">Mã nguồn trên GitHub →</a>
         </div>
     </footer>
 

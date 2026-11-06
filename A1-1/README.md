@@ -26,21 +26,31 @@ Nguồn thông tin và tải:
 - Paper gốc: Bossard, Guillaumin và Van Gool, *Food-101 — Mining Discriminative
   Components with Random Forests*, ECCV 2014. [PDF từ ETH Zurich](https://data.vision.ee.ethz.ch/cvl/datasets_extra/food-101/static/bossard_eccv14_food-101.pdf).
 
-### License và hạn chế chia sẻ
+### Dataset License and Usage
 
-Trang dataset của ETH Zurich không nêu một license mở riêng cho ảnh trong nội
-dung đã kiểm tra. Một [dataset card của Voxel51](https://docs.voxel51.com/dataset_zoo/datasets_hf/food101.html)
-cho biết ảnh bắt nguồn từ Foodspotting, không thuộc ETH Zurich, và việc sử dụng
-ngoài “scientific fair use” cần được thỏa thuận với chủ sở hữu ảnh theo điều
-khoản Foodspotting. Đây là nguồn thứ cấp, không phải giấy phép cấp quyền từ chủ
-sở hữu ảnh.
+Food-101 được giới thiệu bởi Bossard et al. (2014) và do Computer Vision Lab,
+ETH Zurich cung cấp. Theo License Agreement trong [dataset card `ethz/food101`
+trên Hugging Face](https://huggingface.co/datasets/ethz/food101), ảnh được thu
+thập từ Foodspotting và không thuộc quyền sở hữu của ETH Zurich. Mọi việc sử
+dụng vượt ngoài phạm vi “scientific fair use” phải được thỏa thuận với chủ sở
+hữu từng ảnh theo điều khoản sử dụng gốc của Foodspotting. Metadata của dataset
+card ghi license là `unknown`; không có căn cứ để cho rằng toàn bộ ảnh được phát
+hành theo một open license cụ thể. [Dataset card của Voxel51](https://docs.voxel51.com/dataset_zoo/datasets_hf/food101.html)
+là nguồn thứ cấp có thông tin tương tự, không phải giấy phép từ chủ sở hữu ảnh.
 
-Vì vậy, tài liệu này **không kết luận** ảnh được cấp phép tự do, dùng thương
-mại hoặc tái phân phối. License riêng của metadata/nhãn cũng chưa được xác
-minh. Nếu sử dụng dataset cho bài tập, chỉ tải từ nguồn chính thức và dẫn paper;
-không đưa archive, ảnh dataset hoặc bản sao ảnh vào repository. Việc sử dụng
-phải tuân thủ quy định môn học và các quyền áp dụng; thông tin hiện có không
-thay thế tư vấn pháp lý.
+Trong bài tập học thuật này, Food-101 chỉ được dùng cho nghiên cứu và đánh giá
+mô hình. Ảnh dataset không được phân phối lại hoặc đưa vào repository mã nguồn
+công khai; chỉ công bố mã triển khai, script tiền xử lý, cấu hình thí nghiệm và
+kết quả đánh giá. Chỉ tải dữ liệu từ nguồn chính thức và dẫn paper gốc.
+
+**Dataset source:** <https://data.vision.ee.ethz.ch/cvl/datasets_extra/food-101/>
+
+**License note:** Dataset không cung cấp một open license chung cho việc tái phân
+phối ảnh. Cần xem lại điều khoản gốc và xin phép chủ sở hữu ảnh đối với việc sử
+dụng vượt ngoài scientific fair use. Header Apache License 2.0 ở một số file
+loader chỉ áp dụng cho phần code đó, không áp dụng cho ảnh Food-101. Thông tin
+này không phải tư vấn pháp lý và không kết luận việc sử dụng hợp pháp trong mọi
+phạm vi hoặc quốc gia. License riêng của metadata/nhãn chưa được xác minh.
 
 ## Split protocol
 
