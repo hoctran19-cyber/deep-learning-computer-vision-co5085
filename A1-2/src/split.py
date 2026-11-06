@@ -191,7 +191,7 @@ def build_manifest(
     return records
 
 
-def validate_manifest(records: list[dict]) -> None:
+def validate_manifest(records: list[dict], classes: list[str]) -> None:
     """Validate split counts and class distribution."""
 
     expected_counts = {
