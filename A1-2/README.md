@@ -257,3 +257,38 @@ python3 -m unittest discover -s A1-2/tests -p 'test_smoke_pipeline.py'
 Phần tải dữ liệu và tạo mô hình ResNet-50, ViT-B/16 đã được triển khai.
 Vòng huấn luyện có validation, checkpoint và dừng sớm; đánh giá cuối cùng
 trên tập test và kết quả thí nghiệm vẫn chưa được triển khai.
+
+## Pilot Food-101 trên Google Colab
+
+1. Đặt Food-101 đã giải nén trên Google Drive, gồm `meta/classes.txt`,
+   `meta/train.json` và thư mục `images/`; lưu manifest hiện có riêng trên
+   Drive. Không tải lại dữ liệu hoặc tạo lại split.
+2. Mở `notebooks/A1_2_experiment.ipynb` trong Colab và chọn GPU. Trong cell
+   Drive, chỉnh `DATASET_ROOT` và `MANIFEST` theo vị trí thực tế.
+3. Chạy các cell từ trên xuống. Notebook clone hoặc pull fast-forward nhánh
+   `assignment_A1`; nếu repository đã có thay đổi chưa commit hoặc sai nhánh,
+   notebook dừng để tránh ghi đè. Source mới cần được commit và push trước khi
+   Colab có thể lấy về.
+4. Pipeline kiểm tra manifest, ảnh train/validation và membership với
+   `train.json`; sau đó lấy 5 ảnh train và 2 ảnh validation mỗi lớp bằng seed
+   42. Không khởi tạo dataset test, không đọc `test.json` hay ảnh test; các
+   dòng test trong manifest vẫn được kiểm tra cấu trúc và trùng lặp.
+5. ResNet-50 và ViT-B/16 chạy from-scratch với batch 8, tối đa 2 epoch.
+   Việc reset seed giúp tái lập subset và trình tự ngẫu nhiên; kết quả GPU
+   vẫn có thể thay đổi do phép toán không hoàn toàn xác định.
+
+Mỗi lần chạy tạo thư mục riêng dưới `outputs/pilot/` trên Drive, gồm
+`resnet50_best.pt`, `vit_b16_best.pt`, hai file `*_epochs.jsonl` và hai file
+`*_summary.json`. Summary ghi runtime, commit, hash manifest, cấu hình,
+metrics, số mẫu, tham số trainable, checkpoint và thời gian wall-clock của
+`fit()` **bao gồm validation và ghi artifact**. Vì vậy thời gian này không
+phải train-only time theo protocol A1-1 và không dùng để so sánh hiệu năng
+chính thức. Cuối notebook in bảng so sánh validation; không dùng test để chọn
+model. Không commit ảnh, checkpoint hoặc output.
+
+Chạy kiểm thử liên quan từ thư mục gốc repository:
+
+```bash
+python3 -m unittest discover -s A1-2/tests -p 'test_transforms.py'
+python3 -m unittest discover -s A1-2/tests -p 'test_pilot.py'
+```
