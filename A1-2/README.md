@@ -165,8 +165,24 @@ thực hiện validation, scheduler, lưu checkpoint hay dừng sớm.
 python3 -m unittest discover -s A1-2/tests -p 'test_train.py'
 ```
 
+## Đánh giá trên tập validation
+
+`evaluate_one_epoch(model, dataloader, criterion, device)` trong
+`src/evaluate.py` trả về `loss` trung bình theo mẫu, `accuracy` top-1,
+`macro_f1` và `num_samples`. Trước khi gọi, chuyển model sang `device` và
+truyền DataLoader của **tập validation** để lựa chọn mô hình. Hàm chạy ở chế
+độ inference và khôi phục chế độ train/eval ban đầu, kể cả khi xảy ra lỗi.
+
+Criterion và batch có cùng yêu cầu như vòng train ở trên. Macro-F1 được tính
+trên tất cả lớp theo kích thước logits; lớp không có nhãn lẫn dự đoán nhận
+F1 bằng 0. Không dùng tập test chính thức để lựa chọn mô hình.
+
+```bash
+python3 -m unittest discover -s A1-2/tests -p 'test_evaluate.py'
+```
+
 ## Trạng thái hiện tại
 
 Phần tải dữ liệu và tạo mô hình ResNet-50, ViT-B/16 đã được triển khai.
-Vòng huấn luyện một epoch đã có; quy trình huấn luyện đầy đủ, đánh giá và
-kết quả thí nghiệm vẫn chưa được triển khai.
+Vòng huấn luyện và validation một epoch đã có; quy trình huấn luyện đầy đủ,
+đánh giá cuối cùng trên tập test và kết quả thí nghiệm vẫn chưa được triển khai.
