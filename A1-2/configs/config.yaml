@@ -1,0 +1,53 @@
+project:
+  name: food101_cnn_vs_transformer
+  seed: 42
+  num_classes: 101
+
+data:
+  dataset_name: food101
+  # Set these paths in Colab or through environment-specific overrides.
+  root: /content/drive/MyDrive/CO5085/A1-2/data
+  manifest_dir: /content/drive/MyDrive/CO5085/A1-2/manifests
+  image_size: 224
+  resize_short_edge: 256
+  train_val_seed: 42
+  train_per_class: 675
+  validation_per_class: 75
+  test_per_class: 250
+  horizontal_flip_probability: 0.5
+
+training:
+  batch_size: 32
+  max_epochs: 30
+  early_stopping_patience: 5
+  num_workers: 2
+  pin_memory: true
+  optimizer: AdamW
+  weight_decay: 0.01
+  scratch_learning_rate: 0.001
+  head_learning_rate: 0.001
+  backbone_learning_rate: 0.0001
+  selection_metric: macro_f1
+  tie_break_metric: accuracy
+
+experiments:
+  architectures:
+    - resnet50
+    - vit_b_16
+  regimes:
+    - from_scratch
+    - frozen_backbone
+    - partial_finetuning
+    - full_finetuning
+
+evaluation:
+  metrics:
+    - accuracy
+    - macro_f1
+    - trainable_parameters
+    - training_time_seconds
+  evaluate_test_after_validation_selection: true
+
+reproducibility:
+  deterministic: false
+  log_environment: true
