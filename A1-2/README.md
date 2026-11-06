@@ -181,8 +181,56 @@ F1 bằng 0. Không dùng tập test chính thức để lựa chọn mô hình.
 python3 -m unittest discover -s A1-2/tests -p 'test_evaluate.py'
 ```
 
+## Dừng sớm và chọn checkpoint
+
+`src/fit.py` cung cấp `fit()` để kết nối vòng train, validation, scheduler
+(nếu có), checkpoint và log JSONL. Đặt trong `configs/config.yaml`:
+
+```yaml
+training:
+  max_epochs: 30
+  early_stopping_patience: 5
+  early_stopping_min_delta: 0.0
+  selection_metric: macro_f1
+  tie_break_metric: accuracy
+```
+
+Sau khi tạo model, optimizer, criterion và DataLoader, gọi ví dụ từ thư mục
+`A1-2/`:
+
+```python
+from pathlib import Path
+from src.fit import fit
+
+result = fit(
+    model, train_loader, validation_loader, criterion, optimizer, device,
+    config, Path("outputs/checkpoints/best.pt"),
+    Path("outputs/logs/epochs.jsonl"), scheduler=scheduler,
+)
+print(result["best_epoch"], result["best_checkpoint"])
+```
+
+Checkpoint được chọn theo macro-F1 validation **cao nhất**, dùng accuracy
+validation khi macro-F1 bằng nhau. Patience đếm số epoch liên tiếp không
+tăng macro-F1 quá `min_delta` so với mốc cải thiện gần nhất; hòa accuracy
+hoặc tăng nhỏ vẫn có thể tạo checkpoint tốt nhất nhưng không đặt lại
+patience. `min_delta=0` yêu cầu tăng macro-F1 nghiêm ngặt. Mỗi checkpoint
+chứa epoch, trạng thái model/optimizer/scheduler và chỉ số validation; tệp
+được thay thế nguyên tử. Log được nối vào tệp JSONL, vì vậy hãy chọn đường
+dẫn riêng cho mỗi lần chạy. Hàm trả về checkpoint tốt nhất, không tự nạp lại
+trọng số đó vào model và chưa hỗ trợ tiếp tục từ checkpoint.
+
+Chỉ truyền dữ liệu train và validation, không truyền test chính thức.
+`fit()` từ chối các dataset/wrapper công khai `split` không đúng; với dataset
+tùy biến không công khai `split`, caller chịu trách nhiệm bảo đảm dữ liệu
+validation không chứa test. Các DataLoader phải có thể duyệt lại mỗi epoch.
+
+```bash
+python3 -m unittest discover -s A1-2/tests -p 'test_early_stopping.py'
+```
+
 ## Trạng thái hiện tại
 
 Phần tải dữ liệu và tạo mô hình ResNet-50, ViT-B/16 đã được triển khai.
-Vòng huấn luyện và validation một epoch đã có; quy trình huấn luyện đầy đủ,
-đánh giá cuối cùng trên tập test và kết quả thí nghiệm vẫn chưa được triển khai.
+Vòng huấn luyện có validation, checkpoint và dừng sớm; đánh giá cuối cùng
+trên tập test và kết quả thí nghiệm vẫn chưa được triển khai.

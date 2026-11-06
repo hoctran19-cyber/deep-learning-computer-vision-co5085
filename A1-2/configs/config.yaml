@@ -20,6 +20,7 @@ training:
   batch_size: 32
   max_epochs: 30
   early_stopping_patience: 5
+  early_stopping_min_delta: 0.0
   num_workers: 2
   pin_memory: true
   optimizer: AdamW
