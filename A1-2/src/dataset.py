@@ -77,11 +77,6 @@ class Food101Dataset(Dataset):
         if len(set(self.classes)) != len(self.classes):
             raise ValueError("Class names in classes.txt must be unique")
 
-        if self.classes != sorted(self.classes):
-            raise ValueError(
-                "Class names in classes.txt must be alphabetically sorted"
-            )
-
         # enumerate giữ nhãn nhất quán với thứ tự lớp trong classes.txt.
         self.class_to_idx = {
             class_name: idx

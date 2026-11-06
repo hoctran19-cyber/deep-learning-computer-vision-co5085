@@ -1,51 +1,51 @@
-# A1.2 — CNN vs Transformer Experiments
+# A1.2 — Thí nghiệm CNN và Transformer
 
-This directory contains the implementation and experiment workflow for Assignment A1.2.
+Thư mục này chứa phần triển khai và quy trình thực nghiệm cho bài tập A1.2.
 
-## Execution architecture
+## Môi trường thực hiện
 
-- **Local Mac (Intel):** edit source code, validate small components, manage Git.
-- **Google Colab:** run Food-101 preparation, model training, validation, and final test evaluation.
-- **Google Drive:** store the dataset, checkpoints, logs, metrics, and generated figures.
-- **GitHub:** version source code, configuration, notebooks, and reports. Do not commit the Food-101 image archive or large checkpoints.
+- **Mac cục bộ (Intel):** chỉnh sửa mã nguồn, kiểm tra các thành phần nhỏ và quản lý Git.
+- **Google Colab:** chuẩn bị Food-101, huấn luyện mô hình, kiểm định và đánh giá cuối cùng trên tập test.
+- **Google Drive:** lưu bộ dữ liệu, checkpoint, log, các chỉ số và hình ảnh được tạo ra.
+- **GitHub:** quản lý phiên bản mã nguồn, cấu hình, notebook và báo cáo. Không commit kho ảnh Food-101 hoặc các checkpoint lớn.
 
-## Planned experiments
+## Các thí nghiệm dự kiến
 
-Two architectures are evaluated under four training regimes each:
+Mỗi kiến trúc trong hai kiến trúc được đánh giá theo bốn chế độ huấn luyện:
 
-| Architecture | Training regimes |
+| Kiến trúc | Chế độ huấn luyện |
 |---|---|
-| ResNet-50 | from scratch, frozen backbone, partial fine-tuning (layer4 + head), full fine-tuning |
-| ViT-B/16 | from scratch, frozen backbone, partial fine-tuning (last encoder block + head), full fine-tuning |
+| ResNet-50 | huấn luyện từ đầu, đóng băng backbone, tinh chỉnh một phần (layer4 + head), tinh chỉnh toàn bộ |
+| ViT-B/16 | huấn luyện từ đầu, đóng băng backbone, tinh chỉnh một phần (khối encoder cuối + head), tinh chỉnh toàn bộ |
 
-The experiment protocol, split strategy, preprocessing, and metrics are documented in [A1-1](../A1-1/README.md). The implementation must follow that protocol unless a documented change is approved.
+Quy trình thực nghiệm, chiến lược chia dữ liệu, tiền xử lý và các chỉ số được trình bày trong [A1-1](../A1-1/README.md). Phần triển khai phải tuân theo quy trình đó, trừ khi có thay đổi được phê duyệt và ghi lại.
 
-## Repository layout
+## Cấu trúc repository
 
-- `configs/config.yaml`: shared experiment configuration.
-- `notebooks/A1_2_experiment.ipynb`: Google Colab entry point.
-- `src/`: reusable dataset, transform, model, training, evaluation, and utility modules.
-- `scripts/`: command-line helpers.
-- `outputs/`: local output structure; large generated files are ignored by Git.
+- `configs/config.yaml`: cấu hình chung cho thí nghiệm.
+- `notebooks/A1_2_experiment.ipynb`: notebook khởi chạy trên Google Colab.
+- `src/`: các mô-đun có thể tái sử dụng cho dataset, biến đổi dữ liệu, mô hình, huấn luyện, đánh giá và tiện ích.
+- `scripts/`: các công cụ hỗ trợ chạy từ dòng lệnh.
+- `outputs/`: cấu trúc lưu kết quả cục bộ; các tệp lớn được tạo ra không được Git theo dõi.
 
-## Colab workflow
+## Quy trình trên Colab
 
-1. Open `notebooks/A1_2_experiment.ipynb` in Google Colab.
-2. Select a GPU runtime when available and verify it with `torch.cuda.is_available()`.
-3. Mount Google Drive and set the project/data/output paths in the notebook.
-4. Clone or pull the `assignment_A1` branch.
-5. Implement and validate the pipeline before running the full experiments.
-6. Save checkpoints and experiment artifacts to Google Drive.
-7. Export compact result tables and figures for the report.
+1. Mở `notebooks/A1_2_experiment.ipynb` trên Google Colab.
+2. Chọn môi trường chạy có GPU nếu có và kiểm tra bằng `torch.cuda.is_available()`.
+3. Gắn Google Drive và thiết lập đường dẫn dự án, dữ liệu và đầu ra trong notebook.
+4. Clone hoặc pull nhánh `assignment_A1`.
+5. Triển khai và kiểm tra pipeline trước khi chạy toàn bộ thí nghiệm.
+6. Lưu checkpoint và các kết quả thí nghiệm lên Google Drive.
+7. Xuất các bảng kết quả và hình ảnh gọn cho báo cáo.
 
-## Dataset and licensing
+## Dữ liệu và giấy phép
 
-Food-101 images are not included in this repository. Review the dataset usage and licensing notes in [A1-1/README.md](../A1-1/README.md) before downloading or redistributing data. Do not upload the original images to GitHub.
+Ảnh Food-101 không được đưa vào repository này. Hãy xem các lưu ý về việc sử dụng dữ liệu và giấy phép trong [A1-1/README.md](../A1-1/README.md) trước khi tải xuống hoặc phân phối lại dữ liệu. Không tải ảnh gốc lên GitHub.
 
-## Validate the Food-101 manifest
+## Kiểm tra manifest Food-101
 
-From the repository root, validate the manifest independently against the
-official metadata (no image files or third-party packages are needed):
+Từ thư mục gốc của repository, kiểm tra manifest độc lập với metadata chính
+thức (không cần tệp ảnh hoặc thư viện bên thứ ba):
 
 ```bash
 python3 A1-2/src/validate_manifest.py \
@@ -53,18 +53,38 @@ python3 A1-2/src/validate_manifest.py \
   --manifest A1-2/data/manifests/food101_split_seed42.csv
 ```
 
-`--dataset-root` must contain `meta/classes.txt`, `meta/train.json`, and
-`meta/test.json`. The validator checks class order and labels, paths, split
-counts, duplicates, and exact official membership. It prints each check and
-returns a nonzero exit code if validation fails. It does not verify that image
-files exist.
+`--dataset-root` phải chứa `meta/classes.txt`, `meta/train.json` và
+`meta/test.json`. Công cụ kiểm tra thứ tự lớp và nhãn, đường dẫn, số lượng theo
+từng tập, dữ liệu trùng lặp và sự khớp chính xác với các tập chính thức. Công
+cụ in kết quả từng kiểm tra và trả về mã thoát khác 0 nếu thất bại. Công cụ
+không kiểm tra sự tồn tại của tệp ảnh.
 
-Run the synthetic integration tests with:
+Chạy các kiểm thử tích hợp với dữ liệu giả lập bằng lệnh:
 
 ```bash
 python3 -m unittest discover -s A1-2/tests -p 'test_validate_manifest.py'
 ```
 
-## Current status
+## Kiểm thử nhanh DataLoader của Food-101
 
-This commit establishes the A1.2 project scaffold only. Dataset loading, split-manifest generation, training, evaluation, and experiment results have **not** been implemented yet.
+Sau khi cài đặt các phiên bản tương thích của PyTorch, Torchvision và Pillow,
+và giải nén đầy đủ Food-101 với `meta/classes.txt` và `images/`, chạy:
+
+```bash
+python3 A1-2/src/test_dataloader.py \
+  --dataset-root /path/to/food-101 \
+  --manifest A1-2/data/manifests/food101_split_seed42.csv \
+  --batch-size 8
+```
+
+Kiểm thử xác nhận số lượng mẫu của cả ba tập, mẫu ảnh RGB, hoạt động của
+sampler, các batch tensor và batch cuối. Ảnh được đổi kích thước về 224×224
+trước `ToTensor()` vì kích thước ảnh gốc khác nhau. Kiểm thử duyệt các chỉ số
+của sampler để kiểm tra độ bao phủ, nhưng chỉ giải mã batch đầu, batch cuối và
+một mẫu. Khi khởi tạo dataset, chương trình kiểm tra sự tồn tại của tất cả ảnh
+trong tập tương ứng. Chương trình không huấn luyện hoặc tải dữ liệu; nếu thất
+bại, mã thoát sẽ khác 0.
+
+## Trạng thái hiện tại
+
+Commit này chỉ thiết lập khung dự án A1.2. Phần tải dữ liệu, tạo manifest chia tập, huấn luyện, đánh giá và kết quả thí nghiệm **chưa** được triển khai.
