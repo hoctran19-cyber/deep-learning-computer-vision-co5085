@@ -299,7 +299,24 @@ images/apple_pie/2607306.jpg,apple_pie,0,train
 images/apple_pie/2607694.jpg,apple_pie,0,train
 images/apple_pie/2610017.jpg,apple_pie,0,train
 images/apple_pie/2612593.jpg,apple_pie,0,train
-images/apple_pie/2615584.jpg,apple_pie,0,train
+images/apple_pie/2615584.jpg,apple_pie,0,trainImplement Task 2.1: ResNet-50 model for Food-101 classification.
+
+Requirements:
+1. Inspect the existing project structure and follow its conventions.
+2. Use `torchvision.models.resnet50`.
+3. Support both pretrained weights and random initialization.
+4. Replace the final FC layer with `nn.Linear(..., 101)`.
+5. Create a clean model builder function with configurable `num_classes` and `pretrained`.
+6. Add type hints and docstrings.
+7. Do not implement training, optimizer, scheduler, or dataset logic.
+8. Add unit tests verifying:
+   - Model initialization without pretrained weights.
+   - Output shape `[batch_size, 101]`.
+   - Correct classification head.
+   - Forward pass with a sample tensor.
+9. Avoid downloading pretrained weights during normal unit tests.
+
+Do not modify unrelated files. Report all created/modified files and test results.
 images/apple_pie/2621542.jpg,apple_pie,0,train
 images/apple_pie/2626973.jpg,apple_pie,0,train
 images/apple_pie/2627767.jpg,apple_pie,0,train
