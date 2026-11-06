@@ -126,6 +126,28 @@ chế độ train/eval. Khi huấn luyện từ đầu, cần tạo mô hình v�
 trong chế độ train ngay cả khi tham số của backbone đã đóng băng; vòng huấn
 luyện sau này cần quản lý chế độ train/eval nếu muốn cố định các thống kê đó.
 
+## Optimizer và scheduler
+
+`src/optim.py` cung cấp `build_optimizer(model, config)` và
+`build_scheduler(optimizer, config)`, nhận toàn bộ cấu hình YAML. Trước khi
+tạo optimizer, đặt `training.regime` trùng chế độ truyền vào
+`configure_finetuning(model, regime)`. Chế độ `from_scratch` dùng
+`scratch_learning_rate` cho cả head và backbone; các chế độ khác dùng
+`head_learning_rate` và `backbone_learning_rate` riêng. Chỉ tham số có
+`requires_grad=True` được đưa vào optimizer; cần tạo lại optimizer sau khi
+thay đổi các tham số được mở hoặc đóng băng.
+
+Chọn `training.optimizer` là `AdamW` hoặc `SGD` (SGD dùng `momentum`).
+Chọn `training.scheduler.name` là `CosineAnnealingLR` hoặc `StepLR`, với
+tham số tương ứng trong các mục `cosine_annealing` và `step`. `T_max` và
+`step_size` tính theo epoch; gọi `scheduler.step()` sau mỗi epoch, sau
+`optimizer.step()`. Với cosine, `eta_min` không được lớn hơn learning rate
+thấp nhất của các nhóm; StepLR dùng `0 < gamma <= 1`.
+
+```bash
+python3 -m unittest discover -s A1-2/tests -p 'test_optim.py'
+```
+
 ## Trạng thái hiện tại
 
 Phần tải dữ liệu và tạo mô hình ResNet-50, ViT-B/16 đã được triển khai.

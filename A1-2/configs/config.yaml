@@ -23,10 +23,21 @@ training:
   num_workers: 2
   pin_memory: true
   optimizer: AdamW
+  # Must match the regime passed to configure_finetuning.
+  regime: from_scratch
   weight_decay: 0.01
+  momentum: 0.9
   scratch_learning_rate: 0.001
   head_learning_rate: 0.001
   backbone_learning_rate: 0.0001
+  scheduler:
+    name: CosineAnnealingLR
+    cosine_annealing:
+      T_max: 30
+      eta_min: 0.0
+    step:
+      step_size: 10
+      gamma: 0.1
   selection_metric: macro_f1
   tie_break_metric: accuracy
 
