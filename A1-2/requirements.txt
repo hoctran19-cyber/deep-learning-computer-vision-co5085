@@ -1,0 +1,10 @@
+# Install into the local development environment or Colab as needed.
+# PyTorch and Torchvision are intentionally not pinned here:
+# Google Colab provides a compatible build for its selected runtime.
+numpy>=1.26
+pandas>=2.1
+matplotlib>=3.8
+scikit-learn>=1.4
+Pillow>=10.0
+PyYAML>=6.0
+tqdm>=4.66
