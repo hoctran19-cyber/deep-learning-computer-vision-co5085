@@ -229,6 +229,29 @@ validation không chứa test. Các DataLoader phải có thể duyệt lại m�
 python3 -m unittest discover -s A1-2/tests -p 'test_early_stopping.py'
 ```
 
+## Smoke test toàn bộ pipeline trên CPU
+
+Chạy lệnh sau từ thư mục gốc repository sau khi cài PyTorch, Torchvision và
+PyYAML. Chọn thư mục đầu ra mới để không ghi đè artifact cũ:
+
+```bash
+python3 A1-2/src/smoke_test.py --output-dir /tmp/a1-2-smoke
+```
+
+Chương trình dùng CNN nhỏ và ảnh/nhãn ngẫu nhiên có seed, không dùng Food-101,
+pretrained weights, CUDA hay mạng. Chạy `fit()` với train/validation riêng,
+optimizer, scheduler, dừng sớm và kiểm tra checkpoint cùng metric trong log.
+Thành công in `SMOKE TEST PASSED`; thư mục đầu ra chứa `best.pt` và
+`epochs.jsonl`. Nếu hai tệp này đã tồn tại, chương trình báo lỗi thay vì ghi đè.
+Kết quả chỉ xác minh tích hợp pipeline, không đo hiệu năng Food-101.
+
+Với model tùy biến, `build_optimizer(model, config, classifier=model.classifier)`
+nhận một mô-đun con làm head; ResNet và ViT vẫn tự xác định head như trước.
+
+```bash
+python3 -m unittest discover -s A1-2/tests -p 'test_smoke_pipeline.py'
+```
+
 ## Trạng thái hiện tại
 
 Phần tải dữ liệu và tạo mô hình ResNet-50, ViT-B/16 đã được triển khai.

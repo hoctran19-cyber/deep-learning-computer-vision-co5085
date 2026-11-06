@@ -44,7 +44,12 @@ def _positive_integer(config: Mapping[str, Any], key: str) -> int:
     return value
 
 
-def build_optimizer(model: nn.Module, config: Mapping[str, Any]) -> Optimizer:
+def build_optimizer(
+    model: nn.Module,
+    config: Mapping[str, Any],
+    *,
+    classifier: nn.Module | None = None,
+) -> Optimizer:
     """Tạo optimizer từ cấu hình đầy đủ và trạng thái gradient hiện tại.
 
     Đặt ``training.regime`` trùng với chế độ truyền vào
@@ -52,6 +57,7 @@ def build_optimizer(model: nn.Module, config: Mapping[str, Any]) -> Optimizer:
     ``scratch_learning_rate`` cho cả hai nhóm; các chế độ khác dùng
     ``head_learning_rate`` và ``backbone_learning_rate``. Tham số bị đóng
     băng được loại bỏ. Cần tạo lại optimizer nếu trạng thái huấn luyện đổi.
+    Với kiến trúc khác, truyền ``classifier`` là mô-đun con của model.
     """
     training = _section(config, "training")
     name = training.get("optimizer")
@@ -72,7 +78,13 @@ def build_optimizer(model: nn.Module, config: Mapping[str, Any]) -> Optimizer:
         raise ValueError("learning rates must be positive")
 
     # Head của hai kiến trúc nằm ở các thuộc tính khác nhau.
-    if isinstance(model, ResNet):
+    if classifier is not None:
+        if classifier is model or not any(
+            module is classifier for module in model.modules()
+        ):
+            raise ValueError("classifier must be a child module of model")
+        head = classifier
+    elif isinstance(model, ResNet):
         head = model.fc
     elif isinstance(model, VisionTransformer):
         head = model.heads
