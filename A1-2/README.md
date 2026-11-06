@@ -42,6 +42,29 @@ The experiment protocol, split strategy, preprocessing, and metrics are document
 
 Food-101 images are not included in this repository. Review the dataset usage and licensing notes in [A1-1/README.md](../A1-1/README.md) before downloading or redistributing data. Do not upload the original images to GitHub.
 
+## Validate the Food-101 manifest
+
+From the repository root, validate the manifest independently against the
+official metadata (no image files or third-party packages are needed):
+
+```bash
+python3 A1-2/src/validate_manifest.py \
+  --dataset-root A1-2/data/food-101-metadata \
+  --manifest A1-2/data/manifests/food101_split_seed42.csv
+```
+
+`--dataset-root` must contain `meta/classes.txt`, `meta/train.json`, and
+`meta/test.json`. The validator checks class order and labels, paths, split
+counts, duplicates, and exact official membership. It prints each check and
+returns a nonzero exit code if validation fails. It does not verify that image
+files exist.
+
+Run the synthetic integration tests with:
+
+```bash
+python3 -m unittest discover -s A1-2/tests -p 'test_validate_manifest.py'
+```
+
 ## Current status
 
 This commit establishes the A1.2 project scaffold only. Dataset loading, split-manifest generation, training, evaluation, and experiment results have **not** been implemented yet.
