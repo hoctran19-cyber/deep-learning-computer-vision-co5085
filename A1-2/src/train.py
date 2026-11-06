@@ -1,4 +1,96 @@
-"""Training loop, validation, early stopping, and checkpoint handling.
+"""Huấn luyện mô hình phân loại trong một epoch."""
 
-Implementation is intentionally pending.
-"""
+from collections.abc import Callable, Iterable
+from typing import TypedDict
+
+import torch
+from torch import Tensor, nn
+from torch.optim import Optimizer
+
+
+class EpochMetrics(TypedDict):
+    """Loss trung bình theo mẫu, độ chính xác top-1 và số mẫu đã xử lý."""
+
+    loss: float
+    accuracy: float
+    num_samples: int
+
+
+def train_one_epoch(
+    model: nn.Module,
+    dataloader: Iterable[tuple[Tensor, Tensor]],
+    criterion: Callable[[Tensor, Tensor], Tensor],
+    optimizer: Optimizer,
+    device: torch.device | str,
+) -> EpochMetrics:
+    """Huấn luyện một epoch; accuracy là tỷ lệ trong khoảng [0, 1].
+
+    Caller phải chuyển model sang device trước khi gọi. Mỗi batch gồm ảnh
+    tensor và nhãn int64 một chiều. Criterion phải trả về loss vô hướng trung
+    bình theo mẫu, không dùng reduction='sum' hoặc 'none'. Với loss có trọng
+    số hoặc ignore_index, caller cần đảm bảo kết quả vẫn là trung bình theo
+    tất cả mẫu trong batch để thống kê loss theo epoch có ý nghĩa.
+    """
+    if not callable(criterion):
+        raise ValueError("criterion must be callable")
+    reduction = getattr(criterion, "reduction", "mean")
+    if reduction != "mean":
+        raise ValueError("criterion must use mean reduction")
+    try:
+        batches = iter(dataloader)
+    except TypeError as error:
+        raise ValueError("dataloader must be an iterable of batches") from error
+
+    model.train()
+    loss_sum = 0.0
+    correct = 0
+    num_samples = 0
+
+    for batch_index, batch in enumerate(batches, start=1):
+        if not isinstance(batch, (tuple, list)) or len(batch) != 2:
+            raise ValueError(f"batch {batch_index}: expected (images, labels)")
+        images, labels = batch
+        if not isinstance(images, Tensor) or not isinstance(labels, Tensor):
+            raise ValueError(f"batch {batch_index}: images and labels must be tensors")
+        if images.ndim < 1 or labels.ndim != 1:
+            raise ValueError(f"batch {batch_index}: invalid image or label dimensions")
+        batch_size = labels.shape[0]
+        if batch_size == 0 or images.shape[0] != batch_size:
+            raise ValueError(f"batch {batch_index}: empty or mismatched batch")
+        if labels.dtype != torch.long:
+            raise ValueError(f"batch {batch_index}: labels must have dtype torch.int64")
+
+        images = images.to(device, non_blocking=True)
+        labels = labels.to(device, non_blocking=True)
+        optimizer.zero_grad()
+        logits = model(images)
+        if (
+            not isinstance(logits, Tensor)
+            or logits.ndim != 2
+            or logits.shape[0] != batch_size
+            or logits.shape[1] == 0
+        ):
+            raise ValueError(f"batch {batch_index}: expected logits shape [batch, classes]")
+        if not torch.isfinite(logits).all().item():
+            raise ValueError(f"batch {batch_index}: logits must be finite")
+        if ((labels < 0) | (labels >= logits.shape[1])).any().item():
+            raise ValueError(f"batch {batch_index}: label outside class range")
+        loss = criterion(logits, labels)
+        if not isinstance(loss, Tensor) or loss.ndim != 0:
+            raise ValueError(f"batch {batch_index}: criterion must return scalar loss")
+        if not torch.isfinite(loss).item():
+            raise ValueError(f"batch {batch_index}: loss must be finite")
+        loss.backward()
+        optimizer.step()
+
+        loss_sum += loss.detach().item() * batch_size
+        correct += (logits.detach().argmax(dim=1) == labels).sum().item()
+        num_samples += batch_size
+
+    if num_samples == 0:
+        raise ValueError("dataloader yielded no samples")
+    return {
+        "loss": loss_sum / num_samples,
+        "accuracy": correct / num_samples,
+        "num_samples": num_samples,
+    }

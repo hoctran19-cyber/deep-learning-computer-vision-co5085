@@ -148,7 +148,25 @@ thấp nhất của các nhóm; StepLR dùng `0 < gamma <= 1`.
 python3 -m unittest discover -s A1-2/tests -p 'test_optim.py'
 ```
 
+## Huấn luyện một epoch
+
+`train_one_epoch(model, dataloader, criterion, optimizer, device)` trong
+`src/train.py` trả về loss trung bình theo mẫu, accuracy top-1 theo tỷ lệ
+`[0, 1]` và `num_samples`. Trước khi gọi, chuyển model sang `device` và
+chuẩn bị optimizer theo chế độ fine-tuning. DataLoader cần trả về batch
+`(images, labels)` gồm các tensor, với nhãn `torch.int64` một chiều.
+
+Criterion phải trả về loss vô hướng trung bình theo mẫu (`reduction="mean"`).
+Khi dùng class weights hoặc `ignore_index`, caller phải bảo đảm loss vẫn là
+trung bình theo tất cả mẫu của batch để loss epoch được tính đúng. Hàm không
+thực hiện validation, scheduler, lưu checkpoint hay dừng sớm.
+
+```bash
+python3 -m unittest discover -s A1-2/tests -p 'test_train.py'
+```
+
 ## Trạng thái hiện tại
 
 Phần tải dữ liệu và tạo mô hình ResNet-50, ViT-B/16 đã được triển khai.
-Huấn luyện, đánh giá và kết quả thí nghiệm vẫn chưa được triển khai.
+Vòng huấn luyện một epoch đã có; quy trình huấn luyện đầy đủ, đánh giá và
+kết quả thí nghiệm vẫn chưa được triển khai.
