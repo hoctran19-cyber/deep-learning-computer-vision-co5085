@@ -33,7 +33,9 @@ training:
 experiments:
   architectures:
     - resnet50
-    - vit_b_16
+    - vit_b16
+  # Override for pretrained training regimes.
+  pretrained: false
   regimes:
     - from_scratch
     - frozen_backbone

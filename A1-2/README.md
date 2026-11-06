@@ -85,12 +85,23 @@ một mẫu. Khi khởi tạo dataset, chương trình kiểm tra sự tồn t�
 trong tập tương ứng. Chương trình không huấn luyện hoặc tải dữ liệu; nếu thất
 bại, mã thoát sẽ khác 0.
 
-## Mô hình ResNet-50
+## Mô hình ResNet-50 và ViT-B/16
 
 Hàm `build_resnet50(num_classes=101, pretrained=False)` trong
 `src/models.py` tạo ResNet-50 với lớp phân loại phù hợp. Đặt
 `pretrained=True` để dùng trọng số ImageNet mặc định của Torchvision; lần đầu
 có thể cần tải trọng số. Chạy kiểm thử mà không tải trọng số:
+
+Hàm `build_vit_b16(num_classes=101, pretrained=False)` trong cùng mô-đun
+tạo ViT-B/16 với lớp phân loại có thể cấu hình. Tương tự, đặt
+`pretrained=True` để dùng trọng số ImageNet mặc định của Torchvision, có thể
+cần tải xuống khi chạy lần đầu.
+
+Hàm `build_model(model_name, num_classes=101, pretrained=False)` chọn một
+trong hai kiến trúc `resnet50` hoặc `vit_b16`. Cấu hình trong
+`configs/config.yaml` liệt kê các kiến trúc và đặt `pretrained: false` mặc
+định; hãy ghi đè giá trị này cho từng chế độ cần trọng số pretrained.
+Chạy kiểm thử cho cả hai mô hình:
 
 ```bash
 python3 -m unittest discover -s A1-2/tests -p 'test_models.py'
@@ -98,5 +109,5 @@ python3 -m unittest discover -s A1-2/tests -p 'test_models.py'
 
 ## Trạng thái hiện tại
 
-Phần tải dữ liệu và tạo mô hình ResNet-50 đã được triển khai. Huấn luyện,
-đánh giá, mô hình ViT và kết quả thí nghiệm vẫn chưa được triển khai.
+Phần tải dữ liệu và tạo mô hình ResNet-50, ViT-B/16 đã được triển khai.
+Huấn luyện, đánh giá và kết quả thí nghiệm vẫn chưa được triển khai.
