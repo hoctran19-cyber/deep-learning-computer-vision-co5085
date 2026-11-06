@@ -170,5 +170,87 @@ class ModelFactoryTests(unittest.TestCase):
                 mocked.assert_called_once_with(num_classes=config["project"]["num_classes"], pretrained=experiments["pretrained"])
 
 
+class FinetuningUtilitiesTests(unittest.TestCase):
+    """Verify exact trainable parameter sets and counts for both architectures."""
+
+    def test_freeze_unfreeze_and_counts(self) -> None:
+        module = nn.Sequential(nn.Linear(3, 4), nn.Linear(4, 2, bias=False))
+        total = 3 * 4 + 4 + 4 * 2
+        self.assertEqual(models.count_parameters(module), (total, total))
+        models.freeze_parameters(module)
+        self.assertEqual(models.count_parameters(module), (total, 0))
+        models.unfreeze_parameters(module[0])
+        self.assertEqual(models.count_parameters(module), (total, 16))
+        models.unfreeze_parameters(module)
+        self.assertEqual(models.count_parameters(module), (total, total))
+
+    def test_all_regimes_and_transitions(self) -> None:
+        config_path = SRC.parent / "configs" / "config.yaml"
+        with config_path.open(encoding="utf-8") as file:
+            config = yaml.safe_load(file)
+        regimes = config["experiments"]["regimes"]
+        self.assertEqual(
+            set(regimes),
+            {"from_scratch", "frozen_backbone", "partial_finetuning",
+             "full_finetuning"},
+        )
+        for name, head_prefix, partial_prefix in (
+            ("resnet50", "fc.", "layer4."),
+            ("vit_b16", "heads.", "encoder.layers.encoder_layer_11."),
+        ):
+            model = models.build_model(name, pretrained=False)
+            parameters = dict(model.named_parameters())
+            total = sum(parameter.numel() for parameter in parameters.values())
+            for regime in (
+                "frozen_backbone", "partial_finetuning", "from_scratch",
+                "partial_finetuning", "full_finetuning", "frozen_backbone",
+            ):
+                with self.subTest(model=name, regime=regime):
+                    models.configure_finetuning(model, regime)
+                    if regime in {"from_scratch", "full_finetuning"}:
+                        expected = set(parameters)
+                    elif regime == "frozen_backbone":
+                        expected = {
+                            key for key in parameters
+                            if key.startswith(head_prefix)
+                        }
+                    else:
+                        expected = {
+                            key for key in parameters
+                            if key.startswith((head_prefix, partial_prefix))
+                        }
+                    self.assertTrue(expected)
+                    actual = {
+                        key for key, parameter in parameters.items()
+                        if parameter.requires_grad
+                    }
+                    self.assertEqual(actual, expected)
+                    expected_count = sum(
+                        parameters[key].numel() for key in expected
+                    )
+                    self.assertEqual(
+                        models.count_parameters(model), (total, expected_count)
+                    )
+            del model, parameters
+
+    def test_invalid_inputs_do_not_change_parameter_state(self) -> None:
+        model = models.build_resnet50(pretrained=False)
+        models.configure_finetuning(model, "frozen_backbone")
+        before = {
+            name: parameter.requires_grad
+            for name, parameter in model.named_parameters()
+        }
+        with self.assertRaisesRegex(ValueError, "Unsupported training regime"):
+            models.configure_finetuning(model, "unknown")
+        self.assertEqual(
+            before,
+            {name: p.requires_grad for name, p in model.named_parameters()},
+        )
+        unsupported = nn.Linear(2, 2)
+        with self.assertRaisesRegex(ValueError, "Unsupported model type"):
+            models.configure_finetuning(unsupported, "full_finetuning")
+        self.assertTrue(all(p.requires_grad for p in unsupported.parameters()))
+
+
 if __name__ == "__main__":
     unittest.main()

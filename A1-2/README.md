@@ -107,6 +107,25 @@ Chạy kiểm thử cho cả hai mô hình:
 python3 -m unittest discover -s A1-2/tests -p 'test_models.py'
 ```
 
+## Cấu hình tham số huấn luyện
+
+`count_parameters(model)` trả về `(tổng số, số có thể huấn luyện)`;
+`freeze_parameters(module)` và `unfreeze_parameters(module)` đóng băng hoặc
+mở toàn bộ tham số của mô-đun. Dùng `configure_finetuning(model, regime)`
+để áp dụng một trong các chế độ đã liệt kê trong cấu hình:
+
+- `from_scratch` và `full_finetuning`: tất cả tham số có thể huấn luyện.
+- `frozen_backbone`: chỉ head phân loại (`fc` của ResNet hoặc `heads` của ViT).
+- `partial_finetuning`: `layer4` và `fc` của ResNet; block encoder cuối và
+  `heads` của ViT. Các tham số còn lại, kể cả encoder norm cuối của ViT,
+  được đóng băng.
+
+Các hàm chỉ thay đổi `requires_grad`, không khởi tạo lại trọng số hoặc chuyển
+chế độ train/eval. Khi huấn luyện từ đầu, cần tạo mô hình với
+`pretrained=False`. Với ResNet, các thống kê BatchNorm vẫn có thể thay đổi
+trong chế độ train ngay cả khi tham số của backbone đã đóng băng; vòng huấn
+luyện sau này cần quản lý chế độ train/eval nếu muốn cố định các thống kê đó.
+
 ## Trạng thái hiện tại
 
 Phần tải dữ liệu và tạo mô hình ResNet-50, ViT-B/16 đã được triển khai.
