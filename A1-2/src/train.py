@@ -47,9 +47,9 @@ def train_one_epoch(
         scaler = None
     if not callable(criterion):
         raise ValueError("criterion must be callable")
-    reduction = getattr(criterion, "reduction", "mean")
+    reduction = getattr(criterion, "reduction", None)
     if reduction != "mean":
-        raise ValueError("criterion must use mean reduction")
+        raise ValueError("criterion must use mean reduction (declare reduction='mean')")
     try:
         batches = iter(dataloader)
     except TypeError as error:
@@ -108,6 +108,10 @@ def train_one_epoch(
             raise ValueError(f"batch {batch_index}: criterion must return scalar loss")
         if not torch.isfinite(loss).item():
             raise ValueError(f"batch {batch_index}: loss must be finite")
+        if not loss.requires_grad:
+            raise ValueError(
+                f"batch {batch_index}: loss must be connected to a gradient graph"
+            )
         if scaler is not None:
             scaler.scale(loss).backward()
             scaler.step(optimizer)
