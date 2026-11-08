@@ -163,6 +163,24 @@ class FitTests(unittest.TestCase):
             self.run_fit(val_loader=val_loader)
         self.assertFalse(self.checkpoint.exists())
 
+    def test_rejects_wrong_split_on_train_and_validation_loaders(self) -> None:
+        def loader_with_split(split: str) -> DataLoader:
+            class SplitDataset(TensorDataset):
+                pass
+
+            data = SplitDataset(torch.randn(4, 2), torch.tensor([0, 1, 0, 1]))
+            data.split = split
+            return DataLoader(data, batch_size=2)
+
+        for split in ("validation", "test"):
+            with self.subTest(split=split), self.assertRaisesRegex(
+                ValueError, f"train dataloader has invalid dataset split '{split}'"
+            ):
+                self.run_fit(train_loader=loader_with_split(split))
+        with self.assertRaisesRegex(ValueError, "validation dataloader"):
+            self.run_fit(val_loader=loader_with_split("train"))
+        self.assertFalse(self.checkpoint.exists())
+
     def test_scheduler_step_and_state(self) -> None:
         self.config["training"]["max_epochs"] = 1
         scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=1, gamma=0.5)

@@ -148,6 +148,18 @@ class TrainingEpochTests(unittest.TestCase):
         )
         self.assertFalse(torch.equal(before, self.model.weight))
 
+    def test_supplied_scaler_is_ignored_when_amp_is_inactive(self) -> None:
+        scaler = mock.MagicMock()
+        optimizer = SGD(self.model.parameters(), lr=0.1)
+        before = self.model.weight.detach().clone()
+        for use_amp in (False, True):
+            train_one_epoch(
+                self.model, self.loader, self.criterion, optimizer, "cpu",
+                use_amp=use_amp, scaler=scaler,
+            )
+        self.assertEqual(scaler.method_calls, [])
+        self.assertFalse(torch.equal(before, self.model.weight))
+
     def test_use_amp_must_be_bool(self) -> None:
         with self.assertRaisesRegex(ValueError, "use_amp"):
             train_one_epoch(
