@@ -23,6 +23,8 @@ training:
   early_stopping_min_delta: 0.0
   num_workers: 2
   pin_memory: true
+  # Mixed precision; automatically disabled when CUDA is unavailable.
+  use_amp: true
   optimizer: AdamW
   # Must match the regime passed to configure_finetuning.
   regime: from_scratch

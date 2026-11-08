@@ -97,12 +97,18 @@ def fit(
         raise ValueError("scheduler must use the supplied optimizer")
     _validate_dataset_split(train_dataloader, "train")
     _validate_dataset_split(validation_dataloader, "validation")
+    use_amp = training.get("use_amp", False)
+    if not isinstance(use_amp, bool):
+        raise ValueError("use_amp must be a boolean")
+    amp_enabled = use_amp and torch.device(device).type == "cuda" and torch.cuda.is_available()
+    scaler = torch.amp.GradScaler("cuda") if amp_enabled else None
     log_path.parent.mkdir(parents=True, exist_ok=True)
 
     completed = 0
     for epoch in range(1, max_epochs + 1):
         training_metrics = train_one_epoch(
-            model, train_dataloader, criterion, optimizer, device
+            model, train_dataloader, criterion, optimizer, device,
+            use_amp=amp_enabled, scaler=scaler,
         )
         validation_metrics = evaluate_one_epoch(
             model, validation_dataloader, criterion, device

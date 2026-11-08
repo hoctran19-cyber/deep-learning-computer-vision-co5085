@@ -22,6 +22,8 @@ def train_one_epoch(
     criterion: Callable[[Tensor, Tensor], Tensor],
     optimizer: Optimizer,
     device: torch.device | str,
+    use_amp: bool = False,
+    scaler: torch.amp.GradScaler | None = None,
 ) -> EpochMetrics:
     """Huấn luyện một epoch; accuracy là tỷ lệ trong khoảng [0, 1].
 
@@ -30,7 +32,19 @@ def train_one_epoch(
     bình theo mẫu, không dùng reduction='sum' hoặc 'none'. Với loss có trọng
     số hoặc ignore_index, caller cần đảm bảo kết quả vẫn là trung bình theo
     tất cả mẫu trong batch để thống kê loss theo epoch có ý nghĩa.
+
+    ``use_amp`` bật mixed precision chỉ khi device là CUDA và CUDA khả dụng;
+    ngược lại AMP tự tắt. ``scaler`` tùy chọn cho phép giữ trạng thái scale
+    giữa các epoch; nếu thiếu, một GradScaler mới được tạo cho epoch này.
     """
+    if not isinstance(use_amp, bool):
+        raise ValueError("use_amp must be a boolean")
+    device_type = torch.device(device).type
+    amp_enabled = use_amp and device_type == "cuda" and torch.cuda.is_available()
+    if amp_enabled and scaler is None:
+        scaler = torch.amp.GradScaler("cuda")
+    if not amp_enabled:
+        scaler = None
     if not callable(criterion):
         raise ValueError("criterion must be callable")
     reduction = getattr(criterion, "reduction", "mean")
@@ -63,7 +77,8 @@ def train_one_epoch(
         images = images.to(device, non_blocking=True)
         labels = labels.to(device, non_blocking=True)
         optimizer.zero_grad()
-        logits = model(images)
+        with torch.amp.autocast(device_type=device_type, enabled=amp_enabled):
+            logits = model(images)
         if (
             not isinstance(logits, Tensor)
             or logits.ndim != 2
@@ -75,13 +90,19 @@ def train_one_epoch(
             raise ValueError(f"batch {batch_index}: logits must be finite")
         if ((labels < 0) | (labels >= logits.shape[1])).any().item():
             raise ValueError(f"batch {batch_index}: label outside class range")
-        loss = criterion(logits, labels)
+        with torch.amp.autocast(device_type=device_type, enabled=amp_enabled):
+            loss = criterion(logits, labels)
         if not isinstance(loss, Tensor) or loss.ndim != 0:
             raise ValueError(f"batch {batch_index}: criterion must return scalar loss")
         if not torch.isfinite(loss).item():
             raise ValueError(f"batch {batch_index}: loss must be finite")
-        loss.backward()
-        optimizer.step()
+        if scaler is not None:
+            scaler.scale(loss).backward()
+            scaler.step(optimizer)
+            scaler.update()
+        else:
+            loss.backward()
+            optimizer.step()
 
         loss_sum += loss.detach().item() * batch_size
         correct += (logits.detach().argmax(dim=1) == labels).sum().item()

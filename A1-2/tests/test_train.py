@@ -2,6 +2,7 @@
 
 import sys
 import unittest
+from unittest import mock
 from pathlib import Path
 
 import torch
@@ -126,6 +127,55 @@ class TrainingEpochTests(unittest.TestCase):
         ]
         with self.assertRaisesRegex(ValueError, "batch 2"):
             self.train(batches)
+
+    def test_amp_disabled_by_default_and_on_cpu(self) -> None:
+        for use_amp in (False, True):
+            with self.subTest(use_amp=use_amp), mock.patch(
+                "torch.amp.GradScaler"
+            ) as scaler_cls:
+                metrics = train_one_epoch(
+                    self.model, self.loader, self.criterion, self.optimizer,
+                    "cpu", use_amp=use_amp,
+                )
+                scaler_cls.assert_not_called()
+                self.assertEqual(metrics["num_samples"], 3)
+
+    def test_amp_cpu_still_updates_parameters(self) -> None:
+        optimizer = SGD(self.model.parameters(), lr=0.1)
+        before = self.model.weight.detach().clone()
+        train_one_epoch(
+            self.model, self.loader, self.criterion, optimizer, "cpu", use_amp=True
+        )
+        self.assertFalse(torch.equal(before, self.model.weight))
+
+    def test_use_amp_must_be_bool(self) -> None:
+        with self.assertRaisesRegex(ValueError, "use_amp"):
+            train_one_epoch(
+                self.model, self.loader, self.criterion, self.optimizer,
+                "cpu", use_amp="yes",
+            )
+
+    def test_amp_enabled_uses_scaler_sequence(self) -> None:
+        scaler = mock.MagicMock()
+        scaler.scale.side_effect = lambda loss: loss
+        with mock.patch("torch.cuda.is_available", return_value=True), mock.patch(
+            "train.torch.amp.autocast"
+        ) as autocast:
+            train_one_epoch(
+                self.model, self.loader, self.criterion, self.optimizer,
+                torch.device("cuda"), use_amp=True, scaler=scaler,
+            ) if False else None
+            self.model.to("cpu")
+            device_patch = mock.patch("train.torch.device", return_value=mock.Mock(type="cuda"))
+            with device_patch, mock.patch.object(torch.Tensor, "to", lambda t, *a, **k: t):
+                train_one_epoch(
+                    self.model, self.loader, self.criterion, self.optimizer,
+                    "cuda", use_amp=True, scaler=scaler,
+                )
+        self.assertEqual(scaler.scale.call_count, 2)
+        self.assertEqual(scaler.step.call_count, 2)
+        self.assertEqual(scaler.update.call_count, 2)
+        self.assertTrue(all(c.kwargs["enabled"] for c in autocast.call_args_list))
 
 
 if __name__ == "__main__":
