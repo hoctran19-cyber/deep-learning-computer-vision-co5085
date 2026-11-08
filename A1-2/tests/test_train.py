@@ -131,7 +131,7 @@ class TrainingEpochTests(unittest.TestCase):
     def test_amp_disabled_by_default_and_on_cpu(self) -> None:
         for use_amp in (False, True):
             with self.subTest(use_amp=use_amp), mock.patch(
-                "torch.amp.GradScaler"
+                "torch.amp.GradScaler", create=True
             ) as scaler_cls:
                 metrics = train_one_epoch(
                     self.model, self.loader, self.criterion, self.optimizer,
@@ -158,20 +158,16 @@ class TrainingEpochTests(unittest.TestCase):
     def test_amp_enabled_uses_scaler_sequence(self) -> None:
         scaler = mock.MagicMock()
         scaler.scale.side_effect = lambda loss: loss
-        with mock.patch("torch.cuda.is_available", return_value=True), mock.patch(
-            "train.torch.amp.autocast"
-        ) as autocast:
+        # Simulate CUDA on a CPU-only machine: the model and tensors stay on CPU.
+        with mock.patch("train.torch.cuda.is_available", return_value=True), mock.patch(
+            "train.torch.device", return_value=mock.Mock(type="cuda")
+        ), mock.patch.object(
+            torch.Tensor, "to", lambda tensor, *args, **kwargs: tensor
+        ), mock.patch("train.torch.amp.autocast") as autocast:
             train_one_epoch(
                 self.model, self.loader, self.criterion, self.optimizer,
-                torch.device("cuda"), use_amp=True, scaler=scaler,
-            ) if False else None
-            self.model.to("cpu")
-            device_patch = mock.patch("train.torch.device", return_value=mock.Mock(type="cuda"))
-            with device_patch, mock.patch.object(torch.Tensor, "to", lambda t, *a, **k: t):
-                train_one_epoch(
-                    self.model, self.loader, self.criterion, self.optimizer,
-                    "cuda", use_amp=True, scaler=scaler,
-                )
+                "cuda", use_amp=True, scaler=scaler,
+            )
         self.assertEqual(scaler.scale.call_count, 2)
         self.assertEqual(scaler.step.call_count, 2)
         self.assertEqual(scaler.update.call_count, 2)

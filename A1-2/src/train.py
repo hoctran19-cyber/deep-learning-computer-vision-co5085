@@ -23,7 +23,7 @@ def train_one_epoch(
     optimizer: Optimizer,
     device: torch.device | str,
     use_amp: bool = False,
-    scaler: torch.amp.GradScaler | None = None,
+    scaler: "torch.amp.GradScaler | None" = None,
 ) -> EpochMetrics:
     """Huấn luyện một epoch; accuracy là tỷ lệ trong khoảng [0, 1].
 

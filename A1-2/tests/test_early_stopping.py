@@ -108,7 +108,7 @@ class FitTests(unittest.TestCase):
             {"loss": 1.0, "accuracy": accuracy, "macro_f1": score, "num_samples": 4}
             for score, accuracy in scores
         ]
-        def fake_train(*args: object) -> dict[str, float | int]:
+        def fake_train(*args: object, **kwargs: object) -> dict[str, float | int]:
             with torch.no_grad():
                 self.model.weight.add_(1)
             return {"loss": 1.0, "accuracy": 0.5, "num_samples": 4}
@@ -131,6 +131,19 @@ class FitTests(unittest.TestCase):
         self.assertEqual([r["checkpoint_saved"] for r in records], [True, True, True, False])
         self.assertEqual(records[-1]["best_epoch"], 3)
         self.assertTrue(records[-1]["stopped_early"])
+
+    def test_use_amp_config_is_disabled_on_cpu_and_validated(self) -> None:
+        self.config["training"]["max_epochs"] = 1
+        self.config["training"]["use_amp"] = True
+        with patch.object(
+            fit, "train_one_epoch", wraps=fit.train_one_epoch
+        ) as train_spy:
+            self.run_fit()
+        self.assertFalse(train_spy.call_args.kwargs["use_amp"])
+        self.assertIsNone(train_spy.call_args.kwargs["scaler"])
+        self.config["training"]["use_amp"] = "yes"
+        with self.assertRaisesRegex(ValueError, "use_amp"):
+            self.run_fit()
 
     def test_real_epoch_and_max_epochs(self) -> None:
         self.config["training"]["max_epochs"] = 1
