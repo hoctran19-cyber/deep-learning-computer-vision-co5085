@@ -94,7 +94,8 @@ def configure_finetuning(model: nn.Module, regime: str) -> None:
 
     This function does not initialize weights or change train/eval mode.
     Build with ``pretrained=False`` for an actual from-scratch experiment.
-    Frozen BatchNorm buffers can still update in training mode.
+    The training loop fixes backbone BatchNorm buffers when all ResNet
+    backbone parameters are frozen; partial fine-tuning retains train mode.
     """
     regimes = {
         "from_scratch", "frozen_backbone",

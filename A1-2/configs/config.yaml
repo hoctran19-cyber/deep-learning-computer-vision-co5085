@@ -55,6 +55,19 @@ experiments:
     - frozen_backbone
     - partial_finetuning
     - full_finetuning
+  resnet50_runs:
+    resnet50_frozen:
+      architecture: resnet50
+      pretrained: true
+      regime: frozen_backbone
+    resnet50_partial:
+      architecture: resnet50
+      pretrained: true
+      regime: partial_finetuning
+    resnet50_full_finetune:
+      architecture: resnet50
+      pretrained: true
+      regime: full_finetuning
 
 evaluation:
   metrics:

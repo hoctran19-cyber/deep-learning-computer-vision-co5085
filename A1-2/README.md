@@ -122,9 +122,9 @@ mở toàn bộ tham số của mô-đun. Dùng `configure_finetuning(model, reg
 
 Các hàm chỉ thay đổi `requires_grad`, không khởi tạo lại trọng số hoặc chuyển
 chế độ train/eval. Khi huấn luyện từ đầu, cần tạo mô hình với
-`pretrained=False`. Với ResNet, các thống kê BatchNorm vẫn có thể thay đổi
-trong chế độ train ngay cả khi tham số của backbone đã đóng băng; vòng huấn
-luyện sau này cần quản lý chế độ train/eval nếu muốn cố định các thống kê đó.
+`pretrained=False`. Vòng train đặt BatchNorm của backbone ResNet ở chế độ
+eval khi toàn bộ tham số backbone bị đóng băng; `fc` vẫn ở chế độ train.
+Partial fine-tuning vẫn dùng chế độ train cho BatchNorm như trước.
 
 ## Optimizer và scheduler
 
@@ -218,7 +218,8 @@ patience. `min_delta=0` yêu cầu tăng macro-F1 nghiêm ngặt. Mỗi checkpoi
 chứa epoch, trạng thái model/optimizer/scheduler và chỉ số validation; tệp
 được thay thế nguyên tử. Log được nối vào tệp JSONL, vì vậy hãy chọn đường
 dẫn riêng cho mỗi lần chạy. Hàm trả về checkpoint tốt nhất, không tự nạp lại
-trọng số đó vào model và chưa hỗ trợ tiếp tục từ checkpoint.
+trọng số đó vào model. Notebook lưu thêm last checkpoint nhưng không tự tiếp
+tục run đã bị gián đoạn.
 
 Chỉ truyền dữ liệu train và validation, không truyền test chính thức.
 `fit()` từ chối các dataset/wrapper công khai `split` không đúng; với dataset
@@ -258,7 +259,7 @@ Phần tải dữ liệu và tạo mô hình ResNet-50, ViT-B/16 đã được t
 Vòng huấn luyện có validation, checkpoint và dừng sớm; đánh giá cuối cùng
 trên tập test và kết quả thí nghiệm vẫn chưa được triển khai.
 
-## Pilot Food-101 trên Google Colab
+## Pilot ResNet-50 fine-tuning trên Google Colab
 
 1. Đặt Food-101 đã giải nén trên Google Drive, gồm `meta/classes.txt`,
    `meta/train.json` và thư mục `images/`; lưu manifest hiện có riêng trên
@@ -273,22 +274,35 @@ trên tập test và kết quả thí nghiệm vẫn chưa được triển khai
    `train.json`; sau đó lấy 5 ảnh train và 2 ảnh validation mỗi lớp bằng seed
    42. Không khởi tạo dataset test, không đọc `test.json` hay ảnh test; các
    dòng test trong manifest vẫn được kiểm tra cấu trúc và trùng lặp.
-5. ResNet-50 và ViT-B/16 chạy from-scratch với batch 8, tối đa 2 epoch.
-   Việc reset seed giúp tái lập subset và trình tự ngẫu nhiên; kết quả GPU
-   vẫn có thể thay đổi do phép toán không hoàn toàn xác định.
+5. Notebook chạy ba cấu hình ResNet-50 ImageNet pretrained trong
+   `experiments.resnet50_runs`: `resnet50_frozen` (chỉ `fc`),
+   `resnet50_partial` (`layer4` và `fc`), và `resnet50_full_finetune`
+   (toàn bộ tham số). Các cấu hình mặc định dùng AdamW, head LR 0.001,
+   backbone LR 0.0001, batch 32, tối đa 30 epoch và cosine scheduler.
+   Có thể thêm mapping `training` cho từng run để ghi đè cấu hình train;
+   nếu ghi đè scheduler, cung cấp toàn bộ mapping scheduler.
+   Mỗi run reset seed 42; kết quả GPU vẫn có thể thay đổi do phép toán không
+   hoàn toàn xác định. Notebook này không chạy ViT hay from-scratch.
 
-Mỗi lần chạy tạo thư mục riêng dưới `outputs/pilot/` trên Drive, gồm
-`resnet50_best.pt`, `vit_b16_best.pt`, hai file `*_epochs.jsonl` và hai file
-`*_summary.json`. Summary ghi runtime, commit, hash manifest, cấu hình,
-metrics, số mẫu, tham số trainable, checkpoint và thời gian wall-clock của
-`fit()` **bao gồm validation và ghi artifact**. Vì vậy thời gian này không
-phải train-only time theo protocol A1-1 và không dùng để so sánh hiệu năng
-chính thức. Cuối notebook in bảng so sánh validation; không dùng test để chọn
-model. Không commit ảnh, checkpoint hoặc output.
+Mỗi thí nghiệm ghi vào `outputs/resnet50_frozen/`,
+`outputs/resnet50_partial/` hoặc `outputs/resnet50_full_finetune/` trên
+Drive. Mỗi thư mục chứa `best_checkpoint.pt`, `last_checkpoint.pt`,
+`training_log.jsonl`, `effective_config.yaml` và `summary.json` nếu run hoàn
+tất. Notebook kiểm tra trước cả ba thư mục và từ chối nếu bất kỳ thư mục nào
+đã tồn tại; không ghi đè kết quả cũ. Sau run lỗi hoặc khi muốn chạy lại, chọn
+`OUTPUT_BASE` mới hoặc tự lưu trữ kết quả trước khi chạy.
+
+Các run vẫn dùng subset pilot 5/2 ảnh mỗi lớp, không phải toàn bộ Food-101.
+Summary ghi runtime, commit, hash manifest, cấu hình, metrics, số mẫu, tham số
+trainable và thời gian wall-clock của `fit()` **bao gồm validation và ghi
+artifact**. Thời gian này không phải train-only time theo protocol A1-1 và
+không dùng để so sánh hiệu năng chính thức. Notebook không dùng test để chọn
+model hoặc đánh giá. Không commit ảnh, checkpoint hoặc output.
 
 Chạy kiểm thử liên quan từ thư mục gốc repository:
 
 ```bash
 python3 -m unittest discover -s A1-2/tests -p 'test_transforms.py'
 python3 -m unittest discover -s A1-2/tests -p 'test_pilot.py'
+python3 -m unittest discover -s A1-2/tests -p 'test_resnet50_experiments.py'
 ```
