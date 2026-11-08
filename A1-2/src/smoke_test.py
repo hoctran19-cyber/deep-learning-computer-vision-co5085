@@ -118,6 +118,21 @@ def run_smoke_test(config: dict[str, Any], output_dir: Path) -> FitResult:
             torch.randn(7, 3, 8, 8, generator=val_generator),
             torch.randint(0, 3, (7,), generator=val_generator),
         )
+        # Validate synthetic labels before entering the training pipeline so
+        # malformed smoke-test data fails with a clear input-validation error.
+        for split_name, dataset in (
+            ("train", train_data),
+            ("validation", validation_data),
+        ):
+            labels = dataset.tensors[1]
+            if labels.ndim != 1 or labels.dtype != torch.long:
+                raise ValueError(
+                    f"{split_name} labels must be a one-dimensional torch.int64 tensor"
+                )
+            if labels.numel() == 0 or ((labels < 0) | (labels >= 3)).any().item():
+                raise ValueError(
+                    f"{split_name} label outside class range [0, 2]"
+                )
         train_loader = DataLoader(
             train_data, batch_size=4, shuffle=True,
             generator=torch.Generator().manual_seed(seed + 2), num_workers=0,
