@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Data and generated artifacts
+data/
+datasets/
+outputs/checkpoints/*
+outputs/metrics/*
+outputs/figures/*
+outputs/logs/*
+!outputs/checkpoints/.gitkeep
+!outputs/metrics/.gitkeep
+!outputs/figures/.gitkeep
+!outputs/logs/.gitkeep
+
+# Local runtime files
+.DS_Store
+.env
