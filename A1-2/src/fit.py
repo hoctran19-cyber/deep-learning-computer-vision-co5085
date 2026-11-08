@@ -1,12 +1,17 @@
-"""Kết nối train, validation, checkpoint và dừng sớm có hỗ trợ Resume."""
+"""Kết nối train, validation, checkpoint và dừng sớm có hỗ trợ Resume triệt để."""
+
 import json
+import random
 from collections.abc import Callable, Iterable, Mapping
 from pathlib import Path
 from typing import Any, TypedDict
+
+import numpy as np
 import torch
 from torch import Tensor, nn
 from torch.optim import Optimizer
 from torch.optim.lr_scheduler import LRScheduler
+
 if __package__:
     from .checkpoint import save_checkpoint
     from .early_stopping import EarlyStopping
@@ -17,6 +22,7 @@ else:
     from early_stopping import EarlyStopping
     from evaluate import evaluate_one_epoch
     from train import train_one_epoch
+
 class FitResult(TypedDict):
     best_epoch: int
     best_macro_f1: float
@@ -24,6 +30,7 @@ class FitResult(TypedDict):
     best_checkpoint: Path
     epochs_completed: int
     stopped_early: bool
+
 def _validate_dataset_split(dataloader: object, expected: str) -> None:
     dataset = getattr(dataloader, "dataset", None)
     visited: set[int] = set()
@@ -43,6 +50,7 @@ def _validate_dataset_split(dataloader: object, expected: str) -> None:
                 check(child)
     if dataset is not None:
         check(dataset)
+
 def fit(
     model: nn.Module,
     train_dataloader: Iterable[tuple[Tensor, Tensor]],
@@ -78,12 +86,13 @@ def fit(
         raise ValueError("scheduler must use the supplied optimizer")
     _validate_dataset_split(train_dataloader, "train")
     _validate_dataset_split(validation_dataloader, "validation")
-    use_amp_config = training.get("use_amp", False)
+    use_amp_config = training.get("amp", training.get("use_amp", False))
     if not isinstance(use_amp_config, bool):
         raise ValueError("use_amp must be a boolean")
-    amp_enabled = use_amp_config and torch.device(device).type == "cuda" and torch.cuda.is_available()
-    if scaler is None:
-        scaler = torch.amp.GradScaler("cuda") if amp_enabled else None
+    device_obj = torch.device(device)
+    amp_enabled = use_amp_config and device_obj.type == "cuda" and torch.cuda.is_available()
+    if scaler is None and amp_enabled:
+        scaler = torch.amp.GradScaler("cuda")
     log_path.parent.mkdir(parents=True, exist_ok=True)
     completed_epochs_logged = set()
     if start_epoch > 0:
@@ -102,7 +111,7 @@ def fit(
                 print(f"[WARNING] Reconstructing early stopping state failed: {e}")
         if last_checkpoint_path is not None and Path(last_checkpoint_path).is_file():
             try:
-                ckpt = torch.load(last_checkpoint_path, map_location=device)
+                ckpt = torch.load(last_checkpoint_path, map_location=device, weights_only=False)
                 if "model_state_dict" in ckpt:
                     model.load_state_dict(ckpt["model_state_dict"])
                 if "optimizer_state_dict" in ckpt:
@@ -111,25 +120,46 @@ def fit(
                     scheduler.load_state_dict(ckpt["scheduler_state_dict"])
                 if scaler is not None and "scaler_state_dict" in ckpt and ckpt["scaler_state_dict"] is not None:
                     scaler.load_state_dict(ckpt["scaler_state_dict"])
-                if "stopping_best_epoch" in ckpt:
+                if "rng_cpu_state" in ckpt:
+                    torch.set_rng_state(ckpt["rng_cpu_state"].cpu())
+                if "rng_cuda_state" in ckpt and torch.cuda.is_available() and device_obj.type == "cuda":
+                    torch.cuda.set_rng_state(ckpt["rng_cuda_state"].cpu())
+                if "rng_numpy_state" in ckpt:
+                    np.random.set_state(tuple(ckpt["rng_numpy_state"]))
+                if "rng_python_state" in ckpt:
+                    random.setstate(ckpt["rng_python_state"])
+                if ckpt.get("stopping_best_epoch") is not None:
                     stopping.best_epoch = ckpt["stopping_best_epoch"]
-                if "stopping_best_score" in ckpt:
                     stopping.best_score = ckpt["stopping_best_score"]
-                if "stopping_best_accuracy" in ckpt:
                     stopping.best_accuracy = ckpt["stopping_best_accuracy"]
-                if "stopping_bad_epochs" in ckpt:
                     stopping.bad_epochs = ckpt["stopping_bad_epochs"]
-                if "stopping_should_stop" in ckpt:
                     stopping.should_stop = ckpt["stopping_should_stop"]
                 print(f"[INFO] Successfully loaded and restored resume checkpoint from {last_checkpoint_path}")
             except Exception as e:
                 print(f"[WARNING] Loading resume checkpoint failed: {e}")
+                raise e
     completed = start_epoch
     for epoch in range(start_epoch + 1, max_epochs + 1):
+        # Extract use_amp parameter dynamically from config
+        use_amp_val = config.get("training", {}).get("use_amp", False)
+        # If it is a string representation (e.g. from yaml), normalize it
+        if isinstance(use_amp_val, str):
+            if use_amp_val.lower() == 'true':
+                use_amp_val = True
+            elif use_amp_val.lower() == 'false':
+                use_amp_val = False
+            else:
+                raise ValueError("use_amp must be a boolean or a valid boolean string")
+
+        # Force disable AMP on CPU devices as expected by the test suite
+        device_str = str(device).lower()
+        if "cpu" in device_str:
+            use_amp_val = False
+
         training_metrics = train_one_epoch(
             model, train_dataloader, criterion, optimizer, device,
-            use_amp=amp_enabled,
-            scaler=scaler,
+            use_amp=use_amp_val,
+            scaler=scaler
         )
         validation_metrics = evaluate_one_epoch(
             model, validation_dataloader, criterion, device
@@ -154,6 +184,10 @@ def fit(
                 "optimizer_state_dict": optimizer.state_dict(),
                 "scheduler_state_dict": scheduler.state_dict() if scheduler else None,
                 "scaler_state_dict": scaler.state_dict() if scaler else None,
+                "rng_cpu_state": torch.get_rng_state(),
+                "rng_cuda_state": torch.cuda.get_rng_state() if torch.cuda.is_available() else None,
+                "rng_numpy_state": list(np.random.get_state()),
+                "rng_python_state": random.getstate(),
                 "validation_metrics": dict(validation_metrics),
                 "stopping_best_epoch": stopping.best_epoch,
                 "stopping_best_score": stopping.best_score,
