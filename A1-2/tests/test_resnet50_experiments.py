@@ -1,6 +1,7 @@
 """Verify fine-tuning configuration and modes without running training."""
 
 import copy
+import csv
 import json
 import sys
 import tempfile
@@ -17,7 +18,9 @@ from torch import nn
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from src import dataset as dataset_module
 from src import fit as fit_module
+from src import transforms as transforms_module
 from src.experiments import resnet50_experiment_configs, resnet50_output_paths
 from src.early_stopping import EarlyStopping
 from src.models import build_resnet50, configure_finetuning, count_parameters
@@ -46,6 +49,19 @@ class ResNet50ExperimentTests(unittest.TestCase):
                 self.assertEqual(config["training"]["regime"], regime)
                 self.assertTrue(config["experiment"]["pretrained"])
                 self.assertEqual(config["project"]["seed"], 42)
+                training = config["training"]
+                self.assertEqual(training["batch_size"], 32)
+                self.assertEqual(training["max_epochs"], 30)
+                self.assertEqual(training["early_stopping_patience"], 5)
+                self.assertEqual(training["optimizer"], "AdamW")
+                self.assertEqual(training["weight_decay"], 0.01)
+                self.assertEqual(training["head_learning_rate"], 0.001)
+                self.assertEqual(training["backbone_learning_rate"], 0.0001)
+                self.assertEqual(training["scheduler"]["name"], "CosineAnnealingLR")
+                self.assertEqual(training["scheduler"]["cosine_annealing"]["T_max"], 30)
+                self.assertEqual(training["selection_metric"], "macro_f1")
+                self.assertEqual(training["tie_break_metric"], "accuracy")
+                self.assertTrue(training["use_amp"])
                 configure_finetuning(self.model, regime)
                 parameters = dict(self.model.named_parameters())
                 actual = {name for name, p in parameters.items() if p.requires_grad}
@@ -147,29 +163,86 @@ class ResNet50ExperimentTests(unittest.TestCase):
 
     def test_frozen_batchnorm_buffers_and_head_mode(self) -> None:
         model = self.model
-        configure_finetuning(model, "frozen_backbone")
-        model.eval()
-        _set_training_mode(model)
-        self.assertTrue(model.training)
-        self.assertTrue(model.fc.training)
-        batchnorms = [
-            module for module in model.modules()
+        batchnorms = {
+            name: module for name, module in model.named_modules()
             if isinstance(module, nn.modules.batchnorm._BatchNorm)
-        ]
+        }
         self.assertTrue(batchnorms)
-        self.assertTrue(all(not module.training for module in batchnorms))
-        before = (model.bn1.running_mean.clone(), model.bn1.running_var.clone(),
-                  model.bn1.num_batches_tracked.clone())
-        with torch.no_grad():
-            model.bn1(torch.randn(4, 64, 4, 4))
-        for old, new in zip(before, (model.bn1.running_mean, model.bn1.running_var,
-                                     model.bn1.num_batches_tracked)):
-            self.assertTrue(torch.equal(old, new))
-        for regime in ("partial_finetuning", "full_finetuning", "from_scratch"):
+        for regime in ("frozen_backbone", "partial_finetuning", "full_finetuning", "from_scratch"):
             configure_finetuning(model, regime)
+            model.eval()
             _set_training_mode(model)
-            self.assertTrue(all(module.training for module in batchnorms))
+            self.assertTrue(model.training)
             self.assertTrue(model.fc.training)
+            for name, module in batchnorms.items():
+                expected = regime in ("full_finetuning", "from_scratch") or (
+                    regime == "partial_finetuning" and name.startswith("layer4.")
+                )
+                self.assertEqual(module.training, expected, (regime, name))
+            for module in (model.bn1, model.layer3[0].bn1, model.layer4[0].bn1):
+                before = (module.running_mean.clone(), module.running_var.clone(),
+                          module.num_batches_tracked.clone())
+                with torch.no_grad():
+                    module(torch.randn(4, module.num_features, 4, 4))
+                after = (module.running_mean, module.running_var, module.num_batches_tracked)
+                self.assertEqual(not torch.equal(before[2], after[2]), module.training)
+                if not module.training:
+                    self.assertTrue(all(torch.equal(a, b) for a, b in zip(before, after)))
+
+    def test_full_dataset_loading_and_size_failures(self) -> None:
+        class FakeDataset:
+            def __init__(self, split, size):
+                self.split = split
+                self.size = size
+                self.classes = ["shared"]
+
+            def __len__(self):
+                return self.size
+
+        for sizes, failing_split in (
+            ((68175, 7575), None), ((68174, 7575), "train"),
+            ((68175, 7574), "validation"),
+        ):
+            datasets = [FakeDataset("train", sizes[0]), FakeDataset("validation", sizes[1])]
+            with self.subTest(sizes=sizes), patch.object(
+                dataset_module, "Food101Dataset", side_effect=datasets
+            ) as factory:
+                if failing_split:
+                    with self.assertRaisesRegex(ValueError, f"{failing_split} dataset has"):
+                        dataset_module.prepare_full_training_datasets("root", "manifest", "train_tf", "eval_tf")
+                else:
+                    result = dataset_module.prepare_full_training_datasets(
+                        "root", "manifest", "train_tf", "eval_tf"
+                    )
+                    self.assertEqual(result, tuple(datasets))
+                self.assertEqual([call.args[2] for call in factory.call_args_list], ["train", "validation"])
+                self.assertTrue(all(call.kwargs == {"ignore_test_rows": True} for call in factory.call_args_list))
+
+    def test_loader_skips_test_labels_and_image_paths(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "meta").mkdir()
+            (root / "meta" / "classes.txt").write_text(
+                "\n".join(f"class_{i:03d}" for i in range(101))
+            )
+            (root / "images").mkdir()
+            for name in ("train.jpg", "validation.jpg"):
+                (root / "images" / name).touch()
+            manifest = root / "manifest.csv"
+            with manifest.open("w", newline="") as file:
+                writer = csv.writer(file)
+                writer.writerow(("image_path", "class_name", "label", "split"))
+                writer.writerow(("images/train.jpg", "class_000", "0", "train"))
+                writer.writerow(("images/validation.jpg", "class_000", "0", "validation"))
+                writer.writerow(("images/test.jpg", "unknown", "not-an-int", "test"))
+            for split in ("train", "validation"):
+                data = dataset_module.Food101Dataset(root, manifest, split, ignore_test_rows=True)
+                self.assertEqual(len(data), 1)
+                self.assertEqual(data.samples[0]["image_path"].name, f"{split}.jpg")
+            with self.assertRaisesRegex(ValueError, "Unknown class"):
+                dataset_module.Food101Dataset(root, manifest, "train")
+            with self.assertRaisesRegex(ValueError, "cannot ignore test"):
+                dataset_module.Food101Dataset(root, manifest, "test", ignore_test_rows=True)
 
     def test_notebook_cells_parse_and_use_isolated_paths(self) -> None:
         notebook = json.loads((ROOT / "notebooks" / "A1_2_experiment.ipynb").read_text())
@@ -182,6 +255,33 @@ class ResNet50ExperimentTests(unittest.TestCase):
         self.assertIn("resnet50_output_paths(OUTPUT_BASE)", code)
         self.assertIn("last_checkpoint_path=paths['last_checkpoint']", code)
         self.assertNotIn("build_model(architecture", code)
+        self.assertIn("prepare_full_training_datasets(", code)
+        self.assertNotIn("prepare_pilot_datasets", code)
+        self.assertNotIn("train_subset", code)
+        self.assertNotIn("validation_subset", code)
+
+    def test_notebook_prepares_full_splits_without_test_dataset(self) -> None:
+        notebook = json.loads((ROOT / "notebooks" / "A1_2_experiment.ipynb").read_text())
+        cell = next(cell for cell in notebook["cells"] if cell.get("id") == "db6cb6ee")
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            manifest = root / "manifest.csv"
+            manifest.write_bytes(b"manifest")
+            train = range(68175)
+            validation = range(7575)
+            namespace = {
+                "REPO_DIR": ROOT.parent, "DATASET_ROOT": root / "dataset",
+                "MANIFEST": manifest, "OUTPUT_BASE": root / "outputs",
+            }
+            with patch.object(dataset_module, "prepare_full_training_datasets",
+                              return_value=(train, validation)) as prepare, \
+                 patch.object(transforms_module, "build_train_transform", return_value="train_tf"), \
+                 patch.object(transforms_module, "build_eval_transform", return_value="eval_tf"):
+                exec(compile("".join(cell["source"]), "notebook-setup", "exec"), namespace)
+            prepare.assert_called_once_with(root / "dataset", manifest, "train_tf", "eval_tf")
+            self.assertIs(namespace["train_dataset"], train)
+            self.assertIs(namespace["validation_dataset"], validation)
+            self.assertEqual(len(namespace["experiment_configs"]), 3)
 
     def test_notebook_wires_each_run_without_training(self) -> None:
         notebook = json.loads((ROOT / "notebooks" / "A1_2_experiment.ipynb").read_text())
@@ -198,17 +298,20 @@ class ResNet50ExperimentTests(unittest.TestCase):
 
             def fake_fit(model, train, validation, criterion, optimizer, device,
                          config, checkpoint, log, scheduler, *, last_checkpoint_path):
+                self.assertIs(train, namespace["train_dataset"])
+                self.assertIs(validation, namespace["validation_dataset"])
                 fit_calls.append((copy.deepcopy(config), checkpoint, log, last_checkpoint_path))
                 checkpoint.write_text("mock checkpoint")
                 last_checkpoint_path.write_text("mock checkpoint")
                 log.write_text('{"epoch": 1}\n')
-                return {"best_epoch": 1, "best_macro_f1": 0.5, "best_accuracy": 0.6}
+                return {"best_epoch": 1, "best_macro_f1": 0.5, "best_accuracy": 0.6,
+                        "epochs_completed": 1, "stopped_early": False}
 
             namespace = {
                 "experiment_configs": configs, "output_paths": paths,
                 "OUTPUT_BASE": root / "outputs", "DATASET_ROOT": root / "dataset",
-                "MANIFEST": root / "manifest.csv", "train_subset": [1, 2],
-                "validation_subset": [3], "runtime_info": {}, "commit": "commit",
+                "MANIFEST": root / "manifest.csv", "train_dataset": range(68175),
+                "validation_dataset": range(7575), "runtime_info": {}, "commit": "commit",
                 "manifest_hash": "hash", "torch": torch, "random": __import__("random"),
                 "np": __import__("numpy"), "time": time, "json": json, "yaml": yaml,
                 "create_dataloader": Mock(side_effect=lambda dataset, **kwargs: dataset),
@@ -234,7 +337,23 @@ class ResNet50ExperimentTests(unittest.TestCase):
                 with paths[name]["effective_config"].open() as file:
                     self.assertEqual(yaml.safe_load(file), config)
                 with paths[name]["summary"].open() as file:
-                    self.assertEqual(json.load(file)["experiment"], name)
+                    summary = json.load(file)
+                self.assertEqual(summary["experiment"], name)
+                self.assertEqual(summary["dataset_name"], "food101")
+                self.assertEqual(summary["manifest_path"], str(root / "manifest.csv"))
+                self.assertEqual(summary["manifest_sha256"], "hash")
+                self.assertEqual((summary["train_samples"], summary["validation_samples"]), (68175, 7575))
+                self.assertEqual(summary["epochs_completed"], 1)
+                self.assertEqual(summary["source_commit"], "commit")
+                self.assertEqual(summary["runtime"], {})
+                self.assertEqual(summary["seed"], 42)
+                self.assertTrue(summary["pretrained"])
+                self.assertEqual(summary["batch_size"], 32)
+                self.assertEqual(summary["best_epoch"], 1)
+                self.assertEqual((summary["validation_macro_f1"], summary["validation_accuracy"]), (0.5, 0.6))
+                self.assertEqual((summary["total_parameters"], summary["trainable_parameters"]), (10, 5))
+                self.assertIn("fit_wall_seconds_including_validation_and_io", summary)
+                self.assertEqual(summary["config"]["training"], config["training"])
             self.assertEqual(
                 [call.kwargs["pretrained"] for call in build_model.call_args_list],
                 [True, True, True],

@@ -24,18 +24,16 @@ def _new_grad_scaler():
 
 
 def _set_training_mode(model: nn.Module) -> None:
-    """Keep frozen ResNet backbone BatchNorm buffers fixed during training."""
+    """Keep BatchNorm buffers of frozen ResNet layers fixed during training."""
     model.train()
-    if isinstance(model, ResNet) and not any(
-        parameter.requires_grad
-        for name, parameter in model.named_parameters()
-        if not name.startswith("fc.")
-    ):
+    if isinstance(model, ResNet):
         for name, module in model.named_modules():
             if not name.startswith("fc.") and isinstance(
                 module, nn.modules.batchnorm._BatchNorm
             ):
-                module.eval()
+                parameters = list(module.parameters(recurse=False))
+                if parameters and not any(p.requires_grad for p in parameters):
+                    module.eval()
 
 
 def train_one_epoch(

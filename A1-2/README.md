@@ -122,9 +122,10 @@ mở toàn bộ tham số của mô-đun. Dùng `configure_finetuning(model, reg
 
 Các hàm chỉ thay đổi `requires_grad`, không khởi tạo lại trọng số hoặc chuyển
 chế độ train/eval. Khi huấn luyện từ đầu, cần tạo mô hình với
-`pretrained=False`. Vòng train đặt BatchNorm của backbone ResNet ở chế độ
-eval khi toàn bộ tham số backbone bị đóng băng; `fc` vẫn ở chế độ train.
-Partial fine-tuning vẫn dùng chế độ train cho BatchNorm như trước.
+`pretrained=False`. Vòng train đặt BatchNorm của các lớp ResNet bị đóng băng
+ở chế độ eval; `fc` vẫn ở chế độ train. Trong partial fine-tuning,
+BatchNorm của layer4 được huấn luyện còn BatchNorm của các lớp trước được
+giữ cố định. Full fine-tuning giữ toàn bộ BatchNorm ở chế độ train.
 
 ## Optimizer và scheduler
 
@@ -259,21 +260,24 @@ Phần tải dữ liệu và tạo mô hình ResNet-50, ViT-B/16 đã được t
 Vòng huấn luyện có validation, checkpoint và dừng sớm; đánh giá cuối cùng
 trên tập test và kết quả thí nghiệm vẫn chưa được triển khai.
 
-## Pilot ResNet-50 fine-tuning trên Google Colab
+## ResNet-50 fine-tuning trên toàn bộ Food-101 ở Google Colab
 
-1. Đặt Food-101 đã giải nén trên Google Drive, gồm `meta/classes.txt`,
-   `meta/train.json` và thư mục `images/`; lưu manifest hiện có riêng trên
-   Drive. Không tải lại dữ liệu hoặc tạo lại split.
-2. Mở `notebooks/A1_2_experiment.ipynb` trong Colab và chọn GPU. Trong cell
-   Drive, chỉnh `DATASET_ROOT` và `MANIFEST` theo vị trí thực tế.
+1. Dùng Food-101 đã giải nén tại
+   `/content/drive/MyDrive/ComputerVision/A1/data/food-101` và manifest seed 42
+   hiện có tại
+   `/content/drive/MyDrive/ComputerVision/A1/data/manifests/food101_split_seed42.csv`.
+   Nếu manifest chưa nằm trên Drive, sao chép CSV hiện có từ repository vào
+   vị trí này; không tạo lại manifest hoặc split.
+2. Mở `notebooks/A1_2_experiment.ipynb` trong Colab và chọn GPU.
 3. Chạy các cell từ trên xuống. Notebook clone hoặc pull fast-forward nhánh
    `assignment_A1`; nếu repository đã có thay đổi chưa commit hoặc sai nhánh,
    notebook dừng để tránh ghi đè. Source mới cần được commit và push trước khi
    Colab có thể lấy về.
-4. Pipeline kiểm tra manifest, ảnh train/validation và membership với
-   `train.json`; sau đó lấy 5 ảnh train và 2 ảnh validation mỗi lớp bằng seed
-   42. Không khởi tạo dataset test, không đọc `test.json` hay ảnh test; các
-   dòng test trong manifest vẫn được kiểm tra cấu trúc và trùng lặp.
+4. Pipeline nạp toàn bộ train (68.175 ảnh) và validation (7.575 ảnh), kiểm tra
+   số lượng và sự tồn tại của ảnh, rồi dừng nếu không khớp. Không khởi tạo
+   dataset test, không đọc `test.json` hay ảnh test; các dòng test trong
+   manifest không được kiểm tra nhãn hoặc trùng lặp. Hash SHA-256 được tính
+   trên toàn bộ tệp manifest để ghi nguồn dữ liệu.
 5. Notebook chạy ba cấu hình ResNet-50 ImageNet pretrained trong
    `experiments.resnet50_runs`: `resnet50_frozen` (chỉ `fc`),
    `resnet50_partial` (`layer4` và `fc`), và `resnet50_full_finetune`
@@ -284,7 +288,8 @@ trên tập test và kết quả thí nghiệm vẫn chưa được triển khai
    Mỗi run reset seed 42; kết quả GPU vẫn có thể thay đổi do phép toán không
    hoàn toàn xác định. Notebook này không chạy ViT hay from-scratch.
 
-Mỗi thí nghiệm ghi vào `outputs/resnet50_frozen/`,
+Mỗi thí nghiệm ghi dưới `/content/drive/MyDrive/ComputerVision/A1/` vào
+`outputs/resnet50_frozen/`,
 `outputs/resnet50_partial/` hoặc `outputs/resnet50_full_finetune/` trên
 Drive. Mỗi thư mục chứa `best_checkpoint.pt`, `last_checkpoint.pt`,
 `training_log.jsonl`, `effective_config.yaml` và `summary.json` nếu run hoàn
@@ -292,7 +297,6 @@ tất. Notebook kiểm tra trước cả ba thư mục và từ chối nếu b�
 đã tồn tại; không ghi đè kết quả cũ. Sau run lỗi hoặc khi muốn chạy lại, chọn
 `OUTPUT_BASE` mới hoặc tự lưu trữ kết quả trước khi chạy.
 
-Các run vẫn dùng subset pilot 5/2 ảnh mỗi lớp, không phải toàn bộ Food-101.
 Summary ghi runtime, commit, hash manifest, cấu hình, metrics, số mẫu, tham số
 trainable và thời gian wall-clock của `fit()` **bao gồm validation và ghi
 artifact**. Thời gian này không phải train-only time theo protocol A1-1 và
