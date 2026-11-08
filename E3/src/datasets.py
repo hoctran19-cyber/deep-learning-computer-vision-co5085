@@ -1,9 +1,25 @@
-"""Tensor preprocessing for row-wise image sequences.
+"""Fashion-MNIST loaders shared with the E1 baseline pipeline."""
 
-This module does not load or download datasets.
-"""
+from typing import Any
 
+from torch.utils.data import DataLoader
 from torch import Tensor
+
+from E1.src.datasets import DatasetBundle
+from E1.src.datasets import create_dataloaders as _create_dataloaders
+from E1.src.datasets import load_datasets as _load_datasets
+
+
+def load_datasets(config: dict[str, Any]) -> DatasetBundle:
+    """Load Fashion-MNIST using E1's transform and seeded train/validation split."""
+    return _load_datasets(config)
+
+
+def create_dataloaders(
+    bundle: DatasetBundle, config: dict[str, Any]
+) -> dict[str, DataLoader]:
+    """Create loaders using E1's shuffle and batching behavior."""
+    return _create_dataloaders(bundle, config)
 
 
 def image_to_row_sequence(images: Tensor) -> Tensor:

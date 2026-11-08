@@ -47,7 +47,9 @@ def test_row_sequence_rejects_invalid_shapes(shape: tuple[int, ...]) -> None:
 def test_default_models_forward_backward_and_factory(
     config: dict, name: str, model_type: type, recurrent_type: type, parameter_count: int
 ) -> None:
-    assert config == {
+    assert {key: config[key] for key in (
+        "seed", "input_size", "hidden_size", "num_layers", "dropout", "num_classes"
+    )} == {
         "seed": 42,
         "input_size": 28,
         "hidden_size": 128,
