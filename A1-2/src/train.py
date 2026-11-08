@@ -79,20 +79,32 @@ def train_one_epoch(
         optimizer.zero_grad()
         with torch.amp.autocast(device_type=device_type, enabled=amp_enabled):
             logits = model(images)
-        if (
-            not isinstance(logits, Tensor)
-            or logits.ndim != 2
-            or logits.shape[0] != batch_size
-            or logits.shape[1] == 0
-        ):
-            raise ValueError(f"batch {batch_index}: expected logits shape [batch, classes]")
+        if not isinstance(logits, Tensor):
+            raise ValueError(f"batch {batch_index}: model output must be a Tensor")
+        if logits.ndim != 2:
+            raise ValueError(
+                f"batch {batch_index}: logits must have shape [batch_size, num_classes], "
+                f"got {tuple(logits.shape)}"
+            )
+        if logits.shape[0] != batch_size:
+            raise ValueError(
+                f"batch {batch_index}: logits batch size {logits.shape[0]} "
+                f"does not match target batch size {batch_size}"
+            )
+        if logits.shape[1] == 0:
+            raise ValueError(f"batch {batch_index}: logits must have at least one class")
         if not torch.isfinite(logits).all().item():
             raise ValueError(f"batch {batch_index}: logits must be finite")
         if ((labels < 0) | (labels >= logits.shape[1])).any().item():
-            raise ValueError(f"batch {batch_index}: label outside class range")
+            raise ValueError(
+                f"batch {batch_index}: label outside class range "
+                f"[0, {logits.shape[1] - 1}]"
+            )
         with torch.amp.autocast(device_type=device_type, enabled=amp_enabled):
             loss = criterion(logits, labels)
-        if not isinstance(loss, Tensor) or loss.ndim != 0:
+        if not isinstance(loss, Tensor):
+            raise ValueError(f"batch {batch_index}: criterion must return a Tensor")
+        if loss.ndim != 0:
             raise ValueError(f"batch {batch_index}: criterion must return scalar loss")
         if not torch.isfinite(loss).item():
             raise ValueError(f"batch {batch_index}: loss must be finite")
