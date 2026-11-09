@@ -1,0 +1,30 @@
+seed: 42
+input_size: 28
+hidden_size: 128
+num_layers: 2
+dropout: 0.2
+num_classes: 10
+
+training:
+  batch_size: 128
+  epochs: 10
+  learning_rate: 0.001
+  optimizer: adam
+  weight_decay: 0.0
+
+dataset:
+  name: fashion_mnist
+  data_dir: data
+  num_workers: 2
+  download: false
+
+experiment:
+  validation_split: 0.1
+
+output:
+  checkpoints_dir: results/checkpoints
+  metrics_dir: results/metrics
+  plots_dir: results/plots
+  results_csv: results/metrics/model_comparison.csv
+  results_json: results/metrics/experiments.json
+  history_dir: results/metrics/history
