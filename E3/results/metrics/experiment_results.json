@@ -1,0 +1,16 @@
+{
+  "lstm": {
+    "test_loss": 0.3058793707847595,
+    "test_accuracy": 0.8913,
+    "num_parameters": 214282,
+    "best_val_accuracy": 0.8955,
+    "training_time": 131.64187345699975
+  },
+  "gru": {
+    "test_loss": 0.2839184885859489,
+    "test_accuracy": 0.9009,
+    "num_parameters": 161034,
+    "best_val_accuracy": 0.903,
+    "training_time": 127.71144260899928
+  }
+}
