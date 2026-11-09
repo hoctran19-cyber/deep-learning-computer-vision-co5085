@@ -1,0 +1,33 @@
+{
+  "format": "full_dataset_v1",
+  "name": "vit_b16_partial",
+  "architecture": "vit_b16",
+  "regime": "partial_finetuning",
+  "pretrained": true,
+  "dataset_name": "food101",
+  "train_samples": 68175,
+  "validation_samples": 7575,
+  "manifest_path": "/content/deep-learning-computer-vision-co5085/A1-2/data/manifests/food101_split_seed42.csv",
+  "manifest_sha256": "57eaf01981d2f7fe291a128042fc0a31f215254e98e8c4e252726bf66c2958d9",
+  "seed": 42,
+  "batch_size": 32,
+  "total_parameters": 85876325,
+  "trainable_parameters": 7165541,
+  "source_commit": "3c9827097c2078d8283b15cb862e80973a831262",
+  "runtime": {
+    "python": "3.13.16",
+    "pytorch": "2.14.1+cu130",
+    "torchvision": "0.29.1+cu130",
+    "cuda_runtime": "13.0",
+    "device": "cuda",
+    "gpu": "NVIDIA A100-SXM4-80GB"
+  },
+  "fit_wall_seconds_including_validation_and_io": 1991.9352530219985,
+  "best_epoch": 5,
+  "validation_macro_f1": 0.7573318043520808,
+  "validation_accuracy": 0.7577557755775578,
+  "epochs_completed": 10,
+  "stopped_early": true,
+  "best_checkpoint_sha256": "07dc50a279475d619811e35019838955fc1e7837ec2f130e92f103c90f654de6",
+  "experiment": "vit_b16_partial"
+}
