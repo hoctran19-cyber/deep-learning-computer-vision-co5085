@@ -1,0 +1,81 @@
+{
+  "total_classes": 101,
+  "alignment_verification_status": "Accuracy Consistency Check Passed",
+  "limitations": "Row-level alignment is not independently verified unless image paths and labels are checked against the actual test dataset order.",
+  "worst_10_classes_by_f1": {
+    "steak": 0.5967078189300411,
+    "pork_chop": 0.6861924686192469,
+    "filet_mignon": 0.704225352112676,
+    "chocolate_mousse": 0.7061310782241015,
+    "apple_pie": 0.7096774193548387,
+    "bread_pudding": 0.7327935222672065,
+    "foie_gras": 0.7526881720430108,
+    "cheese_plate": 0.7626774847870182,
+    "ravioli": 0.7663934426229508,
+    "tuna_tartare": 0.7784431137724551
+  },
+  "worst_10_classes_by_recall": {
+    "steak": 0.58,
+    "pork_chop": 0.656,
+    "chocolate_mousse": 0.668,
+    "foie_gras": 0.7,
+    "filet_mignon": 0.7,
+    "apple_pie": 0.704,
+    "bread_pudding": 0.724,
+    "ravioli": 0.748,
+    "cheese_plate": 0.752,
+    "huevos_rancheros": 0.76
+  },
+  "top_10_confusion_pairs": [
+    {
+      "true_class": "steak",
+      "predicted_class": "filet_mignon",
+      "count": 41
+    },
+    {
+      "true_class": "filet_mignon",
+      "predicted_class": "steak",
+      "count": 33
+    },
+    {
+      "true_class": "chocolate_mousse",
+      "predicted_class": "chocolate_cake",
+      "count": 24
+    },
+    {
+      "true_class": "pork_chop",
+      "predicted_class": "steak",
+      "count": 21
+    },
+    {
+      "true_class": "tuna_tartare",
+      "predicted_class": "beef_tartare",
+      "count": 20
+    },
+    {
+      "true_class": "prime_rib",
+      "predicted_class": "steak",
+      "count": 19
+    },
+    {
+      "true_class": "bread_pudding",
+      "predicted_class": "apple_pie",
+      "count": 15
+    },
+    {
+      "true_class": "steak",
+      "predicted_class": "prime_rib",
+      "count": 15
+    },
+    {
+      "true_class": "steak",
+      "predicted_class": "pork_chop",
+      "count": 15
+    },
+    {
+      "true_class": "chocolate_cake",
+      "predicted_class": "chocolate_mousse",
+      "count": 14
+    }
+  ]
+}

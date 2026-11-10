@@ -73,6 +73,28 @@ lưới ảnh Food-101, confusion matrix và ví dụ dự đoán của checkpoi
 xem hướng dẫn [ANALYSIS_FIGURES.md](ANALYSIS_FIGURES.md). Các hình được lưu
 trong `outputs/figures/`; ảnh và checkpoint gốc không được commit lên Git.
 
+### Sửa mapping tên lớp trong prediction artifacts
+
+`scripts/repair_prediction_artifacts.py` đối chiếu prediction với manifest theo
+đường dẫn ảnh, dựng lại tên lớp từ nhãn số và `classes.txt`, rồi tái tạo metrics
+và hình phân tích. Script không tải model, training hoặc inference; không ghi đè
+artifacts gốc và dừng nếu không xác minh đủ 25.250 ảnh.
+
+```bash
+python3 A1-2/scripts/repair_prediction_artifacts.py \
+  --dataset-root /path/to/food-101
+```
+
+Mặc định script đọc prediction và metrics hiện có trong `outputs/`, manifest
+trong `data/manifests/`, danh sách lớp trong `data/food-101-metadata/meta/`,
+rồi tạo kết quả mới tại `outputs/repaired_artifacts/`. Có thể truyền các đường
+dẫn khác bằng `--prediction-csv`, `--manifest-csv`, `--classes-file`,
+`--final-test-metrics`, `--additional-metrics` và `--output-dir`. Thư mục output
+phải chưa tồn tại; `mapping_audit.json` ghi lại đối chiếu và kết quả kiểm định,
+bao gồm support của từng lớp test. `per_class_error_analysis.csv` chứa đủ 101
+lớp; `worst10_classes_by_f1.csv` và `worst10_classes_by_recall.csv` chứa riêng
+10 lớp thấp nhất theo từng metric.
+
 ## Kiểm thử nhanh DataLoader của Food-101
 
 Sau khi cài đặt các phiên bản tương thích của PyTorch, Torchvision và Pillow,
