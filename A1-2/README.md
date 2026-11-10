@@ -65,6 +65,14 @@ Chạy các kiểm thử tích hợp với dữ liệu giả lập bằng lệnh
 python3 -m unittest discover -s A1-2/tests -p 'test_validate_manifest.py'
 ```
 
+## Hình phân tích và đánh giá
+
+Script `scripts/generate_analysis_figures.py` tạo biểu đồ lịch sử huấn luyện
+và so sánh từ các tệp JSON hiện có, không huấn luyện lại mô hình. Để tạo thêm
+lưới ảnh Food-101, confusion matrix và ví dụ dự đoán của checkpoint đã chọn,
+xem hướng dẫn [ANALYSIS_FIGURES.md](ANALYSIS_FIGURES.md). Các hình được lưu
+trong `outputs/figures/`; ảnh và checkpoint gốc không được commit lên Git.
+
 ## Kiểm thử nhanh DataLoader của Food-101
 
 Sau khi cài đặt các phiên bản tương thích của PyTorch, Torchvision và Pillow,
