@@ -21,6 +21,8 @@ class Food101Dataset(Dataset):
         image_path, class_name, label, split
 
     image_path là đường dẫn tương đối tính từ dataset_root.
+    ``ignore_test_rows=True`` bỏ qua các dòng test khi nạp train/validation;
+    kiểm tra trùng lặp khi đó chỉ bao gồm train và validation.
     """
 
     VALID_SPLITS = {"train", "validation", "test"}
@@ -31,6 +33,8 @@ class Food101Dataset(Dataset):
         manifest_path: str | Path,
         split: str,
         transform: Optional[Callable] = None,
+        *,
+        ignore_test_rows: bool = False,
     ):
         self.dataset_root = Path(dataset_root)
         self.manifest_path = Path(manifest_path)
@@ -43,6 +47,11 @@ class Food101Dataset(Dataset):
                 f"Invalid split: {split}. "
                 f"Expected one of {self.VALID_SPLITS}"
             )
+        if not isinstance(ignore_test_rows, bool):
+            raise ValueError("ignore_test_rows must be a boolean")
+        if ignore_test_rows and split == "test":
+            raise ValueError("cannot ignore test rows for the test split")
+        self.ignore_test_rows = ignore_test_rows
 
         if not self.dataset_root.is_dir():
             raise FileNotFoundError(
@@ -119,8 +128,10 @@ class Food101Dataset(Dataset):
                     f"{required_columns}"
                 )
 
-            # Kiểm tra toàn bộ manifest, kể cả trùng ảnh giữa các tập.
+            # Mặc định kiểm tra toàn bộ manifest, kể cả trùng ảnh giữa các tập.
             for row_number, row in enumerate(reader, start=2):
+                if self.ignore_test_rows and row.get("split") == "test":
+                    continue
                 for column in required_columns:
                     value = row.get(column)
                     if value is None or not value.strip():
@@ -228,6 +239,29 @@ class Food101Dataset(Dataset):
         label = sample["label"]
 
         return image, label
+
+
+def prepare_full_training_datasets(
+    dataset_root: str | Path,
+    manifest_path: str | Path,
+    train_transform: Callable,
+    eval_transform: Callable,
+) -> tuple[Food101Dataset, Food101Dataset]:
+    """Load complete train/validation splits without inspecting test rows."""
+    train = Food101Dataset(
+        dataset_root, manifest_path, "train", train_transform, ignore_test_rows=True
+    )
+    validation = Food101Dataset(
+        dataset_root, manifest_path, "validation", eval_transform, ignore_test_rows=True
+    )
+    for data, expected in ((train, 68175), (validation, 7575)):
+        if len(data) != expected:
+            raise ValueError(
+                f"{data.split} dataset has {len(data)} samples; expected {expected}"
+            )
+    if train.classes != validation.classes:
+        raise ValueError("train/validation class mappings do not match")
+    return train, validation
 
 
 def create_dataloader(

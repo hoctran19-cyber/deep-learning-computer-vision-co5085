@@ -65,6 +65,36 @@ Chạy các kiểm thử tích hợp với dữ liệu giả lập bằng lệnh
 python3 -m unittest discover -s A1-2/tests -p 'test_validate_manifest.py'
 ```
 
+## Hình phân tích và đánh giá
+
+Script `scripts/generate_analysis_figures.py` tạo biểu đồ lịch sử huấn luyện
+và so sánh từ các tệp JSON hiện có, không huấn luyện lại mô hình. Để tạo thêm
+lưới ảnh Food-101, confusion matrix và ví dụ dự đoán của checkpoint đã chọn,
+xem hướng dẫn [ANALYSIS_FIGURES.md](ANALYSIS_FIGURES.md). Các hình được lưu
+trong `outputs/figures/`; ảnh và checkpoint gốc không được commit lên Git.
+
+### Sửa mapping tên lớp trong prediction artifacts
+
+`scripts/repair_prediction_artifacts.py` đối chiếu prediction với manifest theo
+đường dẫn ảnh, dựng lại tên lớp từ nhãn số và `classes.txt`, rồi tái tạo metrics
+và hình phân tích. Script không tải model, training hoặc inference; không ghi đè
+artifacts gốc và dừng nếu không xác minh đủ 25.250 ảnh.
+
+```bash
+python3 A1-2/scripts/repair_prediction_artifacts.py \
+  --dataset-root /path/to/food-101
+```
+
+Mặc định script đọc prediction và metrics hiện có trong `outputs/`, manifest
+trong `data/manifests/`, danh sách lớp trong `data/food-101-metadata/meta/`,
+rồi tạo kết quả mới tại `outputs/repaired_artifacts/`. Có thể truyền các đường
+dẫn khác bằng `--prediction-csv`, `--manifest-csv`, `--classes-file`,
+`--final-test-metrics`, `--additional-metrics` và `--output-dir`. Thư mục output
+phải chưa tồn tại; `mapping_audit.json` ghi lại đối chiếu và kết quả kiểm định,
+bao gồm support của từng lớp test. `per_class_error_analysis.csv` chứa đủ 101
+lớp; `worst10_classes_by_f1.csv` và `worst10_classes_by_recall.csv` chứa riêng
+10 lớp thấp nhất theo từng metric.
+
 ## Kiểm thử nhanh DataLoader của Food-101
 
 Sau khi cài đặt các phiên bản tương thích của PyTorch, Torchvision và Pillow,
@@ -122,9 +152,10 @@ mở toàn bộ tham số của mô-đun. Dùng `configure_finetuning(model, reg
 
 Các hàm chỉ thay đổi `requires_grad`, không khởi tạo lại trọng số hoặc chuyển
 chế độ train/eval. Khi huấn luyện từ đầu, cần tạo mô hình với
-`pretrained=False`. Với ResNet, các thống kê BatchNorm vẫn có thể thay đổi
-trong chế độ train ngay cả khi tham số của backbone đã đóng băng; vòng huấn
-luyện sau này cần quản lý chế độ train/eval nếu muốn cố định các thống kê đó.
+`pretrained=False`. Vòng train đặt BatchNorm của các lớp ResNet bị đóng băng
+ở chế độ eval; `fc` vẫn ở chế độ train. Trong partial fine-tuning,
+BatchNorm của layer4 được huấn luyện còn BatchNorm của các lớp trước được
+giữ cố định. Full fine-tuning giữ toàn bộ BatchNorm ở chế độ train.
 
 ## Optimizer và scheduler
 
@@ -218,7 +249,8 @@ patience. `min_delta=0` yêu cầu tăng macro-F1 nghiêm ngặt. Mỗi checkpoi
 chứa epoch, trạng thái model/optimizer/scheduler và chỉ số validation; tệp
 được thay thế nguyên tử. Log được nối vào tệp JSONL, vì vậy hãy chọn đường
 dẫn riêng cho mỗi lần chạy. Hàm trả về checkpoint tốt nhất, không tự nạp lại
-trọng số đó vào model và chưa hỗ trợ tiếp tục từ checkpoint.
+trọng số đó vào model. Notebook lưu thêm last checkpoint nhưng không tự tiếp
+tục run đã bị gián đoạn.
 
 Chỉ truyền dữ liệu train và validation, không truyền test chính thức.
 `fit()` từ chối các dataset/wrapper công khai `split` không đúng; với dataset
@@ -258,37 +290,53 @@ Phần tải dữ liệu và tạo mô hình ResNet-50, ViT-B/16 đã được t
 Vòng huấn luyện có validation, checkpoint và dừng sớm; đánh giá cuối cùng
 trên tập test và kết quả thí nghiệm vẫn chưa được triển khai.
 
-## Pilot Food-101 trên Google Colab
+## ResNet-50 fine-tuning trên toàn bộ Food-101 ở Google Colab
 
-1. Đặt Food-101 đã giải nén trên Google Drive, gồm `meta/classes.txt`,
-   `meta/train.json` và thư mục `images/`; lưu manifest hiện có riêng trên
-   Drive. Không tải lại dữ liệu hoặc tạo lại split.
-2. Mở `notebooks/A1_2_experiment.ipynb` trong Colab và chọn GPU. Trong cell
-   Drive, chỉnh `DATASET_ROOT` và `MANIFEST` theo vị trí thực tế.
+1. Dùng Food-101 đã giải nén tại
+   `/content/drive/MyDrive/ComputerVision/A1/data/food-101` và manifest seed 42
+   hiện có tại
+   `/content/drive/MyDrive/ComputerVision/A1/data/manifests/food101_split_seed42.csv`.
+   Nếu manifest chưa nằm trên Drive, sao chép CSV hiện có từ repository vào
+   vị trí này; không tạo lại manifest hoặc split.
+2. Mở `notebooks/A1_2_experiment.ipynb` trong Colab và chọn GPU.
 3. Chạy các cell từ trên xuống. Notebook clone hoặc pull fast-forward nhánh
    `assignment_A1`; nếu repository đã có thay đổi chưa commit hoặc sai nhánh,
    notebook dừng để tránh ghi đè. Source mới cần được commit và push trước khi
    Colab có thể lấy về.
-4. Pipeline kiểm tra manifest, ảnh train/validation và membership với
-   `train.json`; sau đó lấy 5 ảnh train và 2 ảnh validation mỗi lớp bằng seed
-   42. Không khởi tạo dataset test, không đọc `test.json` hay ảnh test; các
-   dòng test trong manifest vẫn được kiểm tra cấu trúc và trùng lặp.
-5. ResNet-50 và ViT-B/16 chạy from-scratch với batch 8, tối đa 2 epoch.
-   Việc reset seed giúp tái lập subset và trình tự ngẫu nhiên; kết quả GPU
-   vẫn có thể thay đổi do phép toán không hoàn toàn xác định.
+4. Pipeline nạp toàn bộ train (68.175 ảnh) và validation (7.575 ảnh), kiểm tra
+   số lượng và sự tồn tại của ảnh, rồi dừng nếu không khớp. Không khởi tạo
+   dataset test, không đọc `test.json` hay ảnh test; các dòng test trong
+   manifest không được kiểm tra nhãn hoặc trùng lặp. Hash SHA-256 được tính
+   trên toàn bộ tệp manifest để ghi nguồn dữ liệu.
+5. Notebook chạy ba cấu hình ResNet-50 ImageNet pretrained trong
+   `experiments.resnet50_runs`: `resnet50_frozen` (chỉ `fc`),
+   `resnet50_partial` (`layer4` và `fc`), và `resnet50_full_finetune`
+   (toàn bộ tham số). Các cấu hình mặc định dùng AdamW, head LR 0.001,
+   backbone LR 0.0001, batch 32, tối đa 30 epoch và cosine scheduler.
+   Có thể thêm mapping `training` cho từng run để ghi đè cấu hình train;
+   nếu ghi đè scheduler, cung cấp toàn bộ mapping scheduler.
+   Mỗi run reset seed 42; kết quả GPU vẫn có thể thay đổi do phép toán không
+   hoàn toàn xác định. Notebook này không chạy ViT hay from-scratch.
 
-Mỗi lần chạy tạo thư mục riêng dưới `outputs/pilot/` trên Drive, gồm
-`resnet50_best.pt`, `vit_b16_best.pt`, hai file `*_epochs.jsonl` và hai file
-`*_summary.json`. Summary ghi runtime, commit, hash manifest, cấu hình,
-metrics, số mẫu, tham số trainable, checkpoint và thời gian wall-clock của
-`fit()` **bao gồm validation và ghi artifact**. Vì vậy thời gian này không
-phải train-only time theo protocol A1-1 và không dùng để so sánh hiệu năng
-chính thức. Cuối notebook in bảng so sánh validation; không dùng test để chọn
-model. Không commit ảnh, checkpoint hoặc output.
+Mỗi thí nghiệm ghi dưới `/content/drive/MyDrive/ComputerVision/A1/` vào
+`outputs/resnet50_frozen/`,
+`outputs/resnet50_partial/` hoặc `outputs/resnet50_full_finetune/` trên
+Drive. Mỗi thư mục chứa `best_checkpoint.pt`, `last_checkpoint.pt`,
+`training_log.jsonl`, `effective_config.yaml` và `summary.json` nếu run hoàn
+tất. Notebook kiểm tra trước cả ba thư mục và từ chối nếu bất kỳ thư mục nào
+đã tồn tại; không ghi đè kết quả cũ. Sau run lỗi hoặc khi muốn chạy lại, chọn
+`OUTPUT_BASE` mới hoặc tự lưu trữ kết quả trước khi chạy.
+
+Summary ghi runtime, commit, hash manifest, cấu hình, metrics, số mẫu, tham số
+trainable và thời gian wall-clock của `fit()` **bao gồm validation và ghi
+artifact**. Thời gian này không phải train-only time theo protocol A1-1 và
+không dùng để so sánh hiệu năng chính thức. Notebook không dùng test để chọn
+model hoặc đánh giá. Không commit ảnh, checkpoint hoặc output.
 
 Chạy kiểm thử liên quan từ thư mục gốc repository:
 
 ```bash
 python3 -m unittest discover -s A1-2/tests -p 'test_transforms.py'
 python3 -m unittest discover -s A1-2/tests -p 'test_pilot.py'
+python3 -m unittest discover -s A1-2/tests -p 'test_resnet50_experiments.py'
 ```

@@ -1,0 +1,9 @@
+{
+  "selected_experiment": "resnet50_full_finetune",
+  "test_metrics": {
+    "loss": 0.7215585022974085,
+    "accuracy": 0.8716435643564356,
+    "macro_f1": 0.8710786162375173,
+    "num_samples": 25250
+  }
+}

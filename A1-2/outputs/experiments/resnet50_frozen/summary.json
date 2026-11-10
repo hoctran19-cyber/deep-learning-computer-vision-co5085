@@ -1,0 +1,33 @@
+{
+  "format": "full_dataset_v1",
+  "name": "resnet50_frozen",
+  "architecture": "resnet50",
+  "pretrained": true,
+  "regime": "frozen_backbone",
+  "dataset_name": "food101",
+  "train_samples": 68175,
+  "validation_samples": 7575,
+  "manifest_path": "/content/deep-learning-computer-vision-co5085/A1-2/data/manifests/food101_split_seed42.csv",
+  "manifest_sha256": "57eaf01981d2f7fe291a128042fc0a31f215254e98e8c4e252726bf66c2958d9",
+  "seed": 42,
+  "batch_size": 32,
+  "total_parameters": 23714981,
+  "trainable_parameters": 206949,
+  "source_commit": "3c9827097c2078d8283b15cb862e80973a831262",
+  "runtime": {
+    "python": "3.13.16",
+    "pytorch": "2.14.1+cu130",
+    "torchvision": "0.29.1+cu130",
+    "cuda_runtime": "13.0",
+    "device": "cuda",
+    "gpu": "NVIDIA L4"
+  },
+  "fit_wall_seconds_including_validation_and_io": 3321.06391033,
+  "best_epoch": 12,
+  "validation_macro_f1": 0.6237689252643334,
+  "validation_accuracy": 0.6269306930693069,
+  "epochs_completed": 17,
+  "stopped_early": true,
+  "best_checkpoint_sha256": "9ab4ad16e04ae44f9e062e8673dea4889760cd684cee3abe5032f618eeae2ac4",
+  "experiment": "resnet50_frozen"
+}

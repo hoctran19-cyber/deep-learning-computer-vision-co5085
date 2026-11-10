@@ -1,0 +1,100 @@
+[
+  {
+    "filename": "confusion_matrix.png",
+    "file_type": "figure",
+    "source_path": "/content/drive/MyDrive/ComputerVision/A1/outputs/figures/confusion_matrix.png",
+    "destination_path": "/content/drive/MyDrive/ComputerVision/A1/outputs/report_artifacts/figures/final_evaluation/confusion_matrix.png",
+    "status": "Success"
+  },
+  {
+    "filename": "prediction_examples.png",
+    "file_type": "figure",
+    "source_path": "/content/drive/MyDrive/ComputerVision/A1/outputs/figures/prediction_examples.png",
+    "destination_path": "/content/drive/MyDrive/ComputerVision/A1/outputs/report_artifacts/figures/final_evaluation/prediction_examples.png",
+    "status": "Success"
+  },
+  {
+    "filename": "worst10_classes_by_f1.png",
+    "file_type": "figure",
+    "source_path": "/content/drive/MyDrive/ComputerVision/A1/outputs/figures/worst10_classes_by_f1.png",
+    "destination_path": "/content/drive/MyDrive/ComputerVision/A1/outputs/report_artifacts/figures/error_analysis/worst10_classes_by_f1.png",
+    "status": "Success"
+  },
+  {
+    "filename": "worst10_classes_by_recall.png",
+    "file_type": "figure",
+    "source_path": "/content/drive/MyDrive/ComputerVision/A1/outputs/figures/worst10_classes_by_recall.png",
+    "destination_path": "/content/drive/MyDrive/ComputerVision/A1/outputs/report_artifacts/figures/error_analysis/worst10_classes_by_recall.png",
+    "status": "Success"
+  },
+  {
+    "filename": "top10_confused_class_pairs.png",
+    "file_type": "figure",
+    "source_path": "/content/drive/MyDrive/ComputerVision/A1/outputs/figures/top10_confused_class_pairs.png",
+    "destination_path": "/content/drive/MyDrive/ComputerVision/A1/outputs/report_artifacts/figures/error_analysis/top10_confused_class_pairs.png",
+    "status": "Success"
+  },
+  {
+    "filename": "classification_report.csv",
+    "file_type": "metric_csv",
+    "source_path": "/content/drive/MyDrive/ComputerVision/A1/outputs/figures/classification_report.csv",
+    "destination_path": "/content/drive/MyDrive/ComputerVision/A1/outputs/report_artifacts/metrics/classification_report.csv",
+    "status": "Success"
+  },
+  {
+    "filename": "confusion_matrix.csv",
+    "file_type": "metric_csv",
+    "source_path": "/content/drive/MyDrive/ComputerVision/A1/outputs/figures/confusion_matrix.csv",
+    "destination_path": "/content/drive/MyDrive/ComputerVision/A1/outputs/report_artifacts/metrics/confusion_matrix.csv",
+    "status": "Success"
+  },
+  {
+    "filename": "prediction_results.csv",
+    "file_type": "metric_csv",
+    "source_path": "/content/drive/MyDrive/ComputerVision/A1/outputs/figures/prediction_results.csv",
+    "destination_path": "/content/drive/MyDrive/ComputerVision/A1/outputs/report_artifacts/metrics/prediction_results.csv",
+    "status": "Success"
+  },
+  {
+    "filename": "per_class_error_analysis.csv",
+    "file_type": "metric_csv",
+    "source_path": "/content/drive/MyDrive/ComputerVision/A1/outputs/figures/per_class_error_analysis.csv",
+    "destination_path": "/content/drive/MyDrive/ComputerVision/A1/outputs/report_artifacts/metrics/per_class_error_analysis.csv",
+    "status": "Success"
+  },
+  {
+    "filename": "top10_confused_class_pairs.csv",
+    "file_type": "metric_csv",
+    "source_path": "/content/drive/MyDrive/ComputerVision/A1/outputs/figures/top10_confused_class_pairs.csv",
+    "destination_path": "/content/drive/MyDrive/ComputerVision/A1/outputs/report_artifacts/metrics/top10_confused_class_pairs.csv",
+    "status": "Success"
+  },
+  {
+    "filename": "additional_metrics.json",
+    "file_type": "metric_json",
+    "source_path": "/content/drive/MyDrive/ComputerVision/A1/outputs/figures/additional_metrics.json",
+    "destination_path": "/content/drive/MyDrive/ComputerVision/A1/outputs/report_artifacts/metrics/additional_metrics.json",
+    "status": "Success"
+  },
+  {
+    "filename": "error_analysis_summary.json",
+    "file_type": "metric_json",
+    "source_path": "/content/drive/MyDrive/ComputerVision/A1/outputs/figures/error_analysis_summary.json",
+    "destination_path": "/content/drive/MyDrive/ComputerVision/A1/outputs/report_artifacts/metrics/error_analysis_summary.json",
+    "status": "Success"
+  },
+  {
+    "filename": "validation_selection.json",
+    "file_type": "metric_json",
+    "source_path": "/content/drive/MyDrive/ComputerVision/A1/outputs/final_evaluation/validation_selection.json",
+    "destination_path": "/content/drive/MyDrive/ComputerVision/A1/outputs/report_artifacts/metrics/validation_selection.json",
+    "status": "Success"
+  },
+  {
+    "filename": "test_metrics.json",
+    "file_type": "metric_json",
+    "source_path": "/content/drive/MyDrive/ComputerVision/A1/outputs/final_evaluation/test_metrics.json",
+    "destination_path": "/content/drive/MyDrive/ComputerVision/A1/outputs/report_artifacts/metrics/test_metrics.json",
+    "status": "Success"
+  }
+]

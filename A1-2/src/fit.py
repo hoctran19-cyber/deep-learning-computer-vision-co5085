@@ -1,5 +1,7 @@
 """Kết nối train, validation, checkpoint và dừng sớm có hỗ trợ Resume triệt để."""
 
+from __future__ import annotations
+
 import json
 import random
 from collections.abc import Callable, Iterable, Mapping
@@ -16,12 +18,12 @@ if __package__:
     from .checkpoint import save_checkpoint
     from .early_stopping import EarlyStopping
     from .evaluate import evaluate_one_epoch
-    from .train import train_one_epoch
+    from .train import _new_grad_scaler, train_one_epoch
 else:
     from checkpoint import save_checkpoint
     from early_stopping import EarlyStopping
     from evaluate import evaluate_one_epoch
-    from train import train_one_epoch
+    from train import _new_grad_scaler, train_one_epoch
 
 class FitResult(TypedDict):
     best_epoch: int
@@ -92,7 +94,7 @@ def fit(
     device_obj = torch.device(device)
     amp_enabled = use_amp_config and device_obj.type == "cuda" and torch.cuda.is_available()
     if scaler is None and amp_enabled:
-        scaler = torch.amp.GradScaler("cuda")
+        scaler = _new_grad_scaler()
     log_path.parent.mkdir(parents=True, exist_ok=True)
     completed_epochs_logged = set()
     if start_epoch > 0:

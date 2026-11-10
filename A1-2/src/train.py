@@ -6,6 +6,7 @@ from typing import TypedDict
 import torch
 from torch import Tensor, nn
 from torch.optim import Optimizer
+from torchvision.models.resnet import ResNet
 
 
 class EpochMetrics(TypedDict):
@@ -14,6 +15,25 @@ class EpochMetrics(TypedDict):
     loss: float
     accuracy: float
     num_samples: int
+
+
+def _new_grad_scaler():
+    if hasattr(torch.amp, "GradScaler"):
+        return torch.amp.GradScaler("cuda")
+    return torch.cuda.amp.GradScaler()
+
+
+def _set_training_mode(model: nn.Module) -> None:
+    """Keep BatchNorm buffers of frozen ResNet layers fixed during training."""
+    model.train()
+    if isinstance(model, ResNet):
+        for name, module in model.named_modules():
+            if not name.startswith("fc.") and isinstance(
+                module, nn.modules.batchnorm._BatchNorm
+            ):
+                parameters = list(module.parameters(recurse=False))
+                if parameters and not any(p.requires_grad for p in parameters):
+                    module.eval()
 
 
 def train_one_epoch(
@@ -42,7 +62,7 @@ def train_one_epoch(
     device_type = torch.device(device).type
     amp_enabled = use_amp and device_type == "cuda" and torch.cuda.is_available()
     if amp_enabled and scaler is None:
-        scaler = torch.amp.GradScaler("cuda")
+        scaler = _new_grad_scaler()
     if not amp_enabled:
         scaler = None
     if not callable(criterion):
@@ -55,7 +75,7 @@ def train_one_epoch(
     except TypeError as error:
         raise ValueError("dataloader must be an iterable of batches") from error
 
-    model.train()
+    _set_training_mode(model)
     loss_sum = 0.0
     correct = 0
     num_samples = 0
