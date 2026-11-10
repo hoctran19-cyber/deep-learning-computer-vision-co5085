@@ -46,11 +46,12 @@ DataLoader dùng batch size 32, shuffle train, giữ thứ tự Validation/Test,
 * Có thể sử dụng để khảo sát CNN và Vision Transformer.
 * Có official train/test split, thuận tiện xây dựng protocol thực nghiệm.
 
-### 2.3. EDA – Exploratory Data Analysis
-* Kiểm tra đủ 101 classes và 101.000 ảnh.
-* Kiểm tra cấu trúc thư mục và tính toàn vẹn dataset.
-* Kiểm tra manifest và số lượng mẫu trong từng split.
+### 2.3. Dataset Integrity and Split Verification
+* Kiểm tra cấu trúc thư mục, đủ 101 classes và 101.000 ảnh.
+* Đối chiếu manifest và số lượng mẫu trong từng split.
 * Kiểm tra khả năng đọc ảnh thông qua DataLoader.
+
+Các bước này xác minh cấu trúc và khả năng nạp dữ liệu; không phải một phân tích EDA đầy đủ.
 
 ## 3. Phương pháp (Methodology)
 
@@ -186,7 +187,7 @@ Sau khi chọn ResNet50 Full Fine-tuning theo Validation Macro-F1, checkpoint đ
 | Dự đoán đúng | 22.009 / 25.250 |
 | Dự đoán sai | 3.241 / 25.250 |
 
-Số dự đoán đúng/sai trong `prediction_results.csv` là 22.009/3.241; tổng số phần tử trong confusion matrix là 25.250 và tổng đường chéo là 22.009. Đối chiếu 25.250 đường dẫn theo thứ tự cho thấy chúng khớp với Test trong manifest và các `true_label` số cũng khớp. Tuy nhiên, có 500 trường `true_class` không khớp tên lớp trong manifest: các ảnh `cheesecake` mang nhãn số 16 nhưng được ghi tên `cheese_plate`. Vì vậy, tính nhất quán của Accuracy và tổng số dự đoán được xác nhận, nhưng không thể xem tên lớp trong prediction export là đã alignment hoàn toàn; các phân tích/bảng/ảnh dùng tên lớp từ artifacts cần được đọc với lưu ý này. Mỗi lớp trong manifest có support 250, do đó phân phối Test cân bằng theo protocol.
+Số dự đoán đúng/sai trong `prediction_results.csv` là 22.009/3.241; tổng số phần tử trong confusion matrix là 25.250 và tổng đường chéo là 22.009. Theo `mapping_audit.json`, cả 25.250 prediction rows được khớp với Test manifest bằng đường dẫn ảnh đã chuẩn hóa: không có dòng không khớp, đường dẫn trùng, sai khác `true_label` hoặc sai khác class mapping trong manifest. Tên lớp prediction được tái tạo từ nhãn số và thứ tự chuẩn trong `classes.txt`, không dựa trên các tên lớp cũ trong prediction export. Mỗi lớp trong manifest có support 250, do đó phân phối Test cân bằng theo protocol.
 
 **Hình 7. Confusion matrix chuẩn hóa theo lớp thật trên tập Test.**  
 ![Confusion matrix chuẩn hóa](figures/evaluation/confusion_matrix.png)
@@ -202,7 +203,7 @@ Hình minh họa 12 dự đoán đúng và 12 dự đoán sai được chọn ch
 
 ## 7. Phân tích lỗi theo lớp (Per-class Error Analysis)
 
-Phân tích dưới đây dựa trên artifacts của checkpoint đã chọn. Các lớp trong Test có cùng support 250 ảnh; vì vậy các mức recall có cùng mẫu số theo lớp. Precision vẫn phụ thuộc số dự đoán vào từng lớp. **Lưu ý alignment:** artifacts hiện có ghi sai tên lớp `true_class` cho 500 ảnh cheesecake (nhãn số 16 trong manifest), ghi chúng là `cheese_plate`. Do đó tên lớp liên quan trong báo cáo per-class, confusion matrix, cặp nhầm lẫn và ví dụ dự đoán chưa được xác minh độc lập; số liệu aggregate vẫn nhất quán, nhưng cần sửa/kiểm chứng mapping tên lớp trước khi diễn giải hoặc trích dẫn các kết quả theo lớp.
+Phân tích dưới đây dựa trên artifacts đã sửa mapping và checkpoint được chọn. Các tên lớp được xây dựng từ nhãn số theo `classes.txt`; cả 101 lớp trong Test có support 250 ảnh, nên recall có cùng mẫu số theo lớp. Precision vẫn phụ thuộc số dự đoán vào từng lớp.
 
 ### 7.1. Mười lớp có F1 thấp nhất
 
@@ -219,7 +220,7 @@ Phân tích dưới đây dựa trên artifacts của checkpoint đã chọn. C�
 | 5 | apple_pie | 0,7154 | 0,7040 | 0,7097 | 250 |
 | 6 | bread_pudding | 0,7418 | 0,7240 | 0,7328 | 250 |
 | 7 | foie_gras | 0,8140 | 0,7000 | 0,7527 | 250 |
-| 8 | cheese_plate | 0,7737 | 0,7520 | 0,7627 | 250 |
+| 8 | cheesecake | 0,7737 | 0,7520 | 0,7627 | 250 |
 | 9 | ravioli | 0,7857 | 0,7480 | 0,7664 | 250 |
 | 10 | tuna_tartare | 0,7769 | 0,7800 | 0,7784 | 250 |
 
@@ -246,7 +247,7 @@ Biểu đồ cho thấy khoảng cách giữa steak và các lớp tiếp theo, 
 | 6 | apple_pie | 0,7040 | 176 / 250 |
 | 7 | bread_pudding | 0,7240 | 181 / 250 |
 | 8 | ravioli | 0,7480 | 187 / 250 |
-| 9 | cheese_plate | 0,7520 | 188 / 250 |
+| 9 | cheesecake | 0,7520 | 188 / 250 |
 | 10 | huevos_rancheros | 0,7600 | 190 / 250 |
 
 Steak có recall 0,58, tương ứng 105 ảnh trong lớp này bị gán sang lớp khác. Thứ hạng gần với bảng F1 nhưng không đồng nhất: `huevos_rancheros` nằm trong nhóm recall thấp nhất, trong khi `tuna_tartare` thuộc nhóm F1 thấp nhất nhưng recall 0,78. Điều này minh họa rằng F1 và Recall đo các khía cạnh khác nhau.
@@ -286,7 +287,7 @@ Biểu đồ dùng số đếm theo hướng và xác nhận cặp steak → fil
 
 ### 8.1. Hiệu quả của ResNet50 Full Fine-tuning
 
-Trong bảy cấu hình thực nghiệm, ResNet50 Full Fine-tuning đạt Validation Macro-F1 cao nhất (82,56%) và được chọn theo đúng tiêu chí đã định. Kết quả Test của checkpoint này là Accuracy 87,16% và Macro-F1 87,11%. Tại epoch tốt nhất, Train Accuracy là 99,90% so với Validation Accuracy 82,63%, chênh 17,27 điểm phần trăm. ResNet50 Partial có Train Accuracy 99,89% và Validation Accuracy 80,50%, chênh 19,38 điểm phần trăm. Đây là các khoảng cách Train/Validation lớn, phù hợp với dấu hiệu cần lưu ý về khả năng tổng quát hóa/overfitting; các kết quả này chưa xác định nguyên nhân hay chứng minh tác động của một yếu tố cụ thể.
+Trong bảy cấu hình thực nghiệm, ResNet50 Full Fine-tuning đạt Validation Macro-F1 cao nhất (82,56%) và được chọn theo đúng tiêu chí đã định. Kết quả Test của checkpoint này là Accuracy 87,16% và Macro-F1 87,11%. Tại epoch tốt nhất, Train Accuracy là 99,90% so với Validation Accuracy 82,63%, chênh 17,27 điểm phần trăm. ResNet50 Partial có Train Accuracy 99,89% và Validation Accuracy 80,50%, chênh 19,39 điểm phần trăm. Đây là các khoảng cách Train/Validation lớn, phù hợp với dấu hiệu cần lưu ý về khả năng tổng quát hóa/overfitting; các kết quả này chưa xác định nguyên nhân hay chứng minh tác động của một yếu tố cụ thể.
 
 ### 8.2. CNN và Vision Transformer trong thiết lập này
 

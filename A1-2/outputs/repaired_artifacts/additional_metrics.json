@@ -1,0 +1,15 @@
+{
+  "model": "resnet50_full_finetune",
+  "num_test_samples": 25250,
+  "num_classes": 101,
+  "accuracy": 0.8716435643564356,
+  "top1_accuracy": 0.8716435643564356,
+  "macro_precision": 0.8712482615824875,
+  "macro_recall": 0.8716435643564356,
+  "macro_f1": 0.8710773050974668,
+  "weighted_precision": 0.8712482615824872,
+  "weighted_recall": 0.8716435643564356,
+  "weighted_f1": 0.8710773050974671,
+  "correct_predictions": 22009,
+  "misclassified_predictions": 3241
+}

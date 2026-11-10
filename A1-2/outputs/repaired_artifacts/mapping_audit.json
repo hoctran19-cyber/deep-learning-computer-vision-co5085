@@ -1,0 +1,981 @@
+{
+  "input_columns": {
+    "prediction": [
+      "image_path",
+      "true_label",
+      "true_class",
+      "predicted_label",
+      "predicted_class",
+      "confidence",
+      "correct"
+    ],
+    "manifest": [
+      "image_path",
+      "class_name",
+      "label",
+      "split"
+    ]
+  },
+  "input_rows": {
+    "prediction": 25250,
+    "manifest": 101000,
+    "manifest_test": 25250
+  },
+  "resolved_columns": {
+    "prediction": {
+      "image_path": "image_path",
+      "true_label": "true_label",
+      "pred_label": "predicted_label",
+      "true_class": "true_class",
+      "pred_class": "predicted_class"
+    },
+    "manifest": {
+      "image_path": "image_path",
+      "label": "label",
+      "class_name": "class_name",
+      "split": "split"
+    },
+    "confidence": "confidence"
+  },
+  "alignment": {
+    "expected_prediction_rows": 25250,
+    "matched_prediction_rows": 25250,
+    "unmatched_prediction_rows": 0,
+    "unmatched_manifest_test_rows": 0,
+    "duplicate_prediction_rows": 0,
+    "duplicate_manifest_rows": 0,
+    "paths_with_non_unique_manifest_rows": 0,
+    "true_label_mismatches": 0,
+    "manifest_class_mapping_mismatches": 0
+  },
+  "class_mapping_corrections": {
+    "true_class": {
+      "cheese_plate": [
+        {
+          "correct_class_name": "cheesecake",
+          "count": 250
+        }
+      ],
+      "cheesecake": [
+        {
+          "correct_class_name": "cheese_plate",
+          "count": 250
+        }
+      ]
+    },
+    "pred_class": {
+      "cheese_plate": [
+        {
+          "correct_class_name": "cheesecake",
+          "count": 243
+        }
+      ],
+      "cheesecake": [
+        {
+          "correct_class_name": "cheese_plate",
+          "count": 254
+        }
+      ]
+    }
+  },
+  "class_mapping": {
+    "classes_file": "/content/drive/MyDrive/ComputerVision/A1/data/food-101/meta/classes.txt",
+    "num_classes": 101,
+    "label_to_class": {
+      "0": "apple_pie",
+      "1": "baby_back_ribs",
+      "2": "baklava",
+      "3": "beef_carpaccio",
+      "4": "beef_tartare",
+      "5": "beet_salad",
+      "6": "beignets",
+      "7": "bibimbap",
+      "8": "bread_pudding",
+      "9": "breakfast_burrito",
+      "10": "bruschetta",
+      "11": "caesar_salad",
+      "12": "cannoli",
+      "13": "caprese_salad",
+      "14": "carrot_cake",
+      "15": "ceviche",
+      "16": "cheesecake",
+      "17": "cheese_plate",
+      "18": "chicken_curry",
+      "19": "chicken_quesadilla",
+      "20": "chicken_wings",
+      "21": "chocolate_cake",
+      "22": "chocolate_mousse",
+      "23": "churros",
+      "24": "clam_chowder",
+      "25": "club_sandwich",
+      "26": "crab_cakes",
+      "27": "creme_brulee",
+      "28": "croque_madame",
+      "29": "cup_cakes",
+      "30": "deviled_eggs",
+      "31": "donuts",
+      "32": "dumplings",
+      "33": "edamame",
+      "34": "eggs_benedict",
+      "35": "escargots",
+      "36": "falafel",
+      "37": "filet_mignon",
+      "38": "fish_and_chips",
+      "39": "foie_gras",
+      "40": "french_fries",
+      "41": "french_onion_soup",
+      "42": "french_toast",
+      "43": "fried_calamari",
+      "44": "fried_rice",
+      "45": "frozen_yogurt",
+      "46": "garlic_bread",
+      "47": "gnocchi",
+      "48": "greek_salad",
+      "49": "grilled_cheese_sandwich",
+      "50": "grilled_salmon",
+      "51": "guacamole",
+      "52": "gyoza",
+      "53": "hamburger",
+      "54": "hot_and_sour_soup",
+      "55": "hot_dog",
+      "56": "huevos_rancheros",
+      "57": "hummus",
+      "58": "ice_cream",
+      "59": "lasagna",
+      "60": "lobster_bisque",
+      "61": "lobster_roll_sandwich",
+      "62": "macaroni_and_cheese",
+      "63": "macarons",
+      "64": "miso_soup",
+      "65": "mussels",
+      "66": "nachos",
+      "67": "omelette",
+      "68": "onion_rings",
+      "69": "oysters",
+      "70": "pad_thai",
+      "71": "paella",
+      "72": "pancakes",
+      "73": "panna_cotta",
+      "74": "peking_duck",
+      "75": "pho",
+      "76": "pizza",
+      "77": "pork_chop",
+      "78": "poutine",
+      "79": "prime_rib",
+      "80": "pulled_pork_sandwich",
+      "81": "ramen",
+      "82": "ravioli",
+      "83": "red_velvet_cake",
+      "84": "risotto",
+      "85": "samosa",
+      "86": "sashimi",
+      "87": "scallops",
+      "88": "seaweed_salad",
+      "89": "shrimp_and_grits",
+      "90": "spaghetti_bolognese",
+      "91": "spaghetti_carbonara",
+      "92": "spring_rolls",
+      "93": "steak",
+      "94": "strawberry_shortcake",
+      "95": "sushi",
+      "96": "tacos",
+      "97": "takoyaki",
+      "98": "tiramisu",
+      "99": "tuna_tartare",
+      "100": "waffles"
+    }
+  },
+  "metrics": {
+    "model": "resnet50_full_finetune",
+    "num_test_samples": 25250,
+    "num_classes": 101,
+    "accuracy": 0.8716435643564356,
+    "top1_accuracy": 0.8716435643564356,
+    "macro_precision": 0.8712482615824875,
+    "macro_recall": 0.8716435643564356,
+    "macro_f1": 0.8710773050974668,
+    "weighted_precision": 0.8712482615824872,
+    "weighted_recall": 0.8716435643564356,
+    "weighted_f1": 0.8710773050974671,
+    "correct_predictions": 22009,
+    "misclassified_predictions": 3241
+  },
+  "validation_results": {
+    "prediction_count": 25250,
+    "expected_prediction_count": 25250,
+    "all_predictions_match_one_test_manifest_row": true,
+    "all_true_labels_match_manifest": true,
+    "test_class_support": {
+      "expected_support_per_class": 250,
+      "status": "PASS",
+      "classes": [
+        {
+          "label": 0,
+          "class_name": "apple_pie",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 1,
+          "class_name": "baby_back_ribs",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 2,
+          "class_name": "baklava",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 3,
+          "class_name": "beef_carpaccio",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 4,
+          "class_name": "beef_tartare",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 5,
+          "class_name": "beet_salad",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 6,
+          "class_name": "beignets",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 7,
+          "class_name": "bibimbap",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 8,
+          "class_name": "bread_pudding",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 9,
+          "class_name": "breakfast_burrito",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 10,
+          "class_name": "bruschetta",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 11,
+          "class_name": "caesar_salad",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 12,
+          "class_name": "cannoli",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 13,
+          "class_name": "caprese_salad",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 14,
+          "class_name": "carrot_cake",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 15,
+          "class_name": "ceviche",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 16,
+          "class_name": "cheesecake",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 17,
+          "class_name": "cheese_plate",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 18,
+          "class_name": "chicken_curry",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 19,
+          "class_name": "chicken_quesadilla",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 20,
+          "class_name": "chicken_wings",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 21,
+          "class_name": "chocolate_cake",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 22,
+          "class_name": "chocolate_mousse",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 23,
+          "class_name": "churros",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 24,
+          "class_name": "clam_chowder",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 25,
+          "class_name": "club_sandwich",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 26,
+          "class_name": "crab_cakes",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 27,
+          "class_name": "creme_brulee",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 28,
+          "class_name": "croque_madame",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 29,
+          "class_name": "cup_cakes",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 30,
+          "class_name": "deviled_eggs",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 31,
+          "class_name": "donuts",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 32,
+          "class_name": "dumplings",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 33,
+          "class_name": "edamame",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 34,
+          "class_name": "eggs_benedict",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 35,
+          "class_name": "escargots",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 36,
+          "class_name": "falafel",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 37,
+          "class_name": "filet_mignon",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 38,
+          "class_name": "fish_and_chips",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 39,
+          "class_name": "foie_gras",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 40,
+          "class_name": "french_fries",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 41,
+          "class_name": "french_onion_soup",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 42,
+          "class_name": "french_toast",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 43,
+          "class_name": "fried_calamari",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 44,
+          "class_name": "fried_rice",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 45,
+          "class_name": "frozen_yogurt",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 46,
+          "class_name": "garlic_bread",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 47,
+          "class_name": "gnocchi",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 48,
+          "class_name": "greek_salad",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 49,
+          "class_name": "grilled_cheese_sandwich",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 50,
+          "class_name": "grilled_salmon",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 51,
+          "class_name": "guacamole",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 52,
+          "class_name": "gyoza",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 53,
+          "class_name": "hamburger",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 54,
+          "class_name": "hot_and_sour_soup",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 55,
+          "class_name": "hot_dog",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 56,
+          "class_name": "huevos_rancheros",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 57,
+          "class_name": "hummus",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 58,
+          "class_name": "ice_cream",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 59,
+          "class_name": "lasagna",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 60,
+          "class_name": "lobster_bisque",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 61,
+          "class_name": "lobster_roll_sandwich",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 62,
+          "class_name": "macaroni_and_cheese",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 63,
+          "class_name": "macarons",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 64,
+          "class_name": "miso_soup",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 65,
+          "class_name": "mussels",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 66,
+          "class_name": "nachos",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 67,
+          "class_name": "omelette",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 68,
+          "class_name": "onion_rings",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 69,
+          "class_name": "oysters",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 70,
+          "class_name": "pad_thai",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 71,
+          "class_name": "paella",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 72,
+          "class_name": "pancakes",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 73,
+          "class_name": "panna_cotta",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 74,
+          "class_name": "peking_duck",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 75,
+          "class_name": "pho",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 76,
+          "class_name": "pizza",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 77,
+          "class_name": "pork_chop",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 78,
+          "class_name": "poutine",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 79,
+          "class_name": "prime_rib",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 80,
+          "class_name": "pulled_pork_sandwich",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 81,
+          "class_name": "ramen",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 82,
+          "class_name": "ravioli",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 83,
+          "class_name": "red_velvet_cake",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 84,
+          "class_name": "risotto",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 85,
+          "class_name": "samosa",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 86,
+          "class_name": "sashimi",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 87,
+          "class_name": "scallops",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 88,
+          "class_name": "seaweed_salad",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 89,
+          "class_name": "shrimp_and_grits",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 90,
+          "class_name": "spaghetti_bolognese",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 91,
+          "class_name": "spaghetti_carbonara",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 92,
+          "class_name": "spring_rolls",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 93,
+          "class_name": "steak",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 94,
+          "class_name": "strawberry_shortcake",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 95,
+          "class_name": "sushi",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 96,
+          "class_name": "tacos",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 97,
+          "class_name": "takoyaki",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 98,
+          "class_name": "tiramisu",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 99,
+          "class_name": "tuna_tartare",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        },
+        {
+          "label": 100,
+          "class_name": "waffles",
+          "support": 250,
+          "expected_support": 250,
+          "status": "PASS"
+        }
+      ]
+    },
+    "confusion_matrix_total": 25250,
+    "correct_plus_incorrect": 25250,
+    "correct_predictions": 22009,
+    "incorrect_predictions": 3241,
+    "confusion_matrix_total_valid": true,
+    "correct_plus_incorrect_valid": true,
+    "metrics_match_final_test_within_tolerance": true,
+    "aggregate_metrics_comparison": {
+      "status": "PASS",
+      "tolerance": 1e-05,
+      "explanation": "Rebuilt aggregate metrics are within tolerance of each existing reference. Reference files are preserved unchanged; small differences are recorded rather than replacing source results.",
+      "comparisons": {
+        "final_test_metrics": {
+          "accuracy": {
+            "rebuilt": 0.8716435643564356,
+            "reference": 0.8716435643564356,
+            "difference": 0.0,
+            "tolerance": 1e-05,
+            "status": "PASS"
+          },
+          "macro_f1": {
+            "rebuilt": 0.8710773050974668,
+            "reference": 0.8710786162375173,
+            "difference": -1.3111400504195458e-06,
+            "tolerance": 1e-05,
+            "status": "PASS"
+          }
+        },
+        "additional_metrics": {
+          "accuracy": {
+            "rebuilt": 0.8716435643564356,
+            "reference": 0.8716435643564356,
+            "difference": 0.0,
+            "tolerance": 1e-05,
+            "status": "PASS"
+          },
+          "macro_f1": {
+            "rebuilt": 0.8710773050974668,
+            "reference": 0.8710773050974668,
+            "difference": 0.0,
+            "tolerance": 1e-05,
+            "status": "PASS"
+          }
+        }
+      }
+    },
+    "status": "PASS"
+  },
+  "sources": {
+    "prediction_csv": "/content/drive/MyDrive/ComputerVision/A1/outputs/report_artifacts/metrics/prediction_results.csv",
+    "manifest_csv": "/content/deep-learning-computer-vision-co5085/A1-2/data/manifests/food101_split_seed42.csv",
+    "classes_file": "/content/drive/MyDrive/ComputerVision/A1/data/food-101/meta/classes.txt",
+    "final_test_metrics": "/content/deep-learning-computer-vision-co5085/A1-2/outputs/final_evaluation/test_metrics.json",
+    "additional_metrics": "/content/deep-learning-computer-vision-co5085/A1-2/outputs/report_artifacts/metrics/additional_metrics.json"
+  },
+  "output_directory": "/content/drive/MyDrive/ComputerVision/A1/outputs/repaired_artifacts",
+  "prediction_examples": {
+    "correct_examples": 12,
+    "misclassified_examples": 12
+  }
+}
