@@ -1,0 +1,26 @@
+# Dataset and generated data
+data/
+datasets/
+CCPD*/
+crops/
+*.jpg
+*.jpeg
+*.png
+*.bmp
+
+# Model weights and training artifacts
+*.pt
+*.pth
+*.onnx
+*.engine
+runs/
+outputs/**/*
+!outputs/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+.venv/
+venv/
