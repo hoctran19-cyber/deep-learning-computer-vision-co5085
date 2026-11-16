@@ -1,0 +1,18 @@
+{
+  "name": "e2_pdlpr",
+  "e2e_acc": 0.0,
+  "recog_acc_when_det_ok": 0.0,
+  "e2e_fps": 44.87898077969674,
+  "by_subset": {
+    "blur": 0.0,
+    "challenge": 0.0,
+    "db": 0.0,
+    "fn": 0.0,
+    "rotate": 0.0,
+    "tilt": 0.0
+  },
+  "det_acc_iou07": 0.8802,
+  "iou_e2e": 0.6,
+  "run_status": "failed_non_converged",
+  "run_status_note": "Paired E2 test predictions are blank for all 5000 rows; do not treat this E2E score as a valid pipeline result."
+}

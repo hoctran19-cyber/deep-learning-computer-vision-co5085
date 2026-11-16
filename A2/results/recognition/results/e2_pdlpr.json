@@ -1,0 +1,64 @@
+{
+  "name": "e2_pdlpr",
+  "arch": "pdlpr",
+  "params": 26669764,
+  "test": {
+    "n": 5000,
+    "exact": 0.6288,
+    "exact_no_province": 0.6714,
+    "province_acc": 0.9436,
+    "char_acc": 0.9105428571428571
+  },
+  "by_subset": {
+    "blur": {
+      "n": 500,
+      "exact": 0.612,
+      "exact_no_province": 0.634
+    },
+    "challenge": {
+      "n": 2500,
+      "exact": 0.6924,
+      "exact_no_province": 0.734
+    },
+    "db": {
+      "n": 500,
+      "exact": 0.616,
+      "exact_no_province": 0.646
+    },
+    "fn": {
+      "n": 500,
+      "exact": 0.6,
+      "exact_no_province": 0.65
+    },
+    "rotate": {
+      "n": 500,
+      "exact": 0.558,
+      "exact_no_province": 0.602
+    },
+    "tilt": {
+      "n": 500,
+      "exact": 0.44,
+      "exact_no_province": 0.512
+    }
+  },
+  "speed": {
+    "bs1_img_per_s": 89.60207440981762,
+    "bs64_img_per_s": 3524.0451841577856
+  },
+  "best_epoch": 34,
+  "best_val_exact": 0.9935,
+  "run_status": "selected_primary",
+  "run_status_note": "40 epoch records in history.csv and 5000-row nonzero test predictions; this is the primary E2 result.",
+  "device": "cuda",
+  "gpu": "NVIDIA L4",
+  "crop_margin": 0.1,
+  "seed": 42,
+  "epochs_cfg": 40,
+  "epochs_run": 40,
+  "test_protocol": {
+    "metric": "recognition_exact_match",
+    "input": "ground-truth YOLO-label crop",
+    "crop_margin": 0.1,
+    "test_samples": 5000
+  }
+}

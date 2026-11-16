@@ -1,0 +1,26 @@
+{
+  "name": "e2_pdlpr",
+  "e2e_acc": 0.6508,
+  "recog_acc_when_det_ok": 0.6841626902976596,
+  "e2e_fps": 41.66293206738428,
+  "by_subset": {
+    "blur": 0.578,
+    "challenge": 0.6944,
+    "db": 0.574,
+    "fn": 0.652,
+    "rotate": 0.644,
+    "tilt": 0.588
+  },
+  "det_acc_iou07": 0.8802,
+  "iou_e2e": 0.6,
+  "run_status": "selected_primary",
+  "run_status_note": "Uses the same primary E2 model result set as recognition/results; end-to-end protocol is reported separately.",
+  "test_samples": 5000,
+  "metric_definition": "correct iff IoU > 0.6 and all plate characters match; denominator is all test samples",
+  "detector_confidence_threshold": 0.25,
+  "detector_nms_iou": 0.45,
+  "detector_image_size": 640,
+  "crop_margin": 0.1,
+  "checkpoint_identity_verified": false,
+  "checkpoint_identity_note": "The notebook loads the best E2 checkpoint from the same model path, but the existing E2E artifact does not record checkpoint epoch/hash."
+}

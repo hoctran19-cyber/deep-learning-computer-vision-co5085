@@ -1,0 +1,2 @@
+subset,images,acc_iou07,mean_top1_iou,no_detection,fps
+(root),5000,0.8802,0.8034493575050949,11,96.27354580075901

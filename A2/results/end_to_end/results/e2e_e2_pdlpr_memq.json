@@ -1,0 +1,16 @@
+{
+  "name": "e2_pdlpr_memq",
+  "e2e_acc": 0.6308,
+  "recog_acc_when_det_ok": 0.6632583503749148,
+  "e2e_fps": 42.67481780900821,
+  "by_subset": {
+    "blur": 0.55,
+    "challenge": 0.67,
+    "db": 0.566,
+    "fn": 0.642,
+    "rotate": 0.632,
+    "tilt": 0.568
+  },
+  "det_acc_iou07": 0.8802,
+  "iou_e2e": 0.6
+}

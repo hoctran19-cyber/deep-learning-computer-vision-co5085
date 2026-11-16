@@ -1,0 +1,11 @@
+{
+  "images": 5000,
+  "acc_iou07": 0.8802,
+  "mean_top1_iou": 0.8034493575050948,
+  "fps": 96.27354580075901,
+  "conf": 0.25,
+  "nms_iou": 0.45,
+  "iou_threshold": 0.7,
+  "device": "cuda",
+  "gpu": "NVIDIA L4"
+}

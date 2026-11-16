@@ -1,0 +1,7 @@
+{
+  "sample_images": 5,
+  "tp_iou50": 5,
+  "fp": 0,
+  "fn": 0,
+  "note": "Diagnostic sample only; inspect examples and annotate qualitative causes."
+}

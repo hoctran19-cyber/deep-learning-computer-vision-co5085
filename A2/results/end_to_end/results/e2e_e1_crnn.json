@@ -1,0 +1,16 @@
+{
+  "name": "e1_crnn",
+  "e2e_acc": 0.5554,
+  "recog_acc_when_det_ok": 0.5907748239036582,
+  "e2e_fps": 56.6121902747277,
+  "by_subset": {
+    "blur": 0.452,
+    "challenge": 0.578,
+    "db": 0.45,
+    "fn": 0.6,
+    "rotate": 0.614,
+    "tilt": 0.548
+  },
+  "det_acc_iou07": 0.8802,
+  "iou_e2e": 0.6
+}

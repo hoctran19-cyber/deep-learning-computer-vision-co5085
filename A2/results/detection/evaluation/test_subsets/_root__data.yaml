@@ -1,0 +1,7 @@
+path: /content/dataset/yolo_detection
+train: images/train
+val: images/val
+test: /content/outputs/yolov5s_e0/evaluation/test_subsets/_root__images.txt
+nc: 1
+names:
+- license_plate

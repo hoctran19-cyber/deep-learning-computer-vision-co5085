@@ -1,0 +1,7 @@
+{
+  "(root)": {
+    "images": 5000,
+    "log": "/content/outputs/yolov5s_e0/logs/subset__root_.log",
+    "output": "/content/outputs/yolov5s_e0/evaluation/test_subsets/runs/_root_"
+  }
+}

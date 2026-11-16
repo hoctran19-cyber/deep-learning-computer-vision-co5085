@@ -1,0 +1,303 @@
+{
+  "experiment": "E0 license-plate detection",
+  "model": "YOLOv5s",
+  "scope": "detection only",
+  "dataset": "/content/dataset/yolo_detection",
+  "data_yaml": "/content/dataset/yolo_detection/data.yaml",
+  "class_names": [
+    "license_plate"
+  ],
+  "image_size": 640,
+  "batch_size": 32,
+  "epochs": 50,
+  "patience": 15,
+  "seed": 42,
+  "confidence_threshold": 0.25,
+  "nms_iou": 0.45,
+  "yolov5_commit": "cb2f17fd5d790cfdd0c07c25351904df9affbe6e",
+  "dataset_validation": {
+    "dataset": "/content/dataset/yolo_detection",
+    "splits": {
+      "train": {
+        "images": 18000,
+        "labels": 18000,
+        "boxes": 18000,
+        "empty_labels": 0,
+        "missing_labels": 0,
+        "orphan_labels": 0,
+        "invalid": 0,
+        "image_sizes_unique": 1,
+        "image_size_min": [
+          720,
+          1160
+        ],
+        "examples": {
+          "missing": [],
+          "orphan": [],
+          "invalid": []
+        }
+      },
+      "val": {
+        "images": 2000,
+        "labels": 2000,
+        "boxes": 2000,
+        "empty_labels": 0,
+        "missing_labels": 0,
+        "orphan_labels": 0,
+        "invalid": 0,
+        "image_sizes_unique": 1,
+        "image_size_min": [
+          720,
+          1160
+        ],
+        "examples": {
+          "missing": [],
+          "orphan": [],
+          "invalid": []
+        }
+      },
+      "test": {
+        "images": 5000,
+        "labels": 5000,
+        "boxes": 5000,
+        "empty_labels": 0,
+        "missing_labels": 0,
+        "orphan_labels": 0,
+        "invalid": 0,
+        "image_sizes_unique": 1,
+        "image_size_min": [
+          720,
+          1160
+        ],
+        "examples": {
+          "missing": [],
+          "orphan": [],
+          "invalid": []
+        }
+      }
+    },
+    "all_valid": true,
+    "all_valid_scope": "image_and_label_integrity_only",
+    "overall_validation_status": "incomplete_manifest_path_reconciliation",
+    "manifest": {
+      "loaded": true,
+      "path_comparison_performed": true,
+      "path_comparison_status": "string_sets_mismatch_unresolved",
+      "comparison_method": "output_path minus optional images/<split> or <split> prefix; suffix removed; no subset-folder flattening or basename aliasing",
+      "file_identity_verified": false,
+      "reason": "Manifest đã được nạp và các tập path tương đối đã được so sánh sau chuẩn hóa cơ bản. Tất cả path theo split đều không khớp; chưa có dataset/manifest gốc trong repository để xác minh đây là khác tên/thư mục hay file thiếu.",
+      "required_confirmation": "Chạy lại trong môi trường có manifest CCPD_reduced gốc và /content/dataset/yolo_detection; xác minh mapping output_path sang file ảnh thực trước khi thêm quy tắc alias/flatten.",
+      "rows": 25000,
+      "columns": [
+        "original_path",
+        "split",
+        "subset",
+        "filename",
+        "output_path"
+      ],
+      "split_counts": {
+        "train": 18000,
+        "test": 5000,
+        "val": 2000
+      },
+      "path_comparison": {
+        "train": {
+          "manifest_paths": 18000,
+          "image_paths": 18000,
+          "missing_from_images": 18000,
+          "not_in_manifest": 18000,
+          "examples_missing": [
+            "ccpd_base/00242456896552-90_95-290&509_395&549-388&545_291&546_291&512_388&511-0_0_4_29_32_31_17-77-7",
+            "ccpd_base/00268199233717-93_82-244&553_362&599-352&597_261&594_254&561_345&564-0_0_10_22_29_33_26-104-4",
+            "ccpd_base/00297413793103-91_88-333&500_455&541-441&540_340&539_339&506_440&507-0_0_30_8_29_29_26-96-4",
+            "ccpd_base/00307112068966-90_87-326&463_432&500-429&499_326&501_325&466_428&464-0_0_17_6_33_24_33-120-9",
+            "ccpd_base/00308429118774-90_89-388&480_496&524-492&517_389&517_388&476_491&476-0_0_30_5_33_31_30-123-10"
+          ],
+          "examples_extra": [
+            "00242456896552-90_95-290&509_395&549-388&545_291&546_291&512_388&511-0_0_4_29_32_31_17-77-7",
+            "00268199233717-93_82-244&553_362&599-352&597_261&594_254&561_345&564-0_0_10_22_29_33_26-104-4",
+            "00297413793103-91_88-333&500_455&541-441&540_340&539_339&506_440&507-0_0_30_8_29_29_26-96-4",
+            "00307112068966-90_87-326&463_432&500-429&499_326&501_325&466_428&464-0_0_17_6_33_24_33-120-9",
+            "00308429118774-90_89-388&480_496&524-492&517_389&517_388&476_491&476-0_0_30_5_33_31_30-123-10"
+          ]
+        },
+        "val": {
+          "manifest_paths": 2000,
+          "image_paths": 2000,
+          "missing_from_images": 2000,
+          "not_in_manifest": 2000,
+          "examples_missing": [
+            "ccpd_base/00292624521073-90_92-274&534_379&570-374&568_281&567_281&536_374&537-0_0_15_23_27_26_26-96-9",
+            "ccpd_base/00385416666667-90_91-251&579_378&619-384&626_242&621_241&572_383&577-0_0_27_23_24_24_31-150-14",
+            "ccpd_base/00398946360153-92_87-366&392_485&435-474&439_374&433_378&399_478&405-0_0_20_31_16_31_24-106-8",
+            "ccpd_base/00414870689655-89_91-372&593_498&633-487&634_380&633_381&596_488&597-3_5_8_5_24_24_33-38-8",
+            "ccpd_base/00439655172414-90_91-392&479_520&518-516&521_389&517_391&476_518&480-0_0_3_27_30_27_26-90-9"
+          ],
+          "examples_extra": [
+            "00292624521073-90_92-274&534_379&570-374&568_281&567_281&536_374&537-0_0_15_23_27_26_26-96-9",
+            "00385416666667-90_91-251&579_378&619-384&626_242&621_241&572_383&577-0_0_27_23_24_24_31-150-14",
+            "00398946360153-92_87-366&392_485&435-474&439_374&433_378&399_478&405-0_0_20_31_16_31_24-106-8",
+            "00414870689655-89_91-372&593_498&633-487&634_380&633_381&596_488&597-3_5_8_5_24_24_33-38-8",
+            "00439655172414-90_91-392&479_520&518-516&521_389&517_391&476_518&480-0_0_3_27_30_27_26-90-9"
+          ]
+        },
+        "test": {
+          "manifest_paths": 5000,
+          "image_paths": 5000,
+          "missing_from_images": 5000,
+          "not_in_manifest": 5000,
+          "examples_missing": [
+            "ccpd_blur/0029-1_1-323&513_408&542-408&540_323&542_323&515_408&513-0_0_33_26_30_23_32-118-4",
+            "ccpd_blur/0033-0_3-352&473_440&505-438&505_352&505_354&473_440&473-0_0_21_30_26_30_8-124-3",
+            "ccpd_blur/0038-1_1-241&338_334&373-334&371_241&373_241&340_334&338-0_0_8_27_27_31_25-148-2",
+            "ccpd_blur/0039-0_2-297&511_379&551-379&551_298&550_297&511_378&512-0_10_1_32_25_26_27-91-5",
+            "ccpd_blur/0039-1_0-316&481_413&515-412&515_316&512_317&481_413&484-0_0_30_29_28_24_33-155-5"
+          ],
+          "examples_extra": [
+            "ccpd_blur__0029-1_1-323&513_408&542-408&540_323&542_323&515_408&513-0_0_33_26_30_23_32-118-4",
+            "ccpd_blur__0033-0_3-352&473_440&505-438&505_352&505_354&473_440&473-0_0_21_30_26_30_8-124-3",
+            "ccpd_blur__0038-1_1-241&338_334&373-334&371_241&373_241&340_334&338-0_0_8_27_27_31_25-148-2",
+            "ccpd_blur__0039-0_2-297&511_379&551-379&551_298&550_297&511_378&512-0_10_1_32_25_26_27-91-5",
+            "ccpd_blur__0039-1_0-316&481_413&515-412&515_316&512_317&481_413&484-0_0_30_29_28_24_33-155-5"
+          ]
+        }
+      }
+    }
+  },
+  "artifacts": {
+    "best_pt": {
+      "path": "/content/outputs/yolov5s_e0/runs/yolov5s_ccpd_e0/weights/best.pt",
+      "bytes": 14358063,
+      "sha256": "303bd18d76382a54d4101e695be16e10a7c6a19912bc266f99036f12d46190ed"
+    },
+    "last_pt": {
+      "path": "/content/outputs/yolov5s_e0/runs/yolov5s_ccpd_e0/weights/last.pt",
+      "bytes": 14358063,
+      "sha256": "abb9c57c5f08ca4623a07f98b50350bfa890c8eea0a7500e8f2a670f910dedb0"
+    },
+    "train_results": {
+      "path": "/content/outputs/yolov5s_e0/runs/yolov5s_ccpd_e0/results.csv",
+      "bytes": 13524,
+      "sha256": null
+    },
+    "validation_log": {
+      "path": "/content/outputs/yolov5s_e0/logs/validation.log",
+      "bytes": 14307,
+      "sha256": null
+    },
+    "test_log": {
+      "path": "/content/outputs/yolov5s_e0/logs/test_final.log",
+      "bytes": 30651,
+      "sha256": null
+    }
+  },
+  "metrics": {
+    "validation": {
+      "images": 2000,
+      "instances": 2000,
+      "precision": 0.999,
+      "recall": 1.0,
+      "mAP50": 0.995,
+      "mAP50_95": 0.764,
+      "speed_ms_pre": 0.1,
+      "speed_ms_inf": 1.9,
+      "speed_ms_nms": 1.0
+    },
+    "test": {
+      "images": 5000,
+      "instances": 5000,
+      "precision": 0.984,
+      "recall": 0.983,
+      "mAP50": 0.983,
+      "mAP50_95": 0.609,
+      "speed_ms_pre": 0.1,
+      "speed_ms_inf": 1.9,
+      "speed_ms_nms": 0.9
+    },
+    "test_by_subset": {
+      "_root_": {
+        "images": 5000,
+        "instances": 5000,
+        "precision": 0.984,
+        "recall": 0.983,
+        "mAP50": 0.983,
+        "mAP50_95": 0.609,
+        "speed_ms_pre": 0.1,
+        "speed_ms_inf": 1.9,
+        "speed_ms_nms": 0.9
+      }
+    },
+    "paper_comparable_iou07": {
+      "images": 5000,
+      "acc_iou07": 0.8802,
+      "mean_top1_iou": 0.8034493575050948,
+      "fps": 96.27354580075901,
+      "conf": 0.25,
+      "nms_iou": 0.45,
+      "iou_threshold": 0.7,
+      "device": "cuda",
+      "gpu": "NVIDIA L4"
+    }
+  },
+  "augmentation": {
+    "augmentation": {
+      "hsv_h": 0.015,
+      "hsv_s": 0.7,
+      "hsv_v": 0.4,
+      "degrees": 0.0,
+      "translate": 0.1,
+      "scale": 0.5,
+      "shear": 0.0,
+      "perspective": 0.0,
+      "flipud": 0.0,
+      "fliplr": 0.5,
+      "mosaic": 1.0,
+      "mixup": 0.0,
+      "copy_paste": 0.0
+    },
+    "train_config": {
+      "epochs": 50,
+      "batch_size": 32,
+      "imgsz": 640,
+      "weights": "/content/yolov5s.pt",
+      "hyp": {
+        "lr0": 0.01,
+        "lrf": 0.01,
+        "momentum": 0.937,
+        "weight_decay": 0.0005,
+        "warmup_epochs": 3.0,
+        "warmup_momentum": 0.8,
+        "warmup_bias_lr": 0.1,
+        "box": 0.05,
+        "cls": 0.5,
+        "cls_pw": 1.0,
+        "obj": 1.0,
+        "obj_pw": 1.0,
+        "iou_t": 0.2,
+        "anchor_t": 4.0,
+        "fl_gamma": 0.0,
+        "hsv_h": 0.015,
+        "hsv_s": 0.7,
+        "hsv_v": 0.4,
+        "degrees": 0.0,
+        "translate": 0.1,
+        "scale": 0.5,
+        "shear": 0.0,
+        "perspective": 0.0,
+        "flipud": 0.0,
+        "fliplr": 0.5,
+        "mosaic": 1.0,
+        "mixup": 0.0,
+        "copy_paste": 0.0
+      },
+      "patience": 15,
+      "seed": 42,
+      "workers": 8,
+      "cache": null,
+      "rect": false
+    },
+    "hyp_file": "/content/outputs/yolov5s_e0/runs/yolov5s_ccpd_e0/hyp.yaml"
+  },
+  "metrics_note": "Chỉ số được parse từ log thật; giá trị None nghĩa là chưa chạy/không parse được. Test chỉ dùng cuối, không dùng để tuning. mAP@0.5 (val.py) và accuracy IoU>0.7 (paper) là hai thước đo khác nhau.",
+  "created_at": "2026-11-16 06:47:47"
+}

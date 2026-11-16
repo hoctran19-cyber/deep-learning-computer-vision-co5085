@@ -1,0 +1,55 @@
+{
+  "name": "e1_crnn",
+  "arch": "crnn",
+  "params": 8478852,
+  "test": {
+    "n": 5000,
+    "exact": 0.5554,
+    "exact_no_province": 0.6088,
+    "province_acc": 0.9312,
+    "char_acc": 0.8925714285714286
+  },
+  "by_subset": {
+    "blur": {
+      "n": 500,
+      "exact": 0.5,
+      "exact_no_province": 0.512
+    },
+    "challenge": {
+      "n": 2500,
+      "exact": 0.5984,
+      "exact_no_province": 0.6532
+    },
+    "db": {
+      "n": 500,
+      "exact": 0.516,
+      "exact_no_province": 0.564
+    },
+    "fn": {
+      "n": 500,
+      "exact": 0.56,
+      "exact_no_province": 0.612
+    },
+    "rotate": {
+      "n": 500,
+      "exact": 0.558,
+      "exact_no_province": 0.62
+    },
+    "tilt": {
+      "n": 500,
+      "exact": 0.428,
+      "exact_no_province": 0.514
+    }
+  },
+  "speed": {
+    "bs1_img_per_s": 198.96980716207375,
+    "bs64_img_per_s": 8536.60831774152
+  },
+  "best_epoch": 30,
+  "best_val_exact": 0.992,
+  "device": "cuda",
+  "gpu": "NVIDIA L4",
+  "crop_margin": 0.1,
+  "seed": 42,
+  "epochs_cfg": 30
+}
